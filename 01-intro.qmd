@@ -1,0 +1,685 @@
+---
+engine: julia
+lang: es-MX
+
+---
+
+## El lenguaje de programación Julia {#sec-julia}
+El código se organiza en scripts, módulos y paquetes. Cada uno de estos define tipos y funciones que interactuan para componer las soluciones deseadas.
+
+El resto de esta unidad esta dedicada a precisar la sintaxis del lenguaje y anotaciones de importancia sobre su funcionamiento.
+
+## Instalación
+
+El sitio oficial recomienda el uso de `juliaup`, una herramienta que permite manejar diferentes versiones de Julia y mantenerlas actualizarlas.
+
+[https://julialang.org/install/](https://julialang.org/install/)
+
+Las versiones de Julia siguen el paradigma de _semantic versioning_ (semver), por lo que `juliaup` permite gestionarlas de manera simple y efectiva. La versión estable es la 1.10 y las más nuevas son la 1.11 y la 1.12.
+
+También es posible usar Colab de Google con el kernel para `Julia`; este usar julia 1.11 y hasta el momento, es el único disponible.
+
+## Manos a la obra
+Una vez instalado, se puede ejecutar un REPL de Julia en la terminal ejecutando
+
+```{{bash}}
+$ julia
+```
+
+dado que instalamos con `juliaup` podemos mantener diferentes versiones, e.g., 
+
+```{{bash}}
+$ juliaup list
+```
+
+que nos mostrará una larga lista de posibles _channels_ o versiones de instalación
+
+```{{bash}}
+
+$ juliaup add 1.10
+$ juliaup default 1.10
+``` 
+
+estas instrucciones añadirán la versión 1.10 y la establecerá como versión o canal por omisión. Puedes llamar diferentes versiones ejecutando `julia +channel` como sigue:
+
+```{{bash}}
+$ julia +1.12
+
+               _
+   _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.12.1 (2025-10-17)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org release
+|__/                   |
+
+julia>
+
+``` 
+
+### Creando un "Hola mundo"
+Uno de los programas más comunes es el siguiente
+```{julia}
+println("¡Hola 🌎!")
+```
+
+### Usando Colab
+Es posible usar Colab para reducir la complejidad de la instalación, ya que cuenta con un kernel de Julia. Como se mencionaba anteriormente, solo se soporta la versión `1.11` que es suboptima con las versiones de paquetes que usaremos más adelante. Adicionalmente, se tiene limitante de los recursos limitados que se nos proporcionen, en particular al momento de escribir estas notas, aunque los recursos que se otorgan suelen ser suficientes para pruebas, no lo son en otros ámbitos: solo se tienen 2 vcpus y tiempos de ejecución limitados.
+
+### Usando Jupyter
+Una vez instalado julia; debemos instalar el paquete `IJulia` que instalará todo lo necesario para correr Jupyter (ver la sección de `Pkg` al final de esta unidad para más información sobre paquetes). Una vez corriendo, se debe seleccionar crear un notebook específicando el kernel de Julia para utilizarlo.
+
+### Funciones
+Las funciones son centrales en Julia. Por ahora veremos la estructura y más adelante, definiremos algunas.
+
+Para ejecutar una función se utiliza la sintaxis `fun(arg)`, esta regresará un valor, que depende de la función misma y muchas veces del tipo que tenga `arg`. Si fueran dos argumentos `fun(arg1, arg2)`, etc. También se soportan argumentos con nombre `fun(arg1, arg2, ...; kwarg=val)` (_kwargs_ para nombrarlos de manera sintética). En este caso, los _kwargs_ no influyen en los tipos de salida. Esto puede parecer extraño pero es debido a las decisiones de implementación relacionadas con el desempeño. 
+
+Las funciones se definen como sigue:
+```julia
+function fun(arg1, arg2...) # <1>
+    # ... expresiones ...
+end
+
+function fun(arg1, arg2...; kwarg1=valor1, kwargs2...) # <2>
+    # ... expresiones ...
+end
+
+fun(arg1, arg2...; kwarg1=valor1, kwargs2...) = expresion  # <3>
+
+(arg1, arg2...; kwarg1=valor1, kwargs2...) -> expresion       # <4>
+
+fun() do x # <5>
+    x^2 # ... expresiones ...
+end
+```
+1. Definición de una función simple, los tipos de los argumentos se utilizan para generar múltiples versiones de una función.
+2. También se soportan argumentos nombrados, los cuales van después de `;`, se debe tener en cuenta que los tipos de los argumentos nombrados no son utilizados para determinar si una función debe compilarse. Los argumentos nombrados pueden o no tener valores por omisión.
+3. Si la función tiene una estructura simple, de una expresión, es posible ignorar `function` y `end`, usando '=' para definirla.
+4. Muchas veces es útil definir funciones anónimas, que suelen pasarse a otras funciones de orden superior.
+5. Un embellecedor útil para generar una función anónima (definida entre `do...end`) que se pasa como primer argumento a `fun`, e.g., es equivalente a `fun(x->x^2).`
+
+El _ámbito_ o _scope_ de las variables en Julia es sintáctico, que significa que se hereda del código donde las funciones fueron definidas, y no dinámico (que se hereda desde dónde se ejecuta la función). Aunque es el comportamiento de la mayoría de los lenguajes modernos, es importante conocerlo sobre todo para la creación de _cerraduras sintácticas_ en funciones.
+
+
+### Expresiones y operadores
+Las _expresiones_ son la forma más genérica de expresar el código en Julia, comprenden operaciones aritméticas, asignación y declaración de variables, definiciones de bloques de código, llamadas de funciones, entre otras.
+
+Cada linea suele ser una expresión, a menos que se extienda por múltiples lineas por medio de un agrupador de código o datos, estos pueden ser 
+```julia
+begin
+    ...
+end
+
+let
+    ...
+end
+
+(...)
+
+[...]
+
+[...]
+
+for elem in collection
+    ...
+end
+
+while cond_expr
+    ...
+end
+
+if cond_expr
+    ...
+end
+
+function fun(args...; kwargs...)
+    ...
+end
+
+try
+    ...
+catch
+    ...
+finally
+    ...
+end
+```
+
+entre las más utilizadas; claramentre hay infinidad de formas de componerlas para formar los algoritmos que se esten escribiendo.
+
+#### Definición de variables
+Las definiciones de variables tienen la sintaxis `variable = valor`; las variables comunmente comienzan con una letra o `_`, las letras pueden ser caracteres _unicode_, no deben contener espacios ni puntuaciones como parte del nombre; `valor` es el resultado de evaluar o ejecutar una expresión.
+
+Los operadores más comunes son los aritméticos `+`, `-`, `*`, `/`, `÷`, `%`, `\`, `^`,  con precedencia y significado típico. Existen maneras compuestas de modificar una variable anteponiendo el operador aritmético al simbolo de asignación, e.g., `variable += valor`, que se expande a `variable = variable + valor`. Esto implica que `variable` debe estar previamente definida previo a la ejecución.
+
+
+Los operadores lógicos también tienen el significado esperado.
+
+|operación  |descripción|
+|---        |---- |
+| `a && b`  | AND lógico                       |
+| `a || b`  | OR lógico                        |
+| `a ⊻ b`   | XOR lógico                       |
+| `!a`      | negación lógica                  |
+| `a < b`   | comparación `a` es menor que `b` |
+| `a > b`   | comparación `a` es mayor que `b` |
+| `a <= b`  | comparación `a` es menor o igual que `b`     |
+| `a >= b`  | comparación `a` es mayor o igual que `b`     |
+| `a == b`  | comparación de igualdad                      |
+| `a === b` | comparación de igualdad (a nivel de tipo)    |
+| `a != b`  | comparación de desigualdad                   |
+| `a !== b` | comparación de desigualdad (a nivel de tipo) |
+
+En particular `&&` y `||` implementan _corto circuito de código_, por lo que pueden usarse para el control de que operaciones se ejecutan. Cuando se compara a nivel de tipo 0 (entero) será diferente de 0.0 (real).
+
+También hay operadores lógicos a nivel de bit, los argumentos son enteros.
+
+|operación |descripción|
+|---  |--- |
+| `a & b`  | AND a nivel de bits              |
+| `a | b`  | OR a nivel de bits               |
+| `a ⊻ b`  | XOR a nivel del bits             |
+| `~a`     | negación lógica a nivel de bits  |
+
+#### Literales
+Los valores literales son valores explicitos que Julia permite para algunos tipos de datos, y que permiten definirlos de manera simple; permitiendonos escribir datos directamente en el código.
+
+Los números enteros se definen sin punto decimal, es posible usar `_` como separador y dar más claridad al código. Los enteros pueden tener 8, 16, 32, o 64 bits; por omisión, se empaquetan en variables del tipo `Int` (`Int64`). Los valores hexadecimales se interpretan como enteros sin signo, y además se empaquetan al número de bits necesario minimo para contener. El comportamiento para valores en base 10 es el de hexadecimal es congruente con un lenguaje para programación de sistemas.
+
+```{julia}
+a = 100
+println((a, sizeof(a)))
+b = Int8(100)
+println((b, sizeof(b)))
+c = 30_000_000
+println((c, sizeof(c)))
+d = 0xffff
+println((d, sizeof(d)))
+```
+
+::: {.column-margin}
+Existen números enteros de precisión 128 pero las operaciones al día de hoy no son implementadas de manera nativa por los procesadores; así mismo se reconocen números de punto flotante de precisión media `Float16` pero la mayoría de los procesadores no tienen soporte nativo para realizar operaciones con ellos, aunque los procesadores de última generación si lo tienen.
+:::
+
+Si la precisión esta en duda o el contexto lo amérita, deberá especificarlo usando el constructor del tipo e.g., `Int8(100)`, `UInt8(100)`, `Int16(100)`, `UInt16(100)`, `Int32(100)`, `UInt32(100)`, `Int64(100)`, `UInt64(100)`.
+
+Los números de punto flotante tienen diferentes formas de definirse, teniendo diferentes efectos.
+Para números de precision simple, 32 bits, se definen con el sufijo `f0` como `3f0`. El sufijo `e0` también se puede usar para definir precisión doble (64 bit). El cero del sufijo en realidad tiene el objetivo de colocar el punto decimal, en notación de ingeniería, e.g., $0.003$ se define como $3f-3$ o $3e-3$, dependiendo del tipo de dato que se necesite. 
+Si se omite sufijo y se pone solo punto decimal entonces se interpretará como precision doble. Los tipos son `Float32` y `Float64`.
+
+Los datos booleanos se indican mediante `true` y `false` para verdadero y falso, respectivamente.
+
+Los caracteres son símbolos para índicar cadenas, se suelen representar como enteros pequeños en memoria. Se especifican con comillas simples `'a'`, `'z'`, `'!'` y soporta simbolos _unicode_ `'🤠'`.
+
+Las cadenas de caracteres son la manera de representar textos como datos, se guardan en zonas contiguas de memoria. Se especifican con comillas dobles y también soportan símbolos unicode, e.g., `"hola mundo"`, `"pato es un 🐷"`.
+
+::: {.column-margin}
+Julia guarda los símbolos de manera especial y pueden ser utilizados para realizar identificación de datos eficiente, sin embargo, no es buena idea saturar el sistema de manejo de símbolos por ejemplo para crear un vocabulario ya que no liberará la memoria después de definirlos ya que es un mecánismo diseñado para la representación de los programas, pero lo suficientemente robusto y bien definido para usarse en el diseño e implementación de programas de los usuarios.
+:::
+
+En Julia existe la noción de símbolo, que es una cadena que además solo existe en una posición en memoria se usa el prefijo `:` para denotarlos. 
+
+```{julia}
+println(:hola === :hola)
+println(typeof(:hola))
+println(Symbol("hola mundo"))
+```
+
+### Control de flujo
+El control de flujo nos permite escoger que partes del código se ejecutaran como consecuencia de la evaluación de una expresión, esto incluye repeticiones.
+
+Las condicionales son el control de flujo más simple.
+```{julia}
+a = 10
+if a % 2 == 0 # <1>
+    "par" # <2>
+else
+    "impar" # <3>
+end
+```
+1. Expresión condicional.
+2. Expresión a ejecutarse si (1) es verdadero.
+3. Expresión a evaluarse si (1) es falso.
+
+Se puede ignorar la clausula `else` dando solo la opción de evaluar (2) si (1) es verdadero. Finalmente, note que la condicional es una expresión y devuelve un valor.
+```{julia}
+a = 10
+if log10(a) == 1 # <1>
+    "es 10" # <2>
+end
+```
+
+También pueden concatenarse múltiples expresiones condicionales con `elseif` como se muestra a continuación.
+```{julia}
+a = 9
+if a % 2 == 0
+    println("divisible entre 2")
+elseif a % 3 == 0
+    println("divisible entre 3")
+else
+    println("no divisible entre 2 y 3")
+end
+```
+
+Es común utilizar la sintaxis en Julia (short circuit) para control de flujo:
+```{julia}
+a = 9
+
+println(a % 2 == 0 && "es divisible entre dos")  # <1>
+println(a % 3 == 0 && "es divisible entre tres") # <2>
+```
+1. El resultado de la condición es falso, por lo que no se ejecutará la siguiente expresión.
+2. El resultado es verdadero, por lo que se ejecutará la segunda expresión.
+
+Fnalmente, existe una condicional de tres vias `expresion ? expr-verdadero : expr-falso`
+
+```{julia}
+a = 9
+
+println(a % 2 == 0 ? "es divisible entre dos" : "no es divisible entre dos")
+println(a % 3 == 0 ? "es divisible entre tres" : "no es divisible entre tres")
+```
+
+#### Ciclos
+
+Los ciclos son expresiones de control de flujo que nos permiten iterar sobre una colección o repetir un código hasta que se cumpla alguna condición. En Julia existen dos expresiones de ciclos: 
+
+- `for x in colección ...expresiones... end` y
+- `while condición ...expresioens... end`
+
+En el caso de `for`, la idea es iterar sobre una colección, esta colección puede ser un rango, i.e., `inicio:fin`, `inicio:paso:fin`, o una colección como las tuplas, los arreglos, o cualquiera que cumpla con la interfaz de colección iterable del lenguaje. 
+
+```{julia}
+for i in 1:5
+    println("1er ciclo: ", i => i^2)
+end
+
+for i in [10, 20, 30, 40, 50]
+    println("2do ciclo: ", i => i/10)
+end
+```
+
+Al igual que en otros lenguajes modernos, se define la variante completa o _comprehensive for_ que se utiliza para transformar la colección de entrada en otra colección cuya sintaxis se ejemplifica a continuación:
+
+```{julia}
+a = [i => i^2 for i in 1:5]
+println(a)
+```
+
+También es posible definir un generador, esto es, un código que puede generar los datos, pero que no los generará hasta que se les solicite.
+```{julia}
+a = (i => i^2 for i in 1:5)
+println(a)
+println(collect(a)) 
+```
+
+Otra forma de hacer ciclos de intrucciones es repetir mientras se cumpla una condición:
+```{julia}
+i = 0
+while i < 5
+    i += 1
+    println(i)
+end
+
+i
+```
+
+### Tuplas y arreglos en Julia
+Una tupla es un conjunto ordenado de datos que no se puede modificar y que se desea esten contiguos en memoria, la sintaxis en memoria es como sigue:
+```{julia}
+a = (2, 3, 5, 7)    # <1>
+b = (10, 20.0, 30f0)   # <1>
+c = 100 => 200 # <1>
+println(typeof(a))  # <2>
+println(typeof(b))  # <2>
+println(typeof(c))  # <2>
+a[1], a[end], b[3], c.first, c.second  # <3>
+```
+1. Define las tuplas.
+2. Imprime los tipos de las tuplas.
+3. Muestra como se accede a los elementos de las tuplas. Julia indexa comenzando desde 1, y el término `end` también se utiliza para indicar el último elemento en una colección ordenada.
+
+La misma sintaxis puede generar diferentes tipos de tuplas. En el caso `NTuple{4, Int4}` nos indica que el tipo maneja cuatro elementos de enteros de 64 bits, los argumentos entre `{}` son parametros que especifican los tipos en cuestión.  En el caso de `Tuple` se pueden tener diferentes tipos de elementos. La tupla `Pair` es especial ya que solo puede contener dos elementos y es básicamente para _embellecer_ o _simplificar_ las expresiones; incluso se crea con la sintaxis `key => value` y sus elementos pueden accederse mediante dos campos nombrados.
+
+Los _arreglos_ son datos del mismo tipo contiguos en memoria, a diferencia de las tuplas, los elementos se pueden modificar, incluso pueden crecer o reducirse. Esto puede implicar que se alojan en zonas de memoria diferente (las tuplas se colocan en el _stack_ y los arreglos en el _heap_, ver la siguiente unidad para más información). Desde un alto nivel, los arreglos en Julia suelen estar asociados con vectores, matrices y tensores, y un arsenal de funciones relacionadas se encuentran definidas en el paquete `LinearAlgebra`, lo cual esta más allá del alcance de este curso. 
+
+```{julia}
+a = [2, 3, 5, 7]   # <1>
+b = [10, 20.0, 30f0]   # <1>
+println(typeof(a))  # <2>
+println(typeof(b))  # <2>
+a[1], a[end], b[3], b[2:3]  # <3>
+```
+1. Define los arreglos `a` y `b`.
+2. Muestra los tipos de los arreglos, note como los tipos se promueven al tipo más génerico que contiene la definición de los datos.
+3. El acceso es muy similar a las tuplas para arreglos unidimensionales, note que es posible acceder rangos de elementos con la sintaxis `ini:fin`.
+
+```{julia}
+a = [2 3;
+     5 7]    # <1>
+display(a)  # <2>
+display(a[:, 1]) # <3>
+display(a[1, :]) # <4>
+```
+1. Definición de un arreglo bidimensional, note como se ignora la coma `,` en favor de la escritura por filas separadas por `;`.
+2. La variable `a` es una matriz de 2x2.
+3. Es posible acceder una columna completa usando el símbolo `:` para indicar todos los elementos.
+4. De igual forma, es posible acceder una fila completa.
+
+### Diccionarios y conjuntos en Julia
+Un diccionario es un arreglo asociativo, i.e., guarda pares llave-valor. Permite acceder de manera eficiciente al valor por medio de la llave, así como también verificar si hay una entrada dentro del diccionario con una llave dada. La sintaxis es como sigue:
+
+```{julia}
+a = Dict(:a => 1, :b => 2, :c => 3) # <1>
+a[:b] = 20 # <2>
+println(a)
+a[:d] = 4  # <3>
+println(a)
+delete!(a, :a) # <4>
+a
+```
+1. Definición del diccionario `a` que mapea simbolos a enteros.
+2. Cambia el valor de `:b` por 20.
+3. Añade `:d => 4` al diccionario `a`.
+4. Borra el par con llave `:a`.
+
+Es posible utilizar diferentes tipos siempre y cuando el tipo en cuestión defina de manera correcta la función `hash` sobre la llave y la verificación de igualdad `==`.
+
+Un conjunto se representa con el tipo `Set`, se implementa de manera muy similar al diccionario pero solo necesita el elemento (e.g., la llave). Como conjunto implementa las operaciones clasificación de operaciones de conjuntos
+```{julia}
+a = Set([10, 20, 30, 40]) # <1>
+println(20 in a)          # <2>
+push!(a, 50)              # <3>
+println(a)
+delete!(a, 10)            # <4>
+println(a)
+println(intersect(a, [20, 35])) # <5>
+union!(a, [100, 200]) # <6>
+println(a)
+```
+1. Definición del conjunto de números enteros.
+2. Verificación de membresia al conjunto `a`.
+3. Añade 50 al conjunto.
+4. Se borra el elemento 10 del conjunto.
+5. Intersección de `a` con una colección, no se modifica el conjunto `a`.
+6. Unión con otra colección, se modifica `a`.
+
+## El flujo de compilación de Julia
+
+Basta con escribir una linea de código en el REPL de Julia y esta se compilará y ejecutará en el contexto actual, usando el ámbito de variables. Esto es conveniente para comenzar a trabajar, sin embargo, es importante conocer el flujo de compilación para tenerlo en cuenta mientras se códifica, y así generar código eficiente. En particular, la creación de funciones y evitar la _inestabilidad_  de los tipos de las variables es un paso hacia la generación de código eficiente. También es importante evitar el alojamiento de memoria dinámica siempre que sea posible. A continuación se mostrará el análisis de un código simple a diferentes niveles, mostrando que el lenguaje nos permite observar la generación de código, que últimadamente nos da cierto control y nos permite verificar que lo que se esta implementando es lo que se específica en el código. Esto no es posible en lenguajes como Python.
+
+
+```{julia}
+#| code-line-numbers: true
+let
+    e = 1.1
+    println(e*e)
+    @code_typed e*e
+end
+```
+
+En este código, se utiliza la estructa de agrupación de expresiones `let...end`. Cada expresión puede estar compuesta de otras expresiones, y casi todo es una expresión en Julia. La mayoria de las expresiones serán finalizadas por un salto de linea, pero las compuestas como `let`, `begin`, `function`, `if`, `while`, `for`, `do`, `module` estarán finalizadas con `end`. La indentación no importa la indentación como en Python, pero es aconsejable para mantener la legibilidad del código. La linea 2 define e inicializa la variable `e`; la linea 3 llama a la función `println`, que imprimirá el resultado de `e*e` en la consola. La función `println` esta dentro de la biblioteca estándar de Julia y siempre esta _visible_. La linea 4 es un tanto diferente, es una macro que toma la expresión `e*e` y realiza algo sobre la expresión misma, en particular `@code_type` muestra como se reescribe la expresión para ser ejecutada. Note como se hará una llamada a la función `Base.mul_float` que recibe dos argumentos y que regresará un valor `Float64`. Esta información es necesaria para que Julia pueda generar un código veloz, el flujo de compilación llevaría esta información a generar un código intermedio de _Low Level Virtual Machine_ (LLVM), que es el compilador empotrado en Julia, el cual estaría generando el siguiente código LLVM (usando la macro `@code_llvm`):
+
+```{julia}
+#| echo: false
+let
+    e = 1.1
+    @code_llvm e*e
+end
+```
+
+Este código ya no es específico para Julia, sino para la maquinaría LLVM. Observe la especificidad de los tipos y lo corto del código. El flujo de compilación requeriría generar el código nativo, que puede ser observado a continuación mediante la macro `@code_native`:
+
+```{julia}
+#| echo: false
+let
+    e = 1.1
+    @code_native e*e
+end
+```
+
+En este caso podemos observar código específico para la computadora que esta generando este documento, es posible ver el manejo de registros y el uso de instrucciones del CPU en cuestión.
+
+Este código puede ser eficiente dado que los tipos y las operaciones son conocidos, en el caso que esto no puede ser, la eficiencia esta perdida. Datos no nativos o la imposibilidad de determinar un tipo causarían que se generará más código nativo que terminaría necesitanto más recursos del procesador. Una situación similar ocurre cuando se aloja memoria de manera dinámica. Siempre estaremos buscando que nuestro código pueda determinar el tipo de datos para que el código generado sea simple, si es posible usar datos nativos, además de no manejar o reducir el uso de memoría dinámica.
+
+## Ejemplos de funciones
+Las funciones serán una parte central de nuestros ejemplos, por lo que vale la pena retomarlas y dar ejemplos.
+
+```{julia}
+function f(x)
+    x^2
+end
+```
+
+Siempre regresan el valor de la última expresión; note como el tipo (y no solo el valor) de retorno depende del tipo de la entrada, e.g., si `x` es un entero entonces `x^2` será un entero, pero si `x` es una matriz, `x^2` será una matriz.
+
+Hay valores opcionales y kwargs, ambas tienen características diferentes:
+```{julia}
+function f(x, t=1)
+    (x+t)^2
+end
+
+function g(x; t=1)
+    (x+t)^2
+end
+```
+
+## Estructuras
+
+```{julia}
+struct Point
+  x::Float32
+  y::Float32
+end
+```
+
+La idea suele ser que todo se use de manera armoniosa
+```{julia}
+"""
+  Calcula la norma de un vector representado
+  como un tupla
+"""
+function norm(u::Tuple)
+  s = 0f0
+
+  for i in eachindex(u)
+    s += u[i]^2
+  end
+
+  sqrt(s)
+end
+
+"""
+  Calcula la norma de un vector de 2 dimensiones
+  representado como una estructura
+"""
+function norm(u::Point)
+  sqrt(u.x^2 + u.y^2)
+end
+
+(norm((1, 1, 1, 1)), norm(Point(1, 1)))
+```
+
+## Arreglos
+Una matriz aleatoria de $4 \times 6$ se define como sigue
+```{julia}
+A = rand(Float32, 4, 6)
+```
+
+Un vector aleatorio de 6 dimensiones sería como sigue:
+
+```{julia}
+x = rand(Float32, 4)
+```
+
+entonces podriamos multiplicar `x` con `A` como sigue:
+```{julia}
+y = x' * A
+```
+
+```{julia}
+y'
+```
+
+También existen otras formas para realizarla, aunque no suelen ser la mejor idea si se tienen alternativas canónicas:
+
+```{julia}
+using LinearAlgebra
+
+dot.(Ref(x), eachcol(A))
+```
+
+Este ejemplo muestra la técnica _broadcasting_ que aplica una función a una colección; se indica añadiendo un punto al final del nombre de la función. Adicionalmente, hay una serie de reglas que se deben seguir para el manejo de las colecciones. La función `eachcol` crea un iterador sobre cada columna de la matriz `A` y `Ref(x)`, nos permite que el `broadcasting` reconozca al vector `x` como un único elemento en lugar de una colección de valores.
+
+## Paquetes y módulos
+El ecosistema de paquetes de Julia es una de sus mayores fortalezas, impulsado por usu gestor de paquetes _Pkg_, el cual viene integrado en el REPL y en la su instalación mínima; es muy robusto. Se encarga de la instalación y actualización de librerías, así como también garantiza la reproducibilidad de los proyectos. Cada ambiente de trabajo en Julia utiliza archivos como `Project.toml` y `Manifest.toml` para registrar la paquetería usada, así como las versiones necesarias de todas las dependencias. 
+
+### Pkg en REPL
+
+Para entrar al modo Pkg desde cualquier sesión de Julia en el REPL se debe teclear _corchete cerrado `]`.
+
+
+El prompt del REPL cambiará:
+
+| Modo | Prompt |
+| :--- | :--- |
+| Normal (Julia) | ` julia>  ` |
+| _Modo Pkg_ | ` (@v1.10) pkg>  ` |
+
+
+Ahora se puede ver qué paquetes están instalados en tu entorno actual.
+
+| Comando | Acción |
+| :--- | :--- |
+| `st` o `status` | Muestra la lista de todos los paquetes instalados y sus versiones específicas. |
+
+Para añadir una _paquete_ a tu entorno, usa el comando `add`.
+
+| Comando | Acción |
+| :--- | :--- |
+| `add Paquete` | Descarga e instala el paquete. |
+
+En el caso de que un paquete ya no sea necesario, se puede desinstalar con el comando `rm` (de _remove_).
+
+| Comando | Acción |
+| :--- | :--- |
+| `rm Paquete` | Elimina el paquete del entorno actual. |
+
+
+Finalmente, es posible actualizar paquetes de manera individual o colectiva usando el comando `up`.
+
+| Comando | Acción |
+| :--- | :--- |
+| `up` o `update` | _Actualiza_ todos los paquetes instalados a su última versión compatible. |
+| `up Paquete` o `update Paquete` | Actualiza `Paquete` a su última versión compatible. |
+
+#### Manejo de ambientes 
+El entorno o ambiente (_environment_) se puede especificar de manera global o por diretorio, y nos sirve para aislar las aplicaciones y no entrar en dificultades por versiones.
+
+| Comando | Acción |
+| :--- | :--- |
+| `activate dir`  | Activa el directorio `dir` como ambiente. |
+
+Supongamos que nos comparten un proyecto escrito en julia, lo primero que debemos hacer es activar e instanciar el ambiente; la instanciación es como sigue
+
+| Comando | Acción |
+| :--- | :--- |
+| `instantiate`  | Se instalan todos los paquetes indicados por el ambiente. |
+
+Muchas veces también cambiamos paquetes locales que requiren reactualizar el ambiente, eso se consigue con `] resolve` que actualizará las nuevas dependencias que cambiaron.
+
+#### Saliendo del modo Pkg
+Para volver al modo de ejecución de código normal de Julia, se debe presionar _backspace_.
+
+El prompt cambiará de nuevo a `julia>` y podrás usar los paquetes que instalaste con el comando `using`.
+
+```julia
+using DataFrames, CSV
+
+```
+
+esto traera el paquete al entorno en memoria haciendo accesibles sus métodos y estructuras públicas.
+
+### Usando `Pkg` desde el modo normal de Julia (fuera del modo Pkg del REPL)
+
+Existe un paquete interno de las instalaciones de julia llamado `Pkg` que es el que maneja todo lo anterior, este puede ser utilizado como cualquier paquete. Basicamente tiene funciones similares a las del modo `Pkg` (con nombres completos).
+
+Ejemplos:
+
+```julia
+julia> import Pkg
+julia> Pkg.add("PlotlyLight") 
+julia> Pkg.add(["CSV", "DataFrames"]) 
+julia> Pkg.rm("PlotlyLight")
+julia> Pkg.update()
+julia> Pkg.status() 
+```
+
+Ahora para el manejo de los ambientes:
+
+```julia
+julia> import Pkg
+julia> Pkg.activate(".")
+julia> Pkg.instantiate()
+julia> Pkg.add("Statistics")
+```
+
+## Otras estrategias para la organización de código
+
+La función `include("nombre_archivo.jl")` es el método más simple en Julia para organizar código en múltiples archivos. Su función es equivalente a _copiar y pegar_ el contenido del archivo especificado directamente en la línea donde se llama a `include`.
+
+Sirve para estructurar grandes *scripts* en archivos más pequeños y manejables; el código incluido se ejecuta en el mismo _alcance_ (scope) donde se llamó a `include`. Si llamas a `include` en el alcance global, las funciones y variables definidas en el archivo incluido se vuelven globales. Si lo llamas dentro de un módulo, se vuelven parte de ese módulo.
+
+Es simple, pero no proporciona aislamiento, y puede generar conflictos de nombres si no se usa de manera adecuada.
+
+Por otro lado, los _módulos_ permmiten crear *espacios de nombres (namespaces)* aislados y bien definidos, utiles para organizar proyectos grandes y complejos.
+
+### Aislamiento y alcance (Scoping)
+
+Un módulo actúa como una _caja_ que encierra sus funciones y variables. Todo lo que se define dentro de un módulo es _privado_ por defecto para evitar conflictos de nombres con código externo.
+
+```julia
+module MiCalculadora
+    # Esta función es PRIVADA
+    function interna(x)
+        return x * 2
+    end
+
+    # Esta función se hace PÚBLICA con 'export'
+    export sumar
+
+    function sumar(a, b)
+        return a + b
+    end
+end
+```
+
+Para que las funciones, tipos o constantes dentro de un módulo sean accesibles desde afuera, deben ser explícitamente *exportadas* utilizando la palabra clave `export`.
+
+Los modulos pueden anidarse.
+
+Para utilizar las funciones de un módulo en otro script o en el REPL, se usan dos comandos principales:
+
+| Comando | Acción |
+| :--- | :--- |
+| **`using NombreModulo`** | Importa solo los símbolos que han sido **exportados** por el módulo. |
+| **`import NombreModulo`** | Importa el módulo completo. Para usar sus funciones, debes prefijarlas (ej: `NombreModulo.sumar(1, 2)`). |
+
+En la práctica, un paquete o un proyecto grande de Julia casi siempre usa tanto `include` como módulos. De esta manera, `include` ayuda a la organización de archivos, mientras que el bloque `module` garantiza que todo el código esté contenido en un espacio de nombres único y limpio, evitando colisiones.
+
+En particular, los _paquetes_ pueden verse como la preparación de un módulo para su distribución, indicando los paquetes que usan (dependencias) y sus versiones especificas para los cuales fueron diseñados. También suelen incluir documentación y pruebas unitarias. 
+
+
+## Recursos para aprender más sobre el lenguaje
+
+- Información sobre como instalar Julia y flujos de trabajo simples (e.g., REPL, editores, etc.) para trabajar con este lenguaje de programación: _Modern Julia Workflows_ <https://modernjuliaworkflows.github.io/>.
+- Libro sobre julia _Think Julia: How to Think Like a Computer Scientist_ <https://benlauwens.github.io/ThinkJulia.jl/latest/book.html>.
+- Curso _Introduction to computational thinking_ <https://computationalthinking.mit.edu/Fall20/>
+
+
+## Licencia
+
+[![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
+
+Esta obra está bajo una [Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional](http://creativecommons.org/licenses/by-sa/4.0/)

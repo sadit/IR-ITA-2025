@@ -1,0 +1,66 @@
+---
+engine: julia
+lang: es-MX
+
+---
+```{julia}
+
+using CSV
+using DataFrames
+using Dates
+using PlotlyLight
+
+```
+
+```{julia}
+# --- 2. Crear un archivo CSV de ejemplo ---
+println("-> Creando el archivo 'datos_ventas.csv'...")
+
+# Simular datos para un DataFrame
+data = DataFrame(
+    Producto = ["Laptop", "Monitor", "Teclado", "Mouse", "Laptop"],
+    Region = ["Norte", "Sur", "Norte", "Centro", "Sur"],
+    Ventas = [1500.50, 300.25, 50.00, 25.75, 1200.00],
+    Fecha = [Date(2023, 10, 1), Date(2023, 10, 5), Date(2023, 10, 10), Date(2023, 10, 15), Date(2023, 10, 20)]
+)
+
+# Escribir el DataFrame en un archivo CSV
+CSV.write("datos_ventas.csv", data)
+
+println("Archivo CSV creado con éxito.")
+println("------------------------------------------")
+
+# --- 3. Leer el archivo CSV en un DataFrame ---
+println("-> Leyendo el archivo 'datos_ventas.csv' en un DataFrame...")
+
+# Usamos CSV.File para leer los datos y luego lo convertimos a un DataFrame
+df = CSV.read("datos_ventas.csv", DataFrame)
+
+println("\nDataFrame Leído:")
+println(df)
+println("------------------------------------------")
+
+# --- 4. Manipulación y Análisis Básico del DataFrame ---
+
+println("-> Análisis Básico:")
+
+# Mostrar el tipo de las columnas
+println("\nTipos de Columnas:")
+println(DataFrames.eltype.(eachcol(df)))
+
+# Filtrado de datos (solo ventas del Norte)
+println("\nFiltrando: Solo ventas de la Región Norte")
+df_norte = filter(:Region => r -> r == "Norte", df)
+println(df_norte)
+
+# Agrupación y Suma (ventas totales por Región)
+println("\nAgrupando: Ventas Totales por Región")
+df_resumen = combine(groupby(df, :Region), :Ventas => sum => :Total_Ventas)
+println(df_resumen)
+
+```
+```{julia}
+using PlotlyLight
+
+plot(x=1:100, y=cumsum(rand(100)))
+```

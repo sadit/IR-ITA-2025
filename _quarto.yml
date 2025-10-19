@@ -1,0 +1,44 @@
+lang: es
+quarto-required: ">= 1.6"
+
+project:
+  type: book
+  output-dir: docs
+book:
+  title: "Curso Introductorio al Análisis de Algoritmos con Julia"
+  author: 
+    - name: "Eric S. Téllez"
+      url: https://sadit.github.io
+      affiliation: INFOTEC Centro de Investigación e Innovación en Tecnologías de la Información y Comunicación    
+  chapters:
+    - index.qmd
+    - 01-intro.qmd
+    - 02-data-vis.qmd
+    - refs.qmd
+  site-url: https://sadit.github.io/IR-ITA-2025
+  repo-url: https://github.com/sadit/IR-ITA-2025
+  downloads: pdf
+  page-footer:
+    right: |
+      [![](https://i.creativecommons.org/l/by-sa/4.0/80x15.png)](http://creativecommons.org/licenses/by-sa/4.0/) <br/> Esta obra está bajo una [Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional](http://creativecommons.org/licenses/by-sa/4.0/)
+
+bibliography: refs.bib
+title-block-banner: true
+highlight-style: pygments
+
+engine: julia
+
+format:
+  html:
+    theme: simplex
+    code-tools: true
+    echo: true
+  pdf:
+    documentclass: scrbook
+    echo: true
+    toc: true
+    colorlinks: true
+    papersize: letter
+
+execute:
+  freeze: auto
