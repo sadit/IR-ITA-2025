@@ -1,17 +1,20 @@
 ---
 engine: julia
 lang: es-MX
+title: Dataframes y Visualización
+
 ---
+
 ## Uso de tablas de datos
-Un dataframe es una tabla de datos y visualización con Plotly
+Un dataframe es una tabla de datos y visualización con Plotly; existen varios graficadores de Julia, incluso algunos nativos, pero suelen tener tiempos de compilación considerables que pueden ser poco prácticos para su uso en Colab o un curso práctico limitado en tiempo.
 
 ```{julia}
 using CSV, DataFrames, Downloads, StatsBase, MultivariateStats
 using PlotlyLight
-PlotlyLight.settings.use_iframe = true
-#preset.source.standalone!()
+PlotlyLight.settings.use_iframe = true  # necesario para quarto / jupyter / etc.
 ```
 
+### Descargando un archivo de datos CSV desde Internet
 Descargaremos una tabla de internet en formato CSV y luego se cargará
 ```{julia}
 url = "https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"
@@ -25,12 +28,15 @@ Para observar un resumen del contenido
 describe(df)
 ```
 
+### Filtrado
 Los dataframes permiten filtrar o seleccionar datos de manera muy simple:
 ```{julia}
 df_setosa = filter(r -> r.Name == "Iris-setosa", df)
 df_versicolor = df[df.Name .== "Iris-versicolor", :]
 ```
 
+## Visualización
+Para visualiación 
 
 ```{julia}
 p = plot(mode="markers")
@@ -40,6 +46,7 @@ p.layout.title.text = "2 tipos de flores"
 p
 ```
 
+#### Visualización de datos en alta dimensión
 El plot anterior tiene un problema, solo muestra `SepalLength` vs `PetalLength`; ignorando `SepalWidth` y `PealWidth`. Es posible hacer un plot en 3 dimensiones, pero en 4 ya no es posible. Entonces, lo que se suele hacer para visualizar datos de alta dimensión es utilizar un método para reducir la dimensión. Por ejemplo `PCA`.
 
 
@@ -55,7 +62,7 @@ X = permutedims(Matrix{Float32}(df[:, [:SepalLength, :SepalWidth, :PetalLength, 
 colors = Dict(
     "Iris-setosa" => "blue", 
     "Iris-versicolor" => "red", 
-    "Iris-virginica" => "orange"
+    "Iris-virginica" => "green"
     )
 
 pca = fit(PCA, X; maxoutdim=2)
@@ -69,3 +76,5 @@ p = p.scatter(
     )
 p
 ```
+
+Ahora tenemos un mapa en 2D que contiene información de 4D; lo cual claramente podría implicar un _error_, ver el artículo de [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis) en wikipedia, pero nos permite generar conocimiento e intuición de las relaciones entre los datos.

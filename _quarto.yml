@@ -5,9 +5,14 @@ engine: julia
 
 format:
   html:
-    theme: default
+    theme: simplex
     code-tools: true
     echo: true
+    toc: true
+    toc-location: right-body
+
+title-block-banner: true
+highlight-style: pygments
 
 execute:
   freeze: auto
@@ -15,20 +20,28 @@ execute:
 project:
   type: website
   output-dir: docs
-  
+
+author: 
+  - name: "Eric S. Téllez"
+    email: eric.tellez@ieee.org
+    url: https://sadit.github.io
+    affiliation: INFOTEC Centro de Investigación e Innovación en Tecnologías de la Información y Comunicación
+
 website:
   title: "Curso Introductorio a Julia y Recuperación de Información"
-  
   navbar:
     left:
       - href: index.qmd
         text: Introducción
       - href: 01-basico.qmd
         text: Conceptos básicos de Julia
-      - href: 02-data-vis.qmd
-        text: Uso de dataframes y visualización
+      - 02-data-vis.qmd
+      - 03-IR.qmd
+      - 04-text-IR.qmd
+      - 05-metric-IR.qmd
+      - 06-about.qmd
 
   # Add a footer to the website
   page-footer:
     left: "Eric S. Tellez"
-    center: "Built with [Quarto](https://quarto.org/)"
+    center: "Esta obra está bajo una [Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional](http://creativecommons.org/licenses/by-sa/4.0/)"

@@ -1,0 +1,345 @@
+---
+engine: julia
+lang: es-MX
+title: Búsqueda de Texto Completo
+
+---
+
+Los ejercicios de esta unidad se encuentra disponible en Colab en el siguiente notebook
+<https://colab.research.google.com/drive/1gnvWLHtxFK9qtBHw5p8wTQfyhZop4oSx?usp=sharing>
+
+
+## Índice invertido
+
+Un índice invertido es una representación dispersa de la matriz $W_{m,n}$ formada por $m$ componentes y $n$ documentos, i.e., cada celda $w_{t,i}$ es el peso asignado para el término $t$ que ocurre en el documento $i$. Por construcción, esta matriz tiene una gran cantidad de ceros, por lo que $W$ es altamente dispersa (pocos términos ocurren en un documento).
+
+$$ W \left\{
+\begin{array}{rrrr r}
+                & \vec x_1& \vec x_2&       & \vec x_n \\
+t_1 \rightarrow & w_{1,1} & w_{1,2} & \dots & w_{1,n} \\
+t_2 \rightarrow & w_{2,1} & w_{2,2} &       & w_{2,n} \\
+                & \vdots  &         & \ddots&         \\
+t_m \rightarrow & w_{m,1} & w_{m,2} &       & w_{m,n} \\
+\end{array}
+\right.
+$$
+
+La representación es entonces por fila, a manera de lista de adjacencia; esto es, cada fila $t$ es representada por las tuplas $(i, w_{t,i})$, esto es, un índice invertido es la siguiente estructura $W^*$
+
+$$ W^* \left\{
+\begin{array}{rrr}
+t_1 & \rightarrow & \{(i, w_{1, i})\} \\
+t_2 & \rightarrow & \{(i, w_{2, i})\} \\
+\vdots & \vdots   &  \hfill \vdots \hfill \\
+t_m & \rightarrow & \{(i, w_{m, i})\} \\
+\end{array}
+\right.
+$$
+
+la tupla es usada siempre y cuando $w > 0$. Las tuplas suelen ordenarse por su identificador de columna, pero también puede usarse el peso según convenga. A las filas suele llamarseles _listas de posteo_ (_posting lists_). Los requerimientos de una matriz densa son altísimos ya que las representaciones de texto suelen ser de muy alta dimensión. Si la representación contiene muchos ceros, como es el caso de una representación basada en un modelo léxico, es posible representar las matrices de manera dispersa y reducir enormemente los requisitos de la memoría. Como se verá a continuación la representación también influye enormemente en los tiempos de procesamiento.
+
+### Búsqueda mediante un índice invertido
+
+La solución na\"ive de una obtener los $k$ documentos más similares es evaluar todos los vectores $\vec{x}_i$, i.e., columnas de $W$, y determinar aquellos más similares, i.e., minimizar $d(\vec{x}_i, q)$.
+
+El índice invertido $W^*$ contiene la información necesaria para realizar esta operación de manera eficiente. Primeramente, es necesario analizar la expresión de $\cos$. El denominador $\sqrt{\sum_i u_i^2} \cdot \sqrt{\sum_i q_i^2}$, en sus partes es estático para cada vector, por lo que se puede preprocesar y no calcular de manera explícita para cada evaluación de $\cos$. Con respecto al numerador corresponde al producto punto entre $\vec{u}$ y $\vec{q}$, $\sum_i u_i \cdot q_i$. Dicho esto, solo es necesario calcular los productos diferentes de cero; así pues, la evaluación eficiente de $\cos$ corresponde con una evaluación eficiente de la intersección de las componentes diferentes de cero. Los algoritmos como SvS, BY o BK, pueden ser de gran ayuda para este cálculo. Note que aunque que los pesos con valor cero no se representan en $W^*$, dicho índice representa información por fila, lo cual no permite hacer operaciones eficientes entre $q$ y los vectores columna $\vec x$ individuales.
+
+
+Afortunadamente, la evaluación se puede hacer eficiente para todo el conjunto de posibles candidatos (aquellos donde el producto punto contra $q$ sea diferente de cero). Para esto, se toman las componentes diferentes de cero en $q$, se toman las listas de adyacencia de $W^*$ y se procede a unirlas de manera eficiente. El conjunto de identificadores de documento resultado de esta unión será aquel que debe ser evaluado para obtener el conjunto de documentos similares. 
+Si uno toma la intersección, que puede ser más veloz de calcular, entonces podrían perderse documentos relevantes; es posible también mandar el problema a un punto intermedio, es decir al problema de $t$-thresholds, donde se recupera un conjunto donde cada uno de los miembros aparece en al menos $t$ listas.
+La manera más eficiente, sin embargo, es realizar optimizaciones por filtrado de pesos o mejorando los esquemas de pesado; la idea general entonces es desaparecer entradas de $W*$ de tal forma que la unión sea siempre pequeña. La adecuada optimización de un índice invertido puede hacerlo escalable a niveles realmente impresionantes.
+
+Los algoritmos de BK pueden ser utilizados para calcular la unión y t-thresholds, así como los algoritmos de mezcla clásicos (_merge_). Es posible unir la operación de unión con la operación de producto punto por vector usando los algoritmos adecuados.
+
+- <https://github.com/sadit/InvertedFiles.jl/blob/main/src/invfilesearch.jl>
+- <https://github.com/sadit/InvertedFiles.jl/blob/main/src/winvfilesearch.jl>
+- <https://github.com/sadit/Intersections.jl/blob/main/src/imerge.jl>
+- <https://github.com/sadit/Intersections.jl/blob/main/src/umerge.jl>
+- <https://github.com/sadit/Intersections.jl/blob/main/src/xmerge.jl>
+
+## Preparación del ámbiente
+```{julia}
+using CSV, DataFrames, Downloads
+using SimilaritySearch, TextSearch, InvertedFiles
+using StatsBase, JSON3, Cobweb
+using LinearAlgebra, JLD2
+using PlotlyLight
+PlotlyLight.settings.use_iframe = true  # necesario para quarto / jupyter / etc.
+```
+
+Ahora, podemos descargar nuestros datos. Estos serán la parte en Español de la base de datos WIT (Wikipedia Image Text).
+
+```{julia}
+metafile = "es-wit-text.tsv"
+if !isfile(metafile)
+    Downloads.download("https://huggingface.co/datasets/sadit/WIT-es_jina-clip-v2_sample/resolve/main/es-wit-text.tsv?download=true", metafile)
+end
+```
+
+A continuación se carga el archivo de datos:
+```{julia}
+
+D = CSV.read(metafile, DataFrame)
+names(D)
+```
+
+Un ejemplo de lo que viene en cada registro:
+```{julia}
+Dict(pairs(D[1, :]))
+```
+
+## Creación del modelo de preprocesamiento y tokenización de texto
+Ahora si podemos comenzar con la parte de procesamiento de información textual, para esto estaremos usando nuestro paquete `TextSearch`.
+
+```{julia}
+textmodel = TextConfig()
+Dict(f => getfield(textmodel, f) for f in fieldnames(typeof(textmodel)))
+```
+
+Esta estructura contiene indicaciones necesarias para preprocesar y tokenizar el texto
+```{julia}
+textmodel
+```
+
+Para crear un índice invertido es necesario obtener un vocabulario del texto; utilizaremos para esto el campo `content_page_description`:
+```{julia}
+voc = Vocabulary(textmodel, D.context_page_description)
+```
+
+Vamos a intentar visualizar convirtiendo nuestra estructura en una tabla:
+```{julia}
+table(voc, DataFrame)
+```
+
+### Distribución del vocabulario (Ley de Zipf)
+Vamos a ver su distribución (frecuencia por token o palabra)
+```{julia}
+
+p = plot(y=sort(ndocs(voc), rev=true)[1:1000], type=:scatter)
+display(p)
+p = plot(y=sort(ndocs(voc), rev=true), type=:scatter)
+p.layout.title = "Ley de Zipf"
+p.layout.xaxis.type = "log"
+p.layout.yaxis.type = "log"
+p
+```
+
+La distribución es tipo ley de potencia, Ley de Zipf; el vocabulario es grande, y la cola de la distribución es enorme, lo cual quiere decir que pocas palabras tienen mucha frecuencia y muchísimas aparecen poco.
+
+Las palabras muy frecuentes serán artículos, conjunciones, preprocisiones, etc. Palabras que muchas veces no abonan información semántica importante para la búsqueda. A estas palabras se les llama _stopwords_, y muchas veces podrían estar inyectando información inútil a nuestro modelo.
+
+Por otra parte, dado el tipo de colección, la cola larga de la distribución podría indicar que hay temas muy especializados y deberíamos preservar ese vocabulario. Por razones de simplificación y ahorro de recursos, vamos a suponer que los temas muy especializados, se saldrán de nuestras posibles consultas. Por lo que podemos filtrar el vocabulario como sigue.
+
+```{julia}
+
+display(vocsize(voc))
+voc = filter_tokens(voc) do t
+  3 <= t.ndocs <= 9_000
+end
+vocsize(voc)
+```
+
+Nuestro vocabulario ahora es más pequeño y los vectores que generará serán menos dispersos. En una aplicación se debe valorar que y hasta donde este filtrado debe hacerse, ya que impactará en diferentes formas a nuestras aplicaciones.
+
+## Sobre el pesado de términos
+
+Ya se ha mencionado que un índice invertido es, fundamentalmente, la representación dispersa $W^*$ de la matriz de pesos $W_{m,n}$ de términos vs documentos, con acceso eficiente por filas. Teniendo en cuenta que el número términos por documento con respecto al vocabulario completo es muy baja, dicha representación puede llegar a ser muy eficiente. Es entendible que dependiendo de la colección, los términos podrían llegar a ser más o menos importantes, esto se controla mediante el pesado de términos, que serán finalmente las componentes que se multiplicarán cuando se evalue (de manera explícita o implícita) el producto punto entre consulta y documentos. A continuación se mencionan algunas estrategías de pesados:
+
+- *Binario*: Los pesos toman 2 valores, 1 cuando el término ocurren en el documento y 0 cuando no lo hace.
+- *Frecuencia local*: Se usa la frecuencia del término dentro del documento, útil cuando se sabe que la información local (de la instancia o documento) es dominante.
+- *Frecuencia global*: Se usa la frecuencia del término en la colección, útil cuando la información global es más importante que la información de cada instancia.
+
+Es posible ver dos tendencias naturales, pesado local y pesado global, además de uso de estadísticas de ocurrencias para asignar pesos. Habrá problemas que se beneficien de tener pesos tanto locales como globales, y por tanto usar ambos es una estrategía común. Así mismo, es necesario hacer notar que el uso de frecuencias es desaconsejable ya que dependerán del tamaño de los documentos, y esto será claramente un problema si los documentos son de tamaños diferentes. Por tanto, una solución es desasociar del tamaño del documento, por ejemplo, usando probabilidades u otras técnicas que remuevan la magnitud.
+
+### Frecuencia de término (TF)
+
+Para el pesado local, es posible realizar diferentes normalizaciones, por ejemplo, la probabilidad empírica de que un término ocurra en un documento $d$. 
+$$ tp(t, d) = \frac{\textsf{occs}(t, d)}{\sum_{t' \in d} \textsf{occs}(t', d)} $$
+donde $\textsf{occs}(t, d)$ es el número de ocurrencias de $t$ en el documento $d$.
+
+También es común usar la máxima frecuencia como normalizador
+$$\textsf{TF}(t, d) = \frac{\textsf{occs}(t, d)}{\max_{t' \in d} \textsf{occs}(t', d)} $$
+de hecho, esta es la forma de la frecuencia de término (TF), uno de los pesados locales más usados.
+
+
+### Frecuencia de documento inversa ($\textsf{IDF}$)
+
+El pesado global puede realizarse por medio de la probabilidad de que un término $t$ ocurra pero ahora en el corpus completo $C$
+$$ \textsf{DF}(t, C) = \frac{\textsf{ndocs}(t, C)}{N}$$
+
+donde $\textsf{ndocs}(t, C)$ es el número de documentos que contienen a $t$ en el corpus $C$, y  $N$ es el número de documentos en la colección.
+
+Ya que las colecciones pueden ser muy grandes, es posible que aún en su forma de probabilidad este número sea o muy grande o muy pequeño (Ley de Zipf, ver más adelante). Es por esto que suele modificarse la magnitud usando $\log$, en particular, se puede calcular el llamado _inverse document frequency_ como sigue:
+
+$$\textsf{IDF}(t, C) = \log \frac{N}{\textsf{ndocs}(t, C)} $$
+
+Esto hace que las palabras con pocas apariciones en la colección tengan un peso alto, ya que se desea contrarestar la información local.
+
+### Combinando pesado local y global - $\textsf{TFIDF}$
+
+La combinación de pesado local y global es comúnmente realizada por la multiplicación de ambas.
+En el caso de TF e $\textsf{IDF}$, su combinación se encuentra entre los métodos más aceptados para pesar términos.
+En este caso se debe tener en cuenta que $\textsf{TF}(t, d)$ varia entre 0 y 1 mientras que $\textsf{IDF}(t, C)$ entre 0 y $\log N$. La magnitud de DF se puede reducir mediante el uso de diferentes bases del logaritmo (factor) o haciendolo como el cociente de $\textsf{IDF}(t, C) / \log N$ para hacerlo variar entre 0 y 1. Sin embargo, la manera más aceptada es
+
+$$\textsf{TFIDF}(t, d, C) = \textsf{TF}(t, d) \times \textsf{IDF}(t, C)$$
+
+pero es importante conocer que este pesado dará importancia al peso global, dado su rango de valores.
+
+### Creación de una bolsa de palabras (pesado binario)
+```{julia}
+let text = D.context_page_description[1]
+  display(text)
+  bagofwords(voc, text)
+end
+```
+
+### Creación de un modelo TFIDF
+El modelo vectorial intenta poner pesos 
+```{julia}
+vmodel = VectorModel(IdfWeighting(), TfWeighting(), voc)
+```
+
+Ahora podemos observar el vocabulario, ordenado por su peso TFIDF
+```{julia}
+sort!(table(vmodel, DataFrame), :weight)
+```
+
+La función `vectorize_corpus` codificará una colección de textos en una colección de vectores dispersos:
+```{julia}
+X = vectorize_corpus(vmodel, D.context_page_description)
+```
+
+## Búsqueda por fuerza bruta
+
+Vamos a utilizar estos vectores para realizar búsquedas; para esto usaremos el paquete `SimilaritySearch` y varias de sus estructuras y funciones.
+
+```{julia}
+n = 10^4
+db, queries = VectorDatabase(X[1:n]), VectorDatabase(X[n+1:n+100])
+dist = CosineDistance()
+S = ExhaustiveSearch(; db, dist)
+ctx = GenericContext()
+```
+
+Ahora podemos buscar bloques de consultas, la siguiente instrucción busca 10 vecinos cercanos de `queries` en la base de datos `db` (usando el índice `S` y su contexto de búsqueda `ctx`). 
+
+```{julia}
+@time knns = searchbatch(S, ctx, queries, 10)
+```
+
+Es interesante ver el costo y ejecutarlo al menos dos veces para remover el tiempo de compilación de Julia.
+
+#### Observación de resultados
+A continuación veremos que tipo de cosas consultamos y que tipos de cosas se recuperarón
+```{julia}
+qID = 100
+r = D[10_000 + qID, :]
+Dict(pairs(r))
+```
+
+Ahora visualizaremos usando HTML empotrado (ver `Cobweb` que es el paquete que estamos usando para este punto). La consulta se ve como sigue:
+```{julia}
+
+h.table(
+  h.tr(
+    h.td(h.img(src=r.image_url, alt=r.page_title, width=240), style="width: 20%;"),
+    h.td(r.context_page_description)
+  )
+)
+```
+
+Ahora los resultados recuperados:
+```{julia}
+children = []
+for p in view(knns, :, qID)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+
+Vamos a ver el histograma de distancias, que nos puede decir mucho sobre la dificultad de un problema de búsqueda.
+```{julia}
+p = plot()
+p.layout.title.text = "knn distance histogram"
+p.histogram(x=convert.(Float32, view(knns, 10, :)))
+```
+
+## Búsqueda con índice
+
+```{julia}
+G = WeightedInvertedFile(vocsize(vmodel))
+gctx = InvertedFileContext()
+@time append_items!(G, gctx, VectorDatabase(X))
+```
+
+```{julia}
+@time knns = searchbatch(G, gctx, VectorDatabase(X[1000:1100]), 10)
+```
+
+```{julia}
+
+qID = 13
+r = D[1000+qID-1, :]
+
+h.table(
+  h.tr(
+    h.td(h.img(src=r.image_url, alt=r.page_title, width=160)),
+    h.td(r.context_page_description)
+  )
+)
+```
+
+```{julia}
+
+children = []
+for p in view(knns, :, qID)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+```{julia}
+p = plot()
+#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
+p.layout.title.text = "knn distance histogram - indexed - multimodal "
+p.histogram(x=convert.(Float32, view(knns, 10, :)))
+```
+
+
+## Consultas libres
+
+```{julia}
+@time res = search(G, gctx, vectorize(vmodel, "Benito Juarez"), knnqueue(gctx, 10))
+```
+
+
+```{julia}
+
+children = []
+for p in viewitems(res)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```

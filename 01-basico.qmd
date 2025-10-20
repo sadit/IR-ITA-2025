@@ -70,6 +70,7 @@ Es posible usar Colab para reducir la complejidad de la instalación, ya que cue
 ### Usando Jupyter
 Una vez instalado julia; debemos instalar el paquete `IJulia` que instalará todo lo necesario para correr Jupyter (ver la sección de `Pkg` al final de esta unidad para más información sobre paquetes). Una vez corriendo, se debe seleccionar crear un notebook específicando el kernel de Julia para utilizarlo.
 
+## Sintaxis y estructuras
 ### Funciones
 Las funciones son centrales en Julia. Por ahora veremos la estructura y más adelante, definiremos algunas.
 
@@ -106,6 +107,10 @@ El _ámbito_ o _scope_ de las variables en Julia es sintáctico, que significa q
 Las _expresiones_ son la forma más genérica de expresar el código en Julia, comprenden operaciones aritméticas, asignación y declaración de variables, definiciones de bloques de código, llamadas de funciones, entre otras.
 
 Cada linea suele ser una expresión, a menos que se extienda por múltiples lineas por medio de un agrupador de código o datos, estos pueden ser 
+
+::: {.columns}
+
+::: {.column width="33%"}
 ```julia
 begin
     ...
@@ -120,20 +125,33 @@ end
 [...]
 
 [...]
+```
+:::
 
-for elem in collection
+::: {.column width="33%"}
+```julia
+for el in col
     ...
 end
 
-while cond_expr
+while cond
     ...
 end
 
-if cond_expr
+if cond
+    ...
+elseif cond
+    ...
+else
     ...
 end
 
-function fun(args...; kwargs...)
+```
+:::
+
+::: {.column width="33%"}
+```julia
+function fun(...)
     ...
 end
 
@@ -144,9 +162,66 @@ catch
 finally
     ...
 end
+
 ```
+:::
+
+:::
+
 
 entre las más utilizadas; claramentre hay infinidad de formas de componerlas para formar los algoritmos que se esten escribiendo.
+
+### Comentarios
+Los comentarios en Julia se hacen por linea o por bloque.
+
+Para comentar una linea se usa el carácter hash `#` y define una linea comentada desde ese punto  hasta el salto de linea
+
+```{julia}
+# los siguientes son comentarios de linea completos, por lo que no se imprimirán
+#println(:hola === :hola)
+#println(typeof(:hola)) 
+println(Symbol("hola mundo"))  # este sí se imprimirá, pero este comentario no
+```
+
+Para comentar por bloque, dicho bloque se encierra entre `#= ... =#`
+
+```{julia}
+println("hola mundo!" #=Symbol("hola mundo")=#)
+```
+
+### Documentación 
+La documentación oficial se encuentra en <https://docs.julialang.org>; la cuál cubre el lenguaje y las bibliotecas estandar. Fuera de eso, habrá que ver los sitios y documentaciones de cada paquete, que casi siempre estan en _github_.
+
+Actualmente los chatbots como ChatGPT y Gemini también pueden ser una buena fuente de información sobre el API y las formas de trabajo. Nota: siempre se debe corroborar la información, ya que suelen alucinar.
+
+La manera _empotrada_ de consultar la documentación sobre una función es con el prefijo `?` en el REPL.
+
+::: {style="margin-left: 2cm; background-color: lightgray;"}
+#### Ejemplo
+Nota: Las ligas que salen estan rotas ya que no se adjunta la documentación en este manuscrito.
+
+```{julia}
+?println("holi")
+```
+
+:::
+
+
+
+Esto también indica que debemos documentar nuestro código, en particular se hace de la siguiente forma
+
+```{{julia}}
+
+"""
+    fun(...)
+
+Esta función es un ejemplo de documentación
+"""
+function fun(...)
+    ...
+end
+```
+
 
 #### Definición de variables
 Las definiciones de variables tienen la sintaxis `variable = valor`; las variables comunmente comienzan con una letra o `_`, las letras pueden ser caracteres _unicode_, no deben contener espacios ni puntuaciones como parte del nombre; `valor` es el resultado de evaluar o ejecutar una expresión.
@@ -465,7 +540,7 @@ function g(x; t=1)
 end
 ```
 
-## Estructuras
+## Definición de estructuras
 
 ```{julia}
 struct Point
@@ -537,7 +612,7 @@ El ecosistema de paquetes de Julia es una de sus mayores fortalezas, impulsado p
 
 ### Pkg en REPL
 
-Para entrar al modo Pkg desde cualquier sesión de Julia en el REPL se debe teclear _corchete cerrado `]`.
+Para entrar al modo Pkg desde cualquier sesión de Julia en el REPL se debe teclear corchete que cierra `]`.
 
 
 El prompt del REPL cambiará:
@@ -678,8 +753,3 @@ En particular, los _paquetes_ pueden verse como la preparación de un módulo pa
 - Curso _Introduction to computational thinking_ <https://computationalthinking.mit.edu/Fall20/>
 
 
-## Licencia
-
-[![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
-
-Esta obra está bajo una [Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional](http://creativecommons.org/licenses/by-sa/4.0/)

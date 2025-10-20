@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Eric S. Téllez">
 
-<title>data-vis – Curso Introductorio a Julia y Recuperación de Información</title>
+<title>Dataframes y Visualización – Curso Introductorio a Julia y Recuperación de Información</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,10 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-95f147d06fdb9f8ce149f95e323965f4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8fd1faf6fd93e4e6d207ae0f9db51d78.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c7dc29137db5525bd405bd4cb336165f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,10 +111,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -139,7 +140,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./02-data-vis.html" aria-current="page"> 
-<span class="menu-text">Uso de dataframes y visualización</span></a>
+<span class="menu-text">Dataframes y Visualización</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./03-IR.html"> 
+<span class="menu-text">Recuperación de Información</span></a>
+  </li>  
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">04-text-IR.qmd</span>
+    </span>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./05-metric-IR.html"> 
+<span class="menu-text">Búsqueda en espacios métricos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./06-about.html"> 
+<span class="menu-text">Acerca de</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -149,28 +167,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Dataframes y Visualización</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
+                      </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Autor/a</div>
+    <div class="quarto-title-meta-heading">Afiliación</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author"><a href="https://sadit.github.io">Eric S. Téllez</a> <a href="mailto:eric.tellez@ieee.org" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              INFOTEC Centro de Investigación e Innovación en Tecnologías de la Información y Comunicación
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#uso-de-tablas-de-datos" id="toc-uso-de-tablas-de-datos" class="nav-link active" data-scroll-target="#uso-de-tablas-de-datos">Uso de tablas de datos</a>
+  <ul class="collapse">
+  <li><a href="#descargando-un-archivo-de-datos-csv-desde-internet" id="toc-descargando-un-archivo-de-datos-csv-desde-internet" class="nav-link" data-scroll-target="#descargando-un-archivo-de-datos-csv-desde-internet">Descargando un archivo de datos CSV desde Internet</a></li>
+  <li><a href="#filtrado" id="toc-filtrado" class="nav-link" data-scroll-target="#filtrado">Filtrado</a></li>
+  </ul></li>
+  <li><a href="#visualización" id="toc-visualización" class="nav-link" data-scroll-target="#visualización">Visualización</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7"></h1></header><div class="quarto-title-block"><div class="quarto-title-tools-only"><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#uso-de-tablas-de-datos" id="toc-uso-de-tablas-de-datos">Uso de tablas de datos</a>
+  <ul>
+  <li><a href="#descargando-un-archivo-de-datos-csv-desde-internet" id="toc-descargando-un-archivo-de-datos-csv-desde-internet">Descargando un archivo de datos CSV desde Internet</a></li>
+  <li><a href="#filtrado" id="toc-filtrado">Filtrado</a></li>
+  </ul></li>
+  <li><a href="#visualización" id="toc-visualización">Visualización</a></li>
+  </ul>
+</nav>
 <section id="uso-de-tablas-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="uso-de-tablas-de-datos">Uso de tablas de datos</h2>
-<p>Un dataframe es una tabla de datos y visualización con Plotly</p>
+<p>Un dataframe es una tabla de datos y visualización con Plotly; existen varios graficadores de Julia, incluso algunos nativos, pero suelen tener tiempos de compilación considerables que pueden ser poco prácticos para su uso en Colab o un curso práctico limitado en tiempo.</p>
 <div id="2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">Downloads</span>, <span class="bu">StatsBase</span>, <span class="bu">MultivariateStats</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PlotlyLight</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#preset.source.standalone!()</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span>  <span class="co"># necesario para quarto / jupyter / etc.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>true</code></pre>
 </div>
 </div>
+<section id="descargando-un-archivo-de-datos-csv-desde-internet" class="level3">
+<h3 class="anchored" data-anchor-id="descargando-un-archivo-de-datos-csv-desde-internet">Descargando un archivo de datos CSV desde Internet</h3>
 <p>Descargaremos una tabla de internet en formato CSV y luego se cargará</p>
 <div id="4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"</span></span>
@@ -496,6 +569,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="filtrado" class="level3">
+<h3 class="anchored" data-anchor-id="filtrado">Filtrado</h3>
 <p>Los dataframes permiten filtrar o seleccionar datos de manera muy simple:</p>
 <div id="8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_setosa <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.Name <span class="op">==</span> <span class="st">"Iris-setosa"</span>, df)</span>
@@ -735,6 +811,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="visualización" class="level2">
+<h2 class="anchored" data-anchor-id="visualización">Visualización</h2>
+<p>Para visualiación</p>
 <div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>(mode<span class="op">=</span><span class="st">"markers"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(x<span class="op">=</span>df_setosa.SepalLength, y<span class="op">=</span>df_setosa.PetalLength, mode<span class="op">=</span><span class="st">"markers"</span>)</span>
@@ -742,9 +823,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"2 tipos de flores"</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-ktizdpboex&quot;></div><script>Plotly.newPlot(&quot;plotlyx-ktizdpboex&quot;,[{&quot;type&quot;:&quot;scatter&quot;,&quot;mode&quot;:&quot;markers&quot;},{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[5.1,4.9,4.7,4.6,5.0,5.4,4.6,5.0,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5.0,5.0,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5.0,5.5,4.9,4.4,5.1,5.0,4.5,4.4,5.0,5.1,4.8,5.1,4.6,5.3,5.0],&quot;y&quot;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1.0,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.5,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4],&quot;mode&quot;:&quot;markers&quot;},{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[7.0,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5.0,5.9,6.0,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6.0,5.7,5.5,5.5,5.8,6.0,5.4,6.0,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5.0,5.6,5.7,5.7,6.2,5.1,5.7],&quot;y&quot;:[4.7,4.5,4.9,4.0,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4.0,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4.0,4.9,4.7,4.3,4.4,4.8,5.0,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4.0,4.4,4.6,4.0,3.3,4.2,4.2,4.2,4.3,3.0,4.1],&quot;mode&quot;:&quot;markers&quot;}],{&quot;title&quot;:{&quot;text&quot;:&quot;2 tipos de flores&quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-yoyqmuyhit&quot;></div><script>Plotly.newPlot(&quot;plotlyx-yoyqmuyhit&quot;,[{&quot;type&quot;:&quot;scatter&quot;,&quot;mode&quot;:&quot;markers&quot;},{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[5.1,4.9,4.7,4.6,5.0,5.4,4.6,5.0,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5.0,5.0,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5.0,5.5,4.9,4.4,5.1,5.0,4.5,4.4,5.0,5.1,4.8,5.1,4.6,5.3,5.0],&quot;y&quot;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1.0,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.5,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4],&quot;mode&quot;:&quot;markers&quot;},{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[7.0,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5.0,5.9,6.0,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6.0,5.7,5.5,5.5,5.8,6.0,5.4,6.0,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5.0,5.6,5.7,5.7,6.2,5.1,5.7],&quot;y&quot;:[4.7,4.5,4.9,4.0,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4.0,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4.0,4.9,4.7,4.3,4.4,4.8,5.0,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4.0,4.4,4.6,4.0,3.3,4.2,4.2,4.2,4.3,3.0,4.1],&quot;mode&quot;:&quot;markers&quot;}],{&quot;title&quot;:{&quot;text&quot;:&quot;2 tipos de flores&quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 </div>
+<section id="visualización-de-datos-en-alta-dimensión" class="level4">
+<h4 class="anchored" data-anchor-id="visualización-de-datos-en-alta-dimensión">Visualización de datos en alta dimensión</h4>
 <p>El plot anterior tiene un problema, solo muestra <code>SepalLength</code> vs <code>PetalLength</code>; ignorando <code>SepalWidth</code> y <code>PealWidth</code>. Es posible hacer un plot en 3 dimensiones, pero en 4 ya no es posible. Entonces, lo que se suele hacer para visualizar datos de alta dimensión es utilizar un método para reducir la dimensión. Por ejemplo <code>PCA</code>.</p>
 <div class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
@@ -755,7 +838,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> <span class="fu">Dict</span>(</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-setosa"</span> <span class="op">=&gt;</span> <span class="st">"blue"</span>, </span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-versicolor"</span> <span class="op">=&gt;</span> <span class="st">"red"</span>, </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-virginica"</span> <span class="op">=&gt;</span> <span class="st">"orange"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-virginica"</span> <span class="op">=&gt;</span> <span class="st">"green"</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> <span class="fu">fit</span>(PCA, X; maxoutdim<span class="op">=</span><span class="fl">2</span>)</span>
@@ -784,7 +867,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-pca-2" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-uvnrlhxhuw&quot;></div><script>Plotly.newPlot(&quot;plotlyx-uvnrlhxhuw&quot;,[{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[2.6842074,2.715391,2.88982,2.7464375,2.7285933,2.2798977,2.8208911,2.6264825,2.887959,2.6738453,2.5065272,2.6131432,2.7874346,3.2252011,2.6435435,2.38387,2.6225266,2.648323,2.1990786,2.5873466,2.310532,2.5432353,3.2158582,2.303129,2.3561716,2.5079176,2.4690566,2.5623915,2.6398218,2.6328485,2.5884626,2.4100778,2.6476374,2.5971599,2.6738453,2.867,2.625229,2.6738453,2.9818432,2.5903234,2.7701395,2.8522115,2.998297,2.4055147,2.2088335,2.7156656,2.5375738,2.8403215,2.542686,2.7039127,-1.284794,-0.93241036,-1.464061,-0.18096672,-1.087134,-0.64043623,-1.0952232,0.75146765,-1.0432972,0.010190536,0.5110867,-0.5110975,-0.26233527,-0.9840439,0.17486459,-0.92757255,-0.65959233,-0.2345401,-0.9423612,-0.043245975,-1.1162405,-0.35678607,-1.2964685,-0.920502,-0.714008,-0.8996405,-1.3310412,-1.5573958,-0.8124551,0.3073353,0.07034341,0.19188495,-0.13499466,-1.3787365,-0.58727443,-0.8072051,-1.2204282,-0.8128675,-0.24519457,-0.16451295,-0.46303064,-0.89015985,-0.22887868,0.7070818,-0.35553235,-0.33112627,-0.3752375,-0.6416899,0.9084639,-0.29780728,-2.5317268,-1.4140718,-2.6164842,-1.9708145,-2.3497577,-3.3968794,-0.51938283,-2.932005,-2.3196726,-2.918134,-1.6619345,-1.8023403,-2.1653786,-1.3445938,-1.585267,-1.9047434,-1.9492484,-3.4887648,-3.7946866,-1.2983294,-2.4281666,-1.198097,-3.499265,-1.387668,-2.275853,-2.6141934,-1.2576249,-1.2906693,-2.1228535,-2.3875642,-2.8409605,-3.2323427,-2.158738,-1.4431021,-1.7796395,-3.0765212,-2.1449866,-1.9048625,-1.1688532,-2.1076536,-2.314303,-1.9224505,-1.4140718,-2.5633223,-2.4193907,-1.9440165,-1.5256633,-1.7640454,-1.9016287,-1.3896657],&quot;y&quot;:[0.32660648,-0.16955782,-0.13734646,-0.31112498,0.33392385,0.74778223,-0.08210501,0.17040472,-0.57079864,-0.10669243,0.6519343,0.021520412,-0.22774094,-0.50328034,1.186194,1.3447536,0.8180888,0.31913573,0.8792431,0.520473,0.3978671,0.44003102,0.14161487,0.10552159,-0.031209579,-0.13905731,0.1378866,0.37468365,0.31928903,-0.19007643,-0.19739367,0.41807893,0.81998223,1.1000212,-0.10669243,0.077192,0.6067988,-0.10669243,-0.48025066,0.23605856,0.27105856,-0.9328668,-0.33430797,0.19591634,0.44269565,-0.24268243,0.5103671,-0.22057696,0.58628047,0.115009926,0.68543816,0.31919736,0.5041888,-0.82560503,0.07538919,-0.41732404,0.2838907,-1.001108,0.22895594,-0.72057563,-1.262493,-0.10228485,-0.54789454,-0.12436097,-0.2518165,0.4682348,-0.3519767,-0.33192226,-0.5418239,-0.5814904,-0.08421441,-0.06682507,-0.32756242,-0.18239091,0.15037821,0.3296097,0.24466838,0.26739138,-0.16233228,-0.3650879,-0.7025388,-0.67749137,-0.31171048,-0.42120564,-0.48328435,0.19505358,0.40803415,-0.37068033,-0.26672855,-0.67966235,-0.669527,-0.033813074,-0.40225855,-1.0084257,-0.5032191,-0.21118061,-0.2916226,0.019070186,-0.75157,-0.34701738,-0.011842565,-0.57492554,0.34193414,-0.1811259,-0.041883312,0.5471671,-1.191352,0.3523765,-0.24554925,0.7803796,0.24203753,-0.21615553,0.21527928,-0.7764165,-0.539308,0.11881811,0.04072968,1.1715441,0.25326416,-0.7610149,0.37678105,-0.60557973,0.45677245,-0.20403199,0.33338574,0.5583663,-0.17913823,-0.11642605,-0.21085568,0.46251833,0.37274155,1.3705236,-0.21832643,-0.14380181,-0.501465,0.6857628,0.13890623,0.048047103,-0.16450325,0.37148106,0.18260753,0.4092696,-0.57492554,0.27597383,0.30350274,0.18741362,-0.37502205,0.0785182,0.11587613,-0.282887],&quot;mode&quot;:&quot;markers&quot;,&quot;marker&quot;:{&quot;color&quot;:[&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;,&quot;orange&quot;]}}],{&quot;title&quot;:&quot;PCA sobre Iris&quot;},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-hgxgrtktll&quot;></div><script>Plotly.newPlot(&quot;plotlyx-hgxgrtktll&quot;,[{&quot;type&quot;:&quot;scatter&quot;,&quot;x&quot;:[2.6842074,2.715391,2.88982,2.7464375,2.7285933,2.2798977,2.8208911,2.6264825,2.887959,2.6738453,2.5065272,2.6131432,2.7874346,3.2252011,2.6435435,2.38387,2.6225266,2.648323,2.1990786,2.5873466,2.310532,2.5432353,3.2158582,2.303129,2.3561716,2.5079176,2.4690566,2.5623915,2.6398218,2.6328485,2.5884626,2.4100778,2.6476374,2.5971599,2.6738453,2.867,2.625229,2.6738453,2.9818432,2.5903234,2.7701395,2.8522115,2.998297,2.4055147,2.2088335,2.7156656,2.5375738,2.8403215,2.542686,2.7039127,-1.284794,-0.93241036,-1.464061,-0.18096672,-1.087134,-0.64043623,-1.0952232,0.75146765,-1.0432972,0.010190536,0.5110867,-0.5110975,-0.26233527,-0.9840439,0.17486459,-0.92757255,-0.65959233,-0.2345401,-0.9423612,-0.043245975,-1.1162405,-0.35678607,-1.2964685,-0.920502,-0.714008,-0.8996405,-1.3310412,-1.5573958,-0.8124551,0.3073353,0.07034341,0.19188495,-0.13499466,-1.3787365,-0.58727443,-0.8072051,-1.2204282,-0.8128675,-0.24519457,-0.16451295,-0.46303064,-0.89015985,-0.22887868,0.7070818,-0.35553235,-0.33112627,-0.3752375,-0.6416899,0.9084639,-0.29780728,-2.5317268,-1.4140718,-2.6164842,-1.9708145,-2.3497577,-3.3968794,-0.51938283,-2.932005,-2.3196726,-2.918134,-1.6619345,-1.8023403,-2.1653786,-1.3445938,-1.585267,-1.9047434,-1.9492484,-3.4887648,-3.7946866,-1.2983294,-2.4281666,-1.198097,-3.499265,-1.387668,-2.275853,-2.6141934,-1.2576249,-1.2906693,-2.1228535,-2.3875642,-2.8409605,-3.2323427,-2.158738,-1.4431021,-1.7796395,-3.0765212,-2.1449866,-1.9048625,-1.1688532,-2.1076536,-2.314303,-1.9224505,-1.4140718,-2.5633223,-2.4193907,-1.9440165,-1.5256633,-1.7640454,-1.9016287,-1.3896657],&quot;y&quot;:[0.32660648,-0.16955782,-0.13734646,-0.31112498,0.33392385,0.74778223,-0.08210501,0.17040472,-0.57079864,-0.10669243,0.6519343,0.021520412,-0.22774094,-0.50328034,1.186194,1.3447536,0.8180888,0.31913573,0.8792431,0.520473,0.3978671,0.44003102,0.14161487,0.10552159,-0.031209579,-0.13905731,0.1378866,0.37468365,0.31928903,-0.19007643,-0.19739367,0.41807893,0.81998223,1.1000212,-0.10669243,0.077192,0.6067988,-0.10669243,-0.48025066,0.23605856,0.27105856,-0.9328668,-0.33430797,0.19591634,0.44269565,-0.24268243,0.5103671,-0.22057696,0.58628047,0.115009926,0.68543816,0.31919736,0.5041888,-0.82560503,0.07538919,-0.41732404,0.2838907,-1.001108,0.22895594,-0.72057563,-1.262493,-0.10228485,-0.54789454,-0.12436097,-0.2518165,0.4682348,-0.3519767,-0.33192226,-0.5418239,-0.5814904,-0.08421441,-0.06682507,-0.32756242,-0.18239091,0.15037821,0.3296097,0.24466838,0.26739138,-0.16233228,-0.3650879,-0.7025388,-0.67749137,-0.31171048,-0.42120564,-0.48328435,0.19505358,0.40803415,-0.37068033,-0.26672855,-0.67966235,-0.669527,-0.033813074,-0.40225855,-1.0084257,-0.5032191,-0.21118061,-0.2916226,0.019070186,-0.75157,-0.34701738,-0.011842565,-0.57492554,0.34193414,-0.1811259,-0.041883312,0.5471671,-1.191352,0.3523765,-0.24554925,0.7803796,0.24203753,-0.21615553,0.21527928,-0.7764165,-0.539308,0.11881811,0.04072968,1.1715441,0.25326416,-0.7610149,0.37678105,-0.60557973,0.45677245,-0.20403199,0.33338574,0.5583663,-0.17913823,-0.11642605,-0.21085568,0.46251833,0.37274155,1.3705236,-0.21832643,-0.14380181,-0.501465,0.6857628,0.13890623,0.048047103,-0.16450325,0.37148106,0.18260753,0.4092696,-0.57492554,0.27597383,0.30350274,0.18741362,-0.37502205,0.0785182,0.11587613,-0.282887],&quot;mode&quot;:&quot;markers&quot;,&quot;marker&quot;:{&quot;color&quot;:[&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;red&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;,&quot;green&quot;]}}],{&quot;title&quot;:&quot;PCA sobre Iris&quot;},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b)
@@ -798,10 +881,12 @@ Figura&nbsp;1
 </figure>
 </div>
 </div>
+<p>Ahora tenemos un mapa en 2D que contiene información de 4D; lo cual claramente podría implicar un <em>error</em>, ver el artículo de <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a> en wikipedia, pero nos permite generar conocimiento e intuición de las relaciones entre los datos.</p>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1259,74 +1344,83 @@ Figura&nbsp;1
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> julia</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">lang:</span><span class="co"> es-MX</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Uso de tablas de datos</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>Un dataframe es una tabla de datos y visualización con Plotly</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Dataframes y Visualización</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">Downloads</span>, <span class="bu">StatsBase</span>, <span class="bu">MultivariateStats</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PlotlyLight</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#preset.source.standalone!()</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>Descargaremos una tabla de internet en formato CSV y luego se cargará</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="bu">Downloads</span>.<span class="fu">download</span>(url, <span class="st">"iris.csv"</span>)</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"iris.csv"</span>, DataFrame)</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>Para observar un resumen del contenido</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>Los dataframes permiten filtrar o seleccionar datos de manera muy simple:</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>df_setosa <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.Name <span class="op">==</span> <span class="st">"Iris-setosa"</span>, df)</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>df_versicolor <span class="op">=</span> df[df.Name <span class="op">.==</span> <span class="st">"Iris-versicolor"</span>, <span class="op">:</span>]</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>(mode<span class="op">=</span><span class="st">"markers"</span>)</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(x<span class="op">=</span>df_setosa.SepalLength, y<span class="op">=</span>df_setosa.PetalLength, mode<span class="op">=</span><span class="st">"markers"</span>)</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(x<span class="op">=</span>df_versicolor.SepalLength, y<span class="op">=</span>df_versicolor.PetalLength, mode<span class="op">=</span><span class="st">"markers"</span>)</span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"2 tipos de flores"</span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>p</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>El plot anterior tiene un problema, solo muestra <span class="in">`SepalLength`</span> vs <span class="in">`PetalLength`</span>; ignorando <span class="in">`SepalWidth`</span> y <span class="in">`PealWidth`</span>. Es posible hacer un plot en 3 dimensiones, pero en 4 ya no es posible. Entonces, lo que se suele hacer para visualizar datos de alta dimensión es utilizar un método para reducir la dimensión. Por ejemplo <span class="in">`PCA`</span>.</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pca</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "PCA"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Uso de tablas de datos</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Un dataframe es una tabla de datos y visualización con Plotly; existen varios graficadores de Julia, incluso algunos nativos, pero suelen tener tiempos de compilación considerables que pueden ser poco prácticos para su uso en Colab o un curso práctico limitado en tiempo.</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">Downloads</span>, <span class="bu">StatsBase</span>, <span class="bu">MultivariateStats</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PlotlyLight</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span>  <span class="co"># necesario para quarto / jupyter / etc.</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### Descargando un archivo de datos CSV desde Internet</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>Descargaremos una tabla de internet en formato CSV y luego se cargará</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="bu">Downloads</span>.<span class="fu">download</span>(url, <span class="st">"iris.csv"</span>)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"iris.csv"</span>, DataFrame)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>Para observar un resumen del contenido</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtrado</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>Los dataframes permiten filtrar o seleccionar datos de manera muy simple:</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>df_setosa <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.Name <span class="op">==</span> <span class="st">"Iris-setosa"</span>, df)</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>df_versicolor <span class="op">=</span> df[df.Name <span class="op">.==</span> <span class="st">"Iris-versicolor"</span>, <span class="op">:</span>]</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualización</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>Para visualiación </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>(mode<span class="op">=</span><span class="st">"markers"</span>)</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(x<span class="op">=</span>df_setosa.SepalLength, y<span class="op">=</span>df_setosa.PetalLength, mode<span class="op">=</span><span class="st">"markers"</span>)</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(x<span class="op">=</span>df_versicolor.SepalLength, y<span class="op">=</span>df_versicolor.PetalLength, mode<span class="op">=</span><span class="st">"markers"</span>)</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"2 tipos de flores"</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>p</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Visualización de datos en alta dimensión</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>El plot anterior tiene un problema, solo muestra <span class="in">`SepalLength`</span> vs <span class="in">`PetalLength`</span>; ignorando <span class="in">`SepalWidth`</span> y <span class="in">`PealWidth`</span>. Es posible hacer un plot en 3 dimensiones, pero en 4 ya no es posible. Entonces, lo que se suele hacer para visualizar datos de alta dimensión es utilizar un método para reducir la dimensión. Por ejemplo <span class="in">`PCA`</span>.</span>
 <span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>p.layout.title <span class="op">=</span> <span class="st">"PCA sobre Iris"</span></span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">permutedims</span>(<span class="fu">Matrix</span><span class="dt">{Float32}</span>(df[<span class="op">:</span>, [<span class="op">:</span>SepalLength, <span class="op">:</span>SepalWidth, <span class="op">:</span>PetalLength, <span class="op">:</span>PetalWidth]]))</span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> <span class="fu">Dict</span>(</span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-setosa"</span> <span class="op">=&gt;</span> <span class="st">"blue"</span>, </span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-versicolor"</span> <span class="op">=&gt;</span> <span class="st">"red"</span>, </span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-virginica"</span> <span class="op">=&gt;</span> <span class="st">"orange"</span></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> <span class="fu">fit</span>(PCA, X; maxoutdim<span class="op">=</span><span class="fl">2</span>)</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> <span class="fu">predict</span>(pca, X)</span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">size</span>(X2))</span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(</span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>X2[<span class="fl">1</span>, <span class="op">:</span>],</span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>X2[<span class="fl">2</span>, <span class="op">:</span>],</span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">"markers"</span>,</span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="fu">Dict</span>(<span class="op">:</span>color <span class="op">=&gt;</span> <span class="fu">map</span>(name<span class="op">-&gt;</span>colors[name], df.Name))</span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>p</span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pca</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "PCA"</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>p.layout.title <span class="op">=</span> <span class="st">"PCA sobre Iris"</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">permutedims</span>(<span class="fu">Matrix</span><span class="dt">{Float32}</span>(df[<span class="op">:</span>, [<span class="op">:</span>SepalLength, <span class="op">:</span>SepalWidth, <span class="op">:</span>PetalLength, <span class="op">:</span>PetalWidth]]))</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> <span class="fu">Dict</span>(</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-setosa"</span> <span class="op">=&gt;</span> <span class="st">"blue"</span>, </span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-versicolor"</span> <span class="op">=&gt;</span> <span class="st">"red"</span>, </span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-virginica"</span> <span class="op">=&gt;</span> <span class="st">"green"</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> <span class="fu">fit</span>(PCA, X; maxoutdim<span class="op">=</span><span class="fl">2</span>)</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> <span class="fu">predict</span>(pca, X)</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">size</span>(X2))</span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> p.<span class="fu">scatter</span>(</span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>X2[<span class="fl">1</span>, <span class="op">:</span>],</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>X2[<span class="fl">2</span>, <span class="op">:</span>],</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">"markers"</span>,</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="fu">Dict</span>(<span class="op">:</span>color <span class="op">=&gt;</span> <span class="fu">map</span>(name<span class="op">-&gt;</span>colors[name], df.Name))</span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>p</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>Ahora tenemos un mapa en 2D que contiene información de 4D; lo cual claramente podría implicar un _error_, ver el artículo de <span class="co">[</span><span class="ot">PCA</span><span class="co">](https://en.wikipedia.org/wiki/Principal_component_analysis)</span> en wikipedia, pero nos permite generar conocimiento e intuición de las relaciones entre los datos.</span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
@@ -1336,7 +1430,7 @@ Figura&nbsp;1
 <p>Eric S. Tellez</p>
 </div>   
     <div class="nav-footer-center">
-<p>Built with <a href="https://quarto.org/">Quarto</a></p>
+<p>Esta obra está bajo una <a href="http://creativecommons.org/licenses/by-sa/4.0/">Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

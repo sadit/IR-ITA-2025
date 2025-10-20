@@ -1,0 +1,12 @@
+---
+engine: julia
+lang: es-MX
+title: Acerca de
+
+---
+
+- Eric Sadit Téllez Avila <eric.tellez@infotec.mx>
+- https://github.com/sadit/SimilaritySearch.jl
+- https://github.com/sadit/SimilaritySearchDemos
+- https://github.com/sadit/TextSearch.jl
+- https://ingeotec.github.io/

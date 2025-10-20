@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es-MX" xml:lang="es-MX"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Eric S. Téllez">
+
+<title>Búsqueda en espacios métricos – Curso Introductorio a Julia y Recuperación de Información</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-95f147d06fdb9f8ce149f95e323965f4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c7dc29137db5525bd405bd4cb336165f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Curso Introductorio a Julia y Recuperación de Información</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Introducción</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./01-basico.html"> 
+<span class="menu-text">Conceptos básicos de Julia</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./02-data-vis.html"> 
+<span class="menu-text">Dataframes y Visualización</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./03-IR.html"> 
+<span class="menu-text">Recuperación de Información</span></a>
+  </li>  
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">04-text-IR.qmd</span>
+    </span>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./05-metric-IR.html" aria-current="page"> 
+<span class="menu-text">Búsqueda en espacios métricos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./06-about.html"> 
+<span class="menu-text">Acerca de</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Búsqueda en espacios métricos</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
+                      </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Autor/a</div>
+    <div class="quarto-title-meta-heading">Afiliación</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author"><a href="https://sadit.github.io">Eric S. Téllez</a> <a href="mailto:eric.tellez@ieee.org" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              INFOTEC Centro de Investigación e Innovación en Tecnologías de la Información y Comunicación
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#búsqueda-por-fuerza-bruta" id="toc-búsqueda-por-fuerza-bruta" class="nav-link active" data-scroll-target="#búsqueda-por-fuerza-bruta">Búsqueda por fuerza bruta</a></li>
+  <li><a href="#búsqueda-con-texto---embeddings-de-jina-clip-v2" id="toc-búsqueda-con-texto---embeddings-de-jina-clip-v2" class="nav-link" data-scroll-target="#búsqueda-con-texto---embeddings-de-jina-clip-v2">Búsqueda con Texto - Embeddings de Jina Clip v2</a></li>
+  <li><a href="#búsqueda-multimodal" id="toc-búsqueda-multimodal" class="nav-link" data-scroll-target="#búsqueda-multimodal">Búsqueda Multimodal</a></li>
+  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice" class="nav-link" data-scroll-target="#búsqueda-con-índice">Búsqueda con índice</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#búsqueda-por-fuerza-bruta" id="toc-búsqueda-por-fuerza-bruta">Búsqueda por fuerza bruta</a></li>
+  <li><a href="#búsqueda-con-texto---embeddings-de-jina-clip-v2" id="toc-búsqueda-con-texto---embeddings-de-jina-clip-v2">Búsqueda con Texto - Embeddings de Jina Clip v2</a></li>
+  <li><a href="#búsqueda-multimodal" id="toc-búsqueda-multimodal">Búsqueda Multimodal</a></li>
+  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice">Búsqueda con índice</a></li>
+  </ul>
+</nav>
+<p>Los ejercicios de esta unidad estan en colab <a href="https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing" class="uri">https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing</a></p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">SimilaritySearch</span>, <span class="bu">StatsBase</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PlotlyLight</span>, <span class="bu">JSON3</span>, <span class="bu">Cobweb</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span>, <span class="bu">JLD2</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span>  <span class="co"># necesario para quarto / jupyter / etc.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"WIT-es_jina-clip-v2_sample"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> !<span class="fu">isdir</span>(path)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">run</span>(<span class="ss">`git clone https://huggingface.co/datasets/sadit/WIT-es_jina-clip-v2_sample/`</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>metaimages <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-images.tsv"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>vecimages <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-images.h5"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">jldopen</span>(vecimages) <span class="cf">do</span> h</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  h[<span class="st">"emb"</span>]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1024×318514 Matrix{Float16}:
+ -0.9116    0.146    -1.663    -0.3271   …  -0.2583    1.117    -0.2664
+  4.496     1.082     0.6924    4.164        1.444     3.73      2.361
+  1.166    -0.9385   -3.037    -2.19         1.483    -0.4084   -2.309
+  3.973     3.578     2.094    -0.841        2.078     3.725     2.709
+  0.2686   -2.83     -2.121    -1.5205       1.729    -0.4478    1.403
+ -1.938    -2.945    -1.264    -1.327    …  -0.4111   -2.363    -2.533
+ -0.0851   -0.4343   -0.1952   -1.795        2.553    -1.731     1.567
+  2.07     -0.4365    1.217     0.4392      -0.0975    2.232    -2.094
+ -3.01     -0.1432   -1.505     0.5024      -0.4185   -2.9      -0.472
+ -3.955    -0.7725    1.451     1.369       -4.367    -1.54     -3.855
+  ⋮                                      ⋱                      
+ -0.804     0.04886   0.306    -0.06165  …  -0.3684   -0.4897   -0.4978
+  0.2059    0.08386   0.4778   -0.374       -0.1692    0.3005    0.02394
+  0.06915  -0.164     0.3442   -0.1354       0.1407    0.10535   0.431
+ -0.2593    0.1254    0.417    -0.4377       0.3865    0.2659    0.404
+ -0.1729   -0.1938   -0.2198   -0.00975      0.4768   -0.06018   0.3657
+  0.0629   -0.1782    0.10474  -0.1715   …  -0.5806    0.1943   -0.3857
+  0.4314    0.2861    0.7065    0.5474       0.087     0.4092    0.1934
+ -0.04266   0.0638    0.127     0.01243      0.07764  -0.03763  -0.04874
+  0.2544    0.3604   -0.04514   0.1028       0.701     0.2524    0.1526</code></pre>
+</div>
+</div>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> CSV.<span class="fu">read</span>(metaimages, DataFrame)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(D)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>19-element Vector{String}:
+ "language"
+ "page_url"
+ "image_url"
+ "page_title"
+ "section_title"
+ "hierarchical_section_title"
+ "caption_reference_description"
+ "caption_attribution_description"
+ "caption_alt_text_description"
+ "mime_type"
+ "original_height"
+ "original_width"
+ "is_main_image"
+ "attribution_passes_lang_id"
+ "page_changed_recently"
+ "context_page_description"
+ "context_section_description"
+ "ID"
+ "image_url_sha256"</code></pre>
+</div>
+</div>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(D[<span class="fl">1</span>, <span class="op">:</span>]))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Dict{Symbol, Any} with 19 entries:
+  :image_url_sha256                =&gt; "14f55329b6d8f9e7125ae6288af2e82807285f11…
+  :ID                              =&gt; String15("00000_0000009")
+  :caption_reference_description   =&gt; "Torreón en el castillo de Barcience, en …
+  :context_section_description     =&gt; "Hacia 1427 contrajo matrimonio con Leono…
+  :hierarchical_section_title      =&gt; "Juan de Silva y Meneses / Biografía / Pr…
+  :page_url                        =&gt; "https://es.wikipedia.org/wiki/Juan_de_Si…
+  :attribution_passes_lang_id      =&gt; false
+  :section_title                   =&gt; "Primer matrimonio y ascenso en la Corte …
+  :is_main_image                   =&gt; false
+  :image_url                       =&gt; "http://upload.wikimedia.org/wikipedia/co…
+  :page_title                      =&gt; "Juan de Silva y Meneses"
+  :original_width                  =&gt; 960
+  :page_changed_recently           =&gt; false
+  :caption_attribution_description =&gt; "Castle of Barcience, near Maqueda, in th…
+  :context_page_description        =&gt; "Juan de Silva y Meneses, noble y cortesa…
+  :original_height                 =&gt; 1280
+  :language                        =&gt; "es"
+  :mime_type                       =&gt; String15("image/jpeg")
+  :caption_alt_text_description    =&gt; missing</code></pre>
+</div>
+</div>
+<section id="búsqueda-por-fuerza-bruta" class="level2">
+<h2 class="anchored" data-anchor-id="búsqueda-por-fuerza-bruta">Búsqueda por fuerza bruta</h2>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(X[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span>n]), <span class="fu">MatrixDatabase</span>(X[<span class="op">:</span>, n<span class="op">+</span><span class="fl">1</span><span class="op">:</span>n<span class="op">+</span><span class="fl">100</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>dist <span class="op">=</span> <span class="fu">SqL2_asf32</span>()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>ctx <span class="op">=</span> <span class="fu">GenericContext</span>()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>GenericContext{KnnSorted}(0, true, InformativeLog(1.0, Base.RefValue{Float64}(0.0), Base.Threads.SpinLock(0)))</code></pre>
+</div>
+</div>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>knns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10×100 Matrix{IdWeight}:
+ IdWeight(0x00000550, 97.6724)  …  IdWeight(0x0000078e, 71.1038)
+ IdWeight(0x00001497, 103.409)     IdWeight(0x00001c94, 95.7726)
+ IdWeight(0x00001ad9, 115.389)     IdWeight(0x0000067e, 106.031)
+ IdWeight(0x000002a7, 171.187)     IdWeight(0x000024f1, 109.175)
+ IdWeight(0x00000a4a, 172.74)      IdWeight(0x00001997, 112.583)
+ IdWeight(0x00001b0b, 180.287)  …  IdWeight(0x00001368, 133.041)
+ IdWeight(0x000021ea, 239.926)     IdWeight(0x00001f9f, 135.978)
+ IdWeight(0x00000280, 258.994)     IdWeight(0x00000abc, 138.976)
+ IdWeight(0x000025ba, 260.493)     IdWeight(0x00000c6a, 140.593)
+ IdWeight(0x00001f6e, 265.5)       IdWeight(0x00001df4, 141.146)</code></pre>
+</div>
+</div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> D[<span class="fl">10_000</span> <span class="op">+</span> qID, <span class="op">:</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(r))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Dict{Symbol, Any} with 19 entries:
+  :image_url_sha256                =&gt; "3ab0c3b127c7665e3aebe5679b2e3d379c346a9d…
+  :ID                              =&gt; String15("00000_0231606")
+  :caption_reference_description   =&gt; missing
+  :context_section_description     =&gt; "Saint-Péran  es una población y comuna f…
+  :hierarchical_section_title      =&gt; "Saint-Péran"
+  :page_url                        =&gt; "https://es.wikipedia.org/wiki/Saint-P%C3…
+  :attribution_passes_lang_id      =&gt; false
+  :section_title                   =&gt; missing
+  :is_main_image                   =&gt; true
+  :image_url                       =&gt; "https://upload.wikimedia.org/wikipedia/c…
+  :page_title                      =&gt; "Saint-Péran"
+  :original_width                  =&gt; 2043
+  :page_changed_recently           =&gt; false
+  :caption_attribution_description =&gt; "Français&amp;#160;: Église de Saint-Péran.Br…
+  :context_page_description        =&gt; "Saint-Péran es una población y comuna fr…
+  :original_height                 =&gt; 3064
+  :language                        =&gt; "es"
+  :mime_type                       =&gt; String15("image/jpeg")
+  :caption_alt_text_description    =&gt; missing</code></pre>
+</div>
+</div>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Saint-P%C3%A9ran_-_%C3%A9glise_02.JPG" alt="Saint-Péran" width="160">
+</div>
+</div>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(knns, <span class="op">:</span>, qID)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/FranceNormandieSaintMartinLeBouillantEglise.jpg" alt="Saint-Martin-le-Bouillant" width="160"><br><a href="https://es.wikipedia.org/wiki/Saint-Martin-le-Bouillant">Saint-Martin-le-Bouillant</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/FrancePaysDeLaLoireSaintAubinDuDesertEglise.jpg" alt="Saint-Aubin-du-Désert" width="160"><br><a href="https://es.wikipedia.org/wiki/Saint-Aubin-du-D%C3%A9sert">Saint-Aubin-du-Désert</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/4/45/FranceNormandiePercyEglise.jpg" alt="Percy (Mancha)" width="160"><br><a href="https://es.wikipedia.org/wiki/Percy_(Mancha)">Percy (Mancha)</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/0/03/FranceNormandieEtouvyEglise.jpg" alt="Étouvy" width="160"><br><a href="https://es.wikipedia.org/wiki/%C3%89touvy">Étouvy</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Eglise_de_Chateauponsac.jpg" alt="Tirso (santo)" width="160"><br><a href="https://es.wikipedia.org/wiki/Tirso_(santo)">Tirso (santo)</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Vue_de_l%27%C3%A9glise_Saint-%C3%89tienne.JPG" alt="Saint-Étienne-l'Allier" width="160"><br><a href="https://es.wikipedia.org/wiki/Saint-%C3%89tienne-l%27Allier">Saint-Étienne-l'Allier</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/%C3%89glise_Saint-Jean-Baptiste_de_Taillepied.JPG" alt="Taillepied" width="160"><br><a href="https://es.wikipedia.org/wiki/Taillepied">Taillepied</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Frasnoy_%28Nord%2C_Fr%29_%C3%A9glise%2C_cot%C3%A9_tour.JPG" alt="Frasnoy" width="160"><br><a href="https://es.wikipedia.org/wiki/Frasnoy">Frasnoy</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Meilhards-church.jpg" alt="Meilhards" width="160"><br><a href="https://es.wikipedia.org/wiki/Meilhards">Meilhards</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Dammartin-les-Templiers%2C_%C3%A9glise_-_img_44460.jpg" alt="Dammartin-les-Templiers" width="160"><br><a href="https://es.wikipedia.org/wiki/Dammartin-les-Templiers">Dammartin-les-Templiers</a></div></div>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-cfgxalxfje&quot;></div><script>Plotly.newPlot(&quot;plotlyx-cfgxalxfje&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[265.50037,362.9355,251.52962,316.98166,396.0979,395.03336,425.55884,269.28714,328.38586,331.18866,261.68958,404.40536,437.3105,396.45245,533.3169,436.17334,337.87433,371.00922,349.27985,350.91504,485.2482,240.0353,334.03638,429.59247,491.2212,348.52814,389.62875,436.7011,380.88632,249.24792,337.24023,225.48091,386.10004,491.21042,455.87973,347.20258,429.7713,346.77734,468.4943,345.1293,309.89178,309.3969,421.45517,236.1104,431.21246,274.6833,218.68262,413.6911,334.851,356.6601,281.94147,388.10617,523.67175,414.01724,218.39648,430.052,474.51282,339.66333,501.6652,387.42358,389.7132,311.1147,343.44922,173.29645,325.37616,445.16135,302.61713,421.58105,331.1025,470.6722,249.91699,385.61688,192.20364,391.71817,422.3018,392.1233,303.56113,391.89948,315.486,609.595,359.24518,488.05008,324.40793,362.56042,290.07495,420.39706,251.74164,462.71378,317.41907,423.29547,390.38593,419.59412,268.02148,339.08484,471.15967,489.45013,494.13116,365.37854,238.71454,141.14615]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram&quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+</div>
+</div>
+</section>
+<section id="búsqueda-con-texto---embeddings-de-jina-clip-v2" class="level1">
+<h1>Búsqueda con Texto - Embeddings de Jina Clip v2</h1>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>metatext <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-text.tsv"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>vectext <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-text.h5"</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> <span class="fu">jldopen</span>(vectext) <span class="cf">do</span> h</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  h[<span class="st">"emb"</span>]</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>DQ <span class="op">=</span> CSV.<span class="fu">read</span>(metatext, DataFrame)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(DQ)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>19-element Vector{String}:
+ "language"
+ "page_url"
+ "image_url"
+ "page_title"
+ "section_title"
+ "hierarchical_section_title"
+ "caption_reference_description"
+ "caption_attribution_description"
+ "caption_alt_text_description"
+ "mime_type"
+ "original_height"
+ "original_width"
+ "is_main_image"
+ "attribution_passes_lang_id"
+ "page_changed_recently"
+ "context_page_description"
+ "context_section_description"
+ "ID"
+ "image_url_sha256"</code></pre>
+</div>
+</div>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span>n]), <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, n<span class="op">+</span><span class="fl">1</span><span class="op">:</span>n<span class="op">+</span><span class="fl">100</span>])</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>knns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10×100 Matrix{IdWeight}:
+ IdWeight(0x000013fb, 176.251)  …  IdWeight(0x000014fa, 132.966)
+ IdWeight(0x00001bab, 179.758)     IdWeight(0x00000d31, 154.491)
+ IdWeight(0x00002280, 190.799)     IdWeight(0x000025b4, 167.495)
+ IdWeight(0x00002663, 194.201)     IdWeight(0x00001d22, 175.824)
+ IdWeight(0x000018bd, 196.033)     IdWeight(0x00000fe3, 175.925)
+ IdWeight(0x000025a6, 199.787)  …  IdWeight(0x0000207d, 176.041)
+ IdWeight(0x0000226f, 200.673)     IdWeight(0x000000d1, 177.714)
+ IdWeight(0x000003fa, 201.174)     IdWeight(0x00000647, 184.847)
+ IdWeight(0x00000915, 203.565)     IdWeight(0x000008b4, 186.362)
+ IdWeight(0x00000e71, 205.645)     IdWeight(0x00002089, 187.546)</code></pre>
+</div>
+</div>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[<span class="fl">10_000</span> <span class="op">+</span> qID, <span class="op">:</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(r))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Volkswagen_brasilia2.jpg" alt="Volkswagen Brasilia" width="160">
+</div>
+</div>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(knns, <span class="op">:</span>, qID)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> DQ[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Ford-royale_dos_puertas.jpg" alt="Ford Versailles" width="160"><br><a href="https://es.wikipedia.org/wiki/Ford_Versailles">Ford Versailles</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/c/cc/VW_Polo_Classic.jpg" alt="Volkswagen Polo III" width="160"><br><a href="https://es.wikipedia.org/wiki/Volkswagen_Polo_III">Volkswagen Polo III</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Motor_tipo2.JPG" alt="Motor Tipo" width="160"><br><a href="https://es.wikipedia.org/wiki/Motor_Tipo">Motor Tipo</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Museo_del_automovilismo21.jpg" alt="IKA-Renault Torino" width="160"><br><a href="https://es.wikipedia.org/wiki/IKA-Renault_Torino">IKA-Renault Torino</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/2/22/MercedesBenzMB13018012014.jpg" alt="Mercedes-Benz MB 100" width="160"><br><a href="https://es.wikipedia.org/wiki/Mercedes-Benz_MB_100">Mercedes-Benz MB 100</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Motor_Fiat_2000_16v_%281993%29.jpg" alt="Fiat Tempra" width="160"><br><a href="https://es.wikipedia.org/wiki/Fiat_Tempra">Fiat Tempra</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/a/a5/VW_Touran_Heck.JPG" alt="Volkswagen Touran" width="160"><br><a href="https://es.wikipedia.org/wiki/Volkswagen_Touran">Volkswagen Touran</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Placa_de_ve%C3%ADculo_Brasil_2011_Amazonas-S%C3%A3o_Sebasti%C3%A3o_do_Uatum%C3%A3_NOP_4567_motocicleta.jpg" alt="Matrículas automovilísticas de Brasil" width="160"><br><a href="https://es.wikipedia.org/wiki/Matr%C3%ADculas_automovil%C3%ADsticas_de_Brasil">Matrículas automovilísticas de Brasil</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Bx_19_gti_rear.jpg" alt="Citroën BX" width="160"><br><a href="https://es.wikipedia.org/wiki/Citro%C3%ABn_BX">Citroën BX</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/8/85/Opel_Ascona_A_Cockpit.JPG" alt="Opel Ascona" width="160"><br><a href="https://es.wikipedia.org/wiki/Opel_Ascona">Opel Ascona</a></div></div>
+</div>
+</div>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - text "</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-ackzwdvkva&quot;></div><script>Plotly.newPlot(&quot;plotlyx-ackzwdvkva&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[205.64456,219.08804,187.26715,196.34872,276.6077,238.62198,200.85129,207.07932,234.98386,195.74542,194.07788,174.56812,163.31091,170.67946,189.92044,256.117,202.01418,191.24078,182.44788,169.77385,181.15567,144.24422,209.71434,192.92236,199.76283,196.91028,142.45212,183.44159,186.54346,155.72229,163.95248,251.44856,196.84738,170.91196,167.2266,205.01128,184.30054,184.41461,198.26428,141.16835,175.37234,191.8652,187.3262,146.12343,163.95331,202.07695,236.92772,169.57632,198.00005,172.2992,174.46045,270.6467,242.48552,207.54955,208.57935,187.26764,190.81444,129.99448,166.33862,232.46156,191.70296,222.47531,151.69778,223.59563,168.56262,229.6274,191.68576,195.25299,141.31412,197.88284,218.36258,176.96072,209.42534,167.11623,198.67928,187.58743,175.34009,173.91185,155.69043,186.54156,177.52144,207.55151,178.3027,137.0307,270.14194,186.23776,167.5747,200.23672,213.44382,176.9073,178.255,249.64235,134.51529,158.15245,211.37097,133.7416,211.81209,161.04245,200.09343,187.54637]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - text &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+</div>
+</div>
+</section>
+<section id="búsqueda-multimodal" class="level1">
+<h1>Búsqueda Multimodal</h1>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(X), <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>])</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> eknns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.275983 seconds (102 allocations: 12.719 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10×100 Matrix{IdWeight}:
+ IdWeight(0x0001a81a, 605.293)  …  IdWeight(0x0001710f, 601.911)
+ IdWeight(0x00034b40, 608.942)     IdWeight(0x0001f3f7, 603.531)
+ IdWeight(0x00032712, 610.634)     IdWeight(0x00015bd3, 615.286)
+ IdWeight(0x00035216, 611.12)      IdWeight(0x00003b56, 623.938)
+ IdWeight(0x00044d5f, 611.12)      IdWeight(0x0001194a, 625.19)
+ IdWeight(0x00031a0c, 612.145)  …  IdWeight(0x00023b04, 627.171)
+ IdWeight(0x000491cd, 613.351)     IdWeight(0x0003cfd4, 630.306)
+ IdWeight(0x00017876, 615.067)     IdWeight(0x0002b7b1, 631.28)
+ IdWeight(0x000481ac, 615.698)     IdWeight(0x0000ef2d, 632.689)
+ IdWeight(0x00031b44, 616.111)     IdWeight(0x0004aa5a, 633.096)</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">7</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[qID, <span class="op">:</span>]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">Dict</span>(<span class="fu">pairs</span>(r)))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>Dict{Symbol, Any} with 19 entries:
+  :image_url_sha256                =&gt; "735517acb164c7e062814d36a22d6f90f6dddb3e…
+  :ID                              =&gt; String15("00000_0000116")
+  :caption_reference_description   =&gt; missing
+  :context_section_description     =&gt; "Tipo de Motor: Monocilíndrico, 4 Tiempos…
+  :hierarchical_section_title      =&gt; "Suzuki GN 125 / Características"
+  :page_url                        =&gt; "https://es.wikipedia.org/wiki/Suzuki_GN_…
+  :attribution_passes_lang_id      =&gt; true
+  :section_title                   =&gt; "Características"
+  :is_main_image                   =&gt; false
+  :image_url                       =&gt; "https://upload.wikimedia.org/wikipedia/c…
+  :page_title                      =&gt; "Suzuki GN 125"
+  :original_width                  =&gt; 1600
+  :page_changed_recently           =&gt; true
+  :caption_attribution_description =&gt; "Español: Suzuki GN 125"
+  :context_page_description        =&gt; "La Suzuki GN 125 es una motocicleta mono…
+  :original_height                 =&gt; 1200
+  :language                        =&gt; "es"
+  :mime_type                       =&gt; String15("image/jpeg")
+  :caption_alt_text_description    =&gt; missing</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Moto_de_Leandro_Lauro%2C_Suzuki_GN_125_H_%282%29.JPG" alt="Suzuki GN 125" width="160">
+</div>
+</div>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(eknns, <span class="op">:</span>, qID)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/a/a7/Kawasaki_Eliminator_125_DSC00126.JPG" alt="Kawasaki Eliminator" width="160"><br><a href="https://es.wikipedia.org/wiki/Kawasaki_Eliminator">Kawasaki Eliminator</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/e/ec/GS1100L.jpg" alt="Suzuki GS1100 (E, ES, G, GK, GL, L, S)" width="160"><br><a href="https://es.wikipedia.org/wiki/Suzuki_GS1100_(E,_ES,_G,_GK,_GL,_L,_S)">Suzuki GS1100 (E, ES, G, GK, GL, L, S)</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Diagrama_RSN.png" alt="Redes semánticas naturales" width="160"><br><a href="https://es.wikipedia.org/wiki/Redes_sem%C3%A1nticas_naturales">Redes semánticas naturales</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/NortonCommandoMKIIA.jpg" alt="Norton Motorcycle Company" width="160"><br><a href="https://es.wikipedia.org/wiki/Norton_Motorcycle_Company">Norton Motorcycle Company</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/NortonCommandoMKIIA.jpg" alt="Motor de dos cilindros en línea" width="160"><br><a href="https://es.wikipedia.org/wiki/Motor_de_dos_cilindros_en_l%C3%ADnea">Motor de dos cilindros en línea</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Kawasaki_W650_2000_Retro_Bevel_Drive_Side.jpg" alt="Kawasaki W650" width="160"><br><a href="https://es.wikipedia.org/wiki/Kawasaki_W650">Kawasaki W650</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/0/00/ECS_BYTE_Offer_Letter_June_1975_pg1.jpg" alt="Byte (revista)" width="160"><br><a href="https://es.wikipedia.org/wiki/Byte_(revista)">Byte (revista)</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/b/ba/Honda_cx500_1981_blue_rhs.jpg" alt="Serie Honda CX" width="160"><br><a href="https://es.wikipedia.org/wiki/Serie_Honda_CX">Serie Honda CX</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/81/Obleagnc.png" alt="Gas natural comprimido" width="160"><br><a href="https://es.wikipedia.org/wiki/Gas_natural_comprimido">Gas natural comprimido</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Honda_Innova_2007_gris.jpg" alt="Honda Wave" width="160"><br><a href="https://es.wikipedia.org/wiki/Honda_Wave">Honda Wave</a></div></div>
+</div>
+</div>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - multimodal "</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(eknns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-gfmutovosy&quot;></div><script>Plotly.newPlot(&quot;plotlyx-gfmutovosy&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[616.11084,635.45605,637.0803,651.08777,639.45825,707.5231,732.46594,648.3557,636.6881,648.3023,635.6843,618.43494,634.28625,573.7157,639.1532,669.718,639.4857,657.72473,696.5674,623.1245,624.1621,627.9716,614.0053,649.3762,623.6111,640.8579,685.8071,653.579,648.8375,582.7557,616.86066,636.39655,662.9824,598.2416,644.2364,672.21625,599.5984,679.3215,730.9042,641.5776,657.4158,598.0437,657.8053,642.1494,599.0949,625.6293,688.855,671.17334,662.2425,661.7044,632.9502,662.7363,642.47095,674.1728,629.8949,716.9863,618.50116,623.6073,624.85974,616.08203,655.91223,643.8335,622.078,617.45715,643.5355,662.749,653.24097,638.0846,625.78625,676.4361,652.1956,610.1084,667.274,675.94617,638.8904,697.072,650.01294,676.63837,720.5722,624.4866,660.1457,566.99243,664.6105,641.2189,641.0554,590.5133,619.87036,731.94257,641.1808,700.0081,640.23926,696.1235,665.1376,599.683,623.32837,677.8589,683.1884,644.95465,680.99133,633.0964]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+</div>
+</div>
+</section>
+<section id="búsqueda-con-índice" class="level1">
+<h1>Búsqueda con índice</h1>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="fu">SearchGraph</span>(; db, dist)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>gctx <span class="op">=</span> <span class="fu">SearchGraphContext</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#hyperparameters_callback=OptimizeParameters(MinRecall(0.99))</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">index!</span>(G, gctx)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>LOG add_vertex! sp=1 ep=1 n=1 BeamSearch(bsize=4, Δ=1.0, maxvisits=1000000) 2025-10-20T18:51:08.332
+LOG n.size quantiles:[0.0, 0.0, 0.0, 0.0, 0.0]
+LOG add_vertex! sp=514 ep=770 n=513 BeamSearch(bsize=10, Δ=1.0095237, maxvisits=336) 2025-10-20T18:51:12.224
+LOG n.size quantiles:[1.0, 3.0, 4.0, 5.0, 9.0]
+LOG add_vertex! sp=59624 ep=59880 n=59623 BeamSearch(bsize=8, Δ=1.0095237, maxvisits=836) 2025-10-20T18:51:13.235
+LOG n.size quantiles:[1.0, 3.0, 4.0, 6.0, 11.0]
+LOG add_vertex! sp=170648 ep=170904 n=170647 BeamSearch(bsize=4, Δ=1.025, maxvisits=696) 2025-10-20T18:51:14.237
+LOG n.size quantiles:[1.0, 3.0, 5.0, 6.0, 13.0]
+LOG add_vertex! sp=244921 ep=245177 n=244920 BeamSearch(bsize=15, Δ=1.02, maxvisits=1088) 2025-10-20T18:51:15.238
+LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 11.0]
+LOG add_vertex! sp=290410 ep=290666 n=290409 BeamSearch(bsize=14, Δ=1.075, maxvisits=1384) 2025-10-20T18:51:16.254
+LOG n.size quantiles:[2.0, 4.0, 5.0, 7.0, 13.0]
+  9.690973 seconds (10.51 M allocations: 625.755 MiB, 2.50% gc time, 68.01% compilation time)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>SearchGraph{SqL2_asf32, MatrixDatabase{Matrix{Float16}}, SimilaritySearch.AdjacencyLists.AdjacencyList{UInt32}, Vector{UInt32}}
+  dist: SqL2_asf32 SqL2_asf32()
+  db: MatrixDatabase{Matrix{Float16}}
+  adj: SimilaritySearch.AdjacencyLists.AdjacencyList{UInt32}
+  hints: Array{UInt32}((70,)) UInt32[0x0000ccb1, 0x0001fd18, 0x0004052a, 0x00011a0a, 0x00036291, 0x00009524, 0x0002f14d, 0x000118f7, 0x0001efdb, 0x0001d07e  …  0x0002096d, 0x0000ca90, 0x00019c05, 0x0001e483, 0x0002a9d8, 0x00036631, 0x00026642, 0x0001dd29, 0x000328d2, 0x00008694]
+  algo: Base.RefValue{BeamSearch}
+  len: Base.RefValue{Int64}</code></pre>
+</div>
+</div>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">optimize_index!</span>(G, gctx, <span class="fu">MinRecall</span>(<span class="fl">0.9</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.248346 seconds (98.97 k allocations: 5.821 MiB, 39.20% compilation time)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>16-element Vector{Pair}:
+      BeamSearch(bsize=6, Δ=1.05, maxvisits=1000000) =&gt; (visited = (min = 169, mean = 297.40625, max = 536), radius = (min = 66.76690673828125, mean = 214.8469545841217, max = 452.42584228515625), recall = 0.9093749999999998, searchtime = 7.84165625e-6, conf = BeamSearch(bsize=6, Δ=1.05, maxvisits=1000000))
+ BeamSearch(bsize=7, Δ=1.0238096, maxvisits=1000000) =&gt; (visited = (min = 169, mean = 300.171875, max = 537), radius = (min = 66.76690673828125, mean = 215.00272488594055, max = 452.42584228515625), recall = 0.9078125, searchtime = 5.8393125e-6, conf = BeamSearch(bsize=7, Δ=1.0238096, maxvisits=1000000))
+      BeamSearch(bsize=6, Δ=1.06, maxvisits=1000000) =&gt; (visited = (min = 169, mean = 301.21875, max = 593), radius = (min = 66.76690673828125, mean = 214.6896698474884, max = 452.42584228515625), recall = 0.9124999999999998, searchtime = 6.48621875e-6, conf = BeamSearch(bsize=6, Δ=1.06, maxvisits=1000000))
+      BeamSearch(bsize=6, Δ=1.07, maxvisits=1000000) =&gt; (visited = (min = 170, mean = 302.140625, max = 569), radius = (min = 66.76690673828125, mean = 214.80255007743835, max = 452.42584228515625), recall = 0.9109374999999998, searchtime = 6.192890625e-6, conf = BeamSearch(bsize=6, Δ=1.07, maxvisits=1000000))
+      BeamSearch(bsize=7, Δ=1.04, maxvisits=1000000) =&gt; (visited = (min = 169, mean = 303.015625, max = 537), radius = (min = 66.76690673828125, mean = 214.72649931907654, max = 452.42584228515625), recall = 0.9078125, searchtime = 6.28853125e-6, conf = BeamSearch(bsize=7, Δ=1.04, maxvisits=1000000))
+     BeamSearch(bsize=6, Δ=1.075, maxvisits=1000000) =&gt; (visited = (min = 171, mean = 304.296875, max = 569), radius = (min = 66.76690673828125, mean = 214.64204955101013, max = 452.42584228515625), recall = 0.9140624999999999, searchtime = 7.192e-6, conf = BeamSearch(bsize=6, Δ=1.075, maxvisits=1000000))
+      BeamSearch(bsize=7, Δ=1.05, maxvisits=1000000) =&gt; (visited = (min = 176, mean = 305.890625, max = 537), radius = (min = 66.76690673828125, mean = 214.47448468208313, max = 452.42584228515625), recall = 0.9093749999999999, searchtime = 6.013625e-6, conf = BeamSearch(bsize=7, Δ=1.05, maxvisits=1000000))
+      BeamSearch(bsize=6, Δ=1.08, maxvisits=1000000) =&gt; (visited = (min = 175, mean = 306.265625, max = 569), radius = (min = 66.76690673828125, mean = 214.64204955101013, max = 452.42584228515625), recall = 0.9140624999999999, searchtime = 5.808109375e-6, conf = BeamSearch(bsize=6, Δ=1.08, maxvisits=1000000))
+      BeamSearch(bsize=6, Δ=1.09, maxvisits=1000000) =&gt; (visited = (min = 177, mean = 308.578125, max = 569), radius = (min = 66.76690673828125, mean = 214.618102312088, max = 452.42584228515625), recall = 0.9140624999999999, searchtime = 5.9476875e-6, conf = BeamSearch(bsize=6, Δ=1.09, maxvisits=1000000))
+     BeamSearch(bsize=7, Δ=1.075, maxvisits=1000000) =&gt; (visited = (min = 176, mean = 312.859375, max = 570), radius = (min = 66.76690673828125, mean = 214.30137658119202, max = 452.42584228515625), recall = 0.9140624999999999, searchtime = 5.88425e-6, conf = BeamSearch(bsize=7, Δ=1.075, maxvisits=1000000))
+    BeamSearch(bsize=6, Δ=1.1025, maxvisits=1000000) =&gt; (visited = (min = 177, mean = 313.578125, max = 569), radius = (min = 66.76690673828125, mean = 214.6067281961441, max = 452.42584228515625), recall = 0.9187499999999998, searchtime = 7.0200625e-6, conf = BeamSearch(bsize=6, Δ=1.1025, maxvisits=1000000))
+ BeamSearch(bsize=6, Δ=1.1129999, maxvisits=1000000) =&gt; (visited = (min = 177, mean = 316.625, max = 569), radius = (min = 66.76690673828125, mean = 214.6067281961441, max = 452.42584228515625), recall = 0.9187499999999998, searchtime = 6.32153125e-6, conf = BeamSearch(bsize=6, Δ=1.1129999, maxvisits=1000000))
+      BeamSearch(bsize=9, Δ=1.04, maxvisits=1000000) =&gt; (visited = (min = 188, mean = 317.890625, max = 568), radius = (min = 66.76690673828125, mean = 214.5673234462738, max = 452.42584228515625), recall = 0.9109375, searchtime = 6.87346875e-6, conf = BeamSearch(bsize=9, Δ=1.04, maxvisits=1000000))
+      BeamSearch(bsize=9, Δ=1.05, maxvisits=1000000) =&gt; (visited = (min = 188, mean = 320.671875, max = 568), radius = (min = 66.76690673828125, mean = 214.3153088092804, max = 452.42584228515625), recall = 0.9124999999999999, searchtime = 6.327578125e-6, conf = BeamSearch(bsize=9, Δ=1.05, maxvisits=1000000))
+ BeamSearch(bsize=6, Δ=1.1235001, maxvisits=1000000) =&gt; (visited = (min = 178, mean = 321.21875, max = 569), radius = (min = 65.17657470703125, mean = 214.56903326511383, max = 452.42584228515625), recall = 0.9203124999999998, searchtime = 6.317796875e-6, conf = BeamSearch(bsize=6, Δ=1.1235001, maxvisits=1000000))
+ BeamSearch(bsize=6, Δ=1.1287501, maxvisits=1000000) =&gt; (visited = (min = 180, mean = 326.625, max = 569), radius = (min = 65.17657470703125, mean = 214.47334802150726, max = 452.42584228515625), recall = 0.9218749999999997, searchtime = 7.996203125e-6, conf = BeamSearch(bsize=6, Δ=1.1287501, maxvisits=1000000))</code></pre>
+</div>
+</div>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> gknns <span class="op">=</span> <span class="fu">searchbatch</span>(G, gctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.539656 seconds (426.38 k allocations: 27.303 MiB, 96.51% compilation time)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10×100 Matrix{IdWeight}:
+ IdWeight(0x0001a81a, 605.293)  …  IdWeight(0x0001f3f7, 603.531)
+ IdWeight(0x000491cd, 613.351)     IdWeight(0x00003b56, 623.938)
+ IdWeight(0x00036827, 624.859)     IdWeight(0x0001194a, 625.19)
+ IdWeight(0x0001d4b5, 628.676)     IdWeight(0x0003cfd4, 630.306)
+ IdWeight(0x00029a8a, 629.847)     IdWeight(0x0000ef2d, 632.689)
+ IdWeight(0x0000a207, 630.56)   …  IdWeight(0x00014093, 633.248)
+ IdWeight(0x000301cf, 631.2)       IdWeight(0x00039bbc, 633.376)
+ IdWeight(0x00017222, 632.228)     IdWeight(0x0000de60, 634.405)
+ IdWeight(0x0000022f, 633.67)      IdWeight(0x000343c1, 637.489)
+ IdWeight(0x0000de60, 642.957)     IdWeight(0x0000d681, 639.53)</code></pre>
+</div>
+</div>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[qID, <span class="op">:</span>]</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">Dict</span>(<span class="fu">pairs</span>(r)))</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>Dict{Symbol, Any} with 19 entries:
+  :image_url_sha256                =&gt; "735517acb164c7e062814d36a22d6f90f6dddb3e…
+  :ID                              =&gt; String15("00000_0000116")
+  :caption_reference_description   =&gt; missing
+  :context_section_description     =&gt; "Tipo de Motor: Monocilíndrico, 4 Tiempos…
+  :hierarchical_section_title      =&gt; "Suzuki GN 125 / Características"
+  :page_url                        =&gt; "https://es.wikipedia.org/wiki/Suzuki_GN_…
+  :attribution_passes_lang_id      =&gt; true
+  :section_title                   =&gt; "Características"
+  :is_main_image                   =&gt; false
+  :image_url                       =&gt; "https://upload.wikimedia.org/wikipedia/c…
+  :page_title                      =&gt; "Suzuki GN 125"
+  :original_width                  =&gt; 1600
+  :page_changed_recently           =&gt; true
+  :caption_attribution_description =&gt; "Español: Suzuki GN 125"
+  :context_page_description        =&gt; "La Suzuki GN 125 es una motocicleta mono…
+  :original_height                 =&gt; 1200
+  :language                        =&gt; "es"
+  :mime_type                       =&gt; String15("image/jpeg")
+  :caption_alt_text_description    =&gt; missing</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Moto_de_Leandro_Lauro%2C_Suzuki_GN_125_H_%282%29.JPG" alt="Suzuki GN 125" width="160">
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(gknns, <span class="op">:</span>, qID)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Diagrama_RSN.png" alt="Redes semánticas naturales" width="160"><br><a href="https://es.wikipedia.org/wiki/Redes_sem%C3%A1nticas_naturales">Redes semánticas naturales</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Cuadro_de_Roscas.png" alt="Rosca (mecánica)" width="160"><br><a href="https://es.wikipedia.org/wiki/Rosca_(mec%C3%A1nica)">Rosca (mecánica)</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Total_deaths_in_US_mass_shootings.png" alt="Tiroteos masivos en Estados Unidos" width="160"><br><a href="https://es.wikipedia.org/wiki/Tiroteos_masivos_en_Estados_Unidos">Tiroteos masivos en Estados Unidos</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Archaeopteryx_growth_curve.jpg" alt="Archaeopteryx" width="160"><br><a href="https://es.wikipedia.org/wiki/Archaeopteryx">Archaeopteryx</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Tabla_de_las_distintas_partes_de_la_prote%C3%ADna_MT5-MMP.png" alt="Proteína MT5-MMP" width="160"><br><a href="https://es.wikipedia.org/wiki/Prote%C3%ADna_MT5-MMP">Proteína MT5-MMP</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="http://upload.wikimedia.org/wikipedia/commons/a/a2/ESQUEMA_2.JPG" alt="Planta de selección de residuos sólidos urbanos" width="160"><br><a href="https://es.wikipedia.org/wiki/Planta_de_selecci%C3%B3n_de_residuos_s%C3%B3lidos_urbanos">Planta de selección de residuos sólidos urbanos</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/H%C3%A1bitats.png" alt="Red Natura 2000" width="160"><br><a href="https://es.wikipedia.org/wiki/Red_Natura_2000">Red Natura 2000</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Dot%27s_syntax_highlighter_2012-08-18.png" alt="Resaltador" width="160"><br><a href="https://es.wikipedia.org/wiki/Resaltador">Resaltador</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Wikidata_roadmap_2020_-_Wikidata_as_a_platform.png" alt="Plan de programación" width="160"><br><a href="https://es.wikipedia.org/wiki/Plan_de_programaci%C3%B3n">Plan de programación</a></div><div style="display: inline-block; margin-left: 0.25cm;"><img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Control_3.jpg" alt="Control de motores de corriente continua" width="160"><br><a href="https://es.wikipedia.org/wiki/Control_de_motores_de_corriente_continua">Control de motores de corriente continua</a></div></div>
+</div>
+</div>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - indexed - multimodal "</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(gknns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-bmnfxuqeje&quot;></div><script>Plotly.newPlot(&quot;plotlyx-bmnfxuqeje&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[642.9574,638.6489,649.99304,672.37427,644.6814,732.21313,797.7318,693.213,642.5015,678.54596,650.24976,643.40967,668.32983,581.27905,645.52637,683.97095,658.0575,666.36426,700.44116,624.8691,634.1637,653.5327,633.96436,657.21375,649.3196,665.69037,697.3344,663.80066,674.67395,598.5908,628.16583,655.92084,678.4998,604.282,662.9219,673.6283,609.0681,707.88916,768.59973,673.3988,667.8487,599.1178,690.9967,661.8416,615.7298,643.9855,716.80396,697.049,687.20374,681.8745,651.6625,693.4591,650.5819,691.07324,651.4176,729.4462,636.2704,655.41174,676.1019,651.5664,710.0346,664.7159,627.9652,643.69946,700.5775,673.07855,677.1364,654.65344,646.76666,681.5081,668.10535,621.4267,689.91064,704.99414,678.68713,711.03595,665.7803,701.97833,733.97614,634.8556,685.15234,577.01794,678.58264,646.0437,664.19995,595.6384,627.52277,776.53406,641.57,722.6459,644.12036,718.05914,688.0163,634.42944,642.3466,684.996,702.36224,676.8671,698.0089,639.5298]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - indexed - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+</div>
+</div>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">macrorecall</span>(eknns, gknns)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.366</code></pre>
+</div>
+</div>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>B_ <span class="op">=</span> B <span class="op">=</span> G.algo[]</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="kw">in</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  G.algo[] <span class="op">=</span> B <span class="op">=</span> <span class="fu">BeamSearch</span>(B.bsize, B.Δ, <span class="fl">3</span> <span class="op">*</span> B.maxvisits)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@time</span> <span class="st">"searching </span><span class="sc">$</span>B<span class="st">"</span> gknns <span class="op">=</span> <span class="fu">searchbatch</span>(G, gctx, queries, <span class="fl">10</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@info</span> <span class="fu">macrorecall</span>(eknns, gknns)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>G.algo[] <span class="op">=</span> B_</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>searching BeamSearch(bsize=6, Δ=1.05, maxvisits=3216): 0.008438 seconds (403 allocations: 19.094 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.366
+searching BeamSearch(bsize=6, Δ=1.05, maxvisits=9648): 0.010771 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.366
+searching BeamSearch(bsize=6, Δ=1.05, maxvisits=28944): 0.012672 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.366
+searching BeamSearch(bsize=6, Δ=1.05, maxvisits=86832): 0.011978 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.366
+searching BeamSearch(bsize=6, Δ=1.05, maxvisits=260496): 0.002413 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.366
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>BeamSearch(bsize=6, Δ=1.05, maxvisits=1072)</code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> julia</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="an">lang:</span><span class="co"> es-MX</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Búsqueda en espacios métricos</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>Los ejercicios de esta unidad estan en colab <span class="ot">&lt;https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing&gt;</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">SimilaritySearch</span>, <span class="bu">StatsBase</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PlotlyLight</span>, <span class="bu">JSON3</span>, <span class="bu">Cobweb</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span>, <span class="bu">JLD2</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>PlotlyLight.settings.use_iframe <span class="op">=</span> <span class="cn">true</span>  <span class="co"># necesario para quarto / jupyter / etc.</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"WIT-es_jina-clip-v2_sample"</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> !<span class="fu">isdir</span>(path)</span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">run</span>(<span class="ss">`git clone https://huggingface.co/datasets/sadit/WIT-es_jina-clip-v2_sample/`</span>)</span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>metaimages <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-images.tsv"</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>vecimages <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-images.h5"</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">jldopen</span>(vecimages) <span class="cf">do</span> h</span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>  h[<span class="st">"emb"</span>]</span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> CSV.<span class="fu">read</span>(metaimages, DataFrame)</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(D)</span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(D[<span class="fl">1</span>, <span class="op">:</span>]))</span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Búsqueda por fuerza bruta</span></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(X[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span>n]), <span class="fu">MatrixDatabase</span>(X[<span class="op">:</span>, n<span class="op">+</span><span class="fl">1</span><span class="op">:</span>n<span class="op">+</span><span class="fl">100</span>])</span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a>dist <span class="op">=</span> <span class="fu">SqL2_asf32</span>()</span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a>ctx <span class="op">=</span> <span class="fu">GenericContext</span>()</span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a>knns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb50-77"><a href="#cb50-77" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> D[<span class="fl">10_000</span> <span class="op">+</span> qID, <span class="op">:</span>]</span>
+<span id="cb50-78"><a href="#cb50-78" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(r))</span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-86"><a href="#cb50-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-89"><a href="#cb50-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(knns, <span class="op">:</span>, qID)</span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb50-94"><a href="#cb50-94" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb50-95"><a href="#cb50-95" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb50-96"><a href="#cb50-96" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb50-97"><a href="#cb50-97" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-98"><a href="#cb50-98" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-99"><a href="#cb50-99" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-100"><a href="#cb50-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-101"><a href="#cb50-101" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span>
+<span id="cb50-102"><a href="#cb50-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-103"><a href="#cb50-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-104"><a href="#cb50-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-107"><a href="#cb50-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-108"><a href="#cb50-108" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb50-109"><a href="#cb50-109" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb50-110"><a href="#cb50-110" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram"</span></span>
+<span id="cb50-111"><a href="#cb50-111" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span>
+<span id="cb50-112"><a href="#cb50-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-113"><a href="#cb50-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-114"><a href="#cb50-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-115"><a href="#cb50-115" aria-hidden="true" tabindex="-1"></a><span class="fu"># Búsqueda con Texto - Embeddings de Jina Clip v2</span></span>
+<span id="cb50-116"><a href="#cb50-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-119"><a href="#cb50-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-120"><a href="#cb50-120" aria-hidden="true" tabindex="-1"></a>metatext <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-text.tsv"</span></span>
+<span id="cb50-121"><a href="#cb50-121" aria-hidden="true" tabindex="-1"></a>vectext <span class="op">=</span> <span class="st">"</span><span class="sc">$</span>path<span class="st">/es-wit-text.h5"</span></span>
+<span id="cb50-122"><a href="#cb50-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-123"><a href="#cb50-123" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> <span class="fu">jldopen</span>(vectext) <span class="cf">do</span> h</span>
+<span id="cb50-124"><a href="#cb50-124" aria-hidden="true" tabindex="-1"></a>  h[<span class="st">"emb"</span>]</span>
+<span id="cb50-125"><a href="#cb50-125" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-126"><a href="#cb50-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-127"><a href="#cb50-127" aria-hidden="true" tabindex="-1"></a>DQ <span class="op">=</span> CSV.<span class="fu">read</span>(metatext, DataFrame)</span>
+<span id="cb50-128"><a href="#cb50-128" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(DQ)</span>
+<span id="cb50-129"><a href="#cb50-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-130"><a href="#cb50-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-133"><a href="#cb50-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-134"><a href="#cb50-134" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span></span>
+<span id="cb50-135"><a href="#cb50-135" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span>n]), <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, n<span class="op">+</span><span class="fl">1</span><span class="op">:</span>n<span class="op">+</span><span class="fl">100</span>])</span>
+<span id="cb50-136"><a href="#cb50-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-137"><a href="#cb50-137" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb50-138"><a href="#cb50-138" aria-hidden="true" tabindex="-1"></a>knns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span>
+<span id="cb50-139"><a href="#cb50-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-140"><a href="#cb50-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-143"><a href="#cb50-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-144"><a href="#cb50-144" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb50-145"><a href="#cb50-145" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[<span class="fl">10_000</span> <span class="op">+</span> qID, <span class="op">:</span>]</span>
+<span id="cb50-146"><a href="#cb50-146" aria-hidden="true" tabindex="-1"></a><span class="fu">Dict</span>(<span class="fu">pairs</span>(r))</span>
+<span id="cb50-147"><a href="#cb50-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-148"><a href="#cb50-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-149"><a href="#cb50-149" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span>
+<span id="cb50-150"><a href="#cb50-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-151"><a href="#cb50-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-154"><a href="#cb50-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-155"><a href="#cb50-155" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb50-156"><a href="#cb50-156" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(knns, <span class="op">:</span>, qID)</span>
+<span id="cb50-157"><a href="#cb50-157" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> DQ[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb50-158"><a href="#cb50-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb50-159"><a href="#cb50-159" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb50-160"><a href="#cb50-160" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb50-161"><a href="#cb50-161" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb50-162"><a href="#cb50-162" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-163"><a href="#cb50-163" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-164"><a href="#cb50-164" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-165"><a href="#cb50-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-166"><a href="#cb50-166" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span>
+<span id="cb50-167"><a href="#cb50-167" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-168"><a href="#cb50-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-171"><a href="#cb50-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-172"><a href="#cb50-172" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb50-173"><a href="#cb50-173" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb50-174"><a href="#cb50-174" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - text "</span></span>
+<span id="cb50-175"><a href="#cb50-175" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span>
+<span id="cb50-176"><a href="#cb50-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-177"><a href="#cb50-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-178"><a href="#cb50-178" aria-hidden="true" tabindex="-1"></a><span class="fu"># Búsqueda Multimodal</span></span>
+<span id="cb50-179"><a href="#cb50-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-182"><a href="#cb50-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-183"><a href="#cb50-183" aria-hidden="true" tabindex="-1"></a>db, queries <span class="op">=</span> <span class="fu">MatrixDatabase</span>(X), <span class="fu">MatrixDatabase</span>(Q[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>])</span>
+<span id="cb50-184"><a href="#cb50-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-185"><a href="#cb50-185" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
+<span id="cb50-186"><a href="#cb50-186" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> eknns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span>
+<span id="cb50-187"><a href="#cb50-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-188"><a href="#cb50-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-191"><a href="#cb50-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-192"><a href="#cb50-192" aria-hidden="true" tabindex="-1"></a>qID <span class="op">=</span> <span class="fl">7</span></span>
+<span id="cb50-193"><a href="#cb50-193" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[qID, <span class="op">:</span>]</span>
+<span id="cb50-194"><a href="#cb50-194" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">Dict</span>(<span class="fu">pairs</span>(r)))</span>
+<span id="cb50-195"><a href="#cb50-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-196"><a href="#cb50-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-197"><a href="#cb50-197" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span>
+<span id="cb50-198"><a href="#cb50-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-199"><a href="#cb50-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-202"><a href="#cb50-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-203"><a href="#cb50-203" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb50-204"><a href="#cb50-204" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(eknns, <span class="op">:</span>, qID)</span>
+<span id="cb50-205"><a href="#cb50-205" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb50-206"><a href="#cb50-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb50-207"><a href="#cb50-207" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb50-208"><a href="#cb50-208" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb50-209"><a href="#cb50-209" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb50-210"><a href="#cb50-210" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-211"><a href="#cb50-211" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-212"><a href="#cb50-212" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-213"><a href="#cb50-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-214"><a href="#cb50-214" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span>
+<span id="cb50-215"><a href="#cb50-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-216"><a href="#cb50-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-219"><a href="#cb50-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-220"><a href="#cb50-220" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb50-221"><a href="#cb50-221" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb50-222"><a href="#cb50-222" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - multimodal "</span></span>
+<span id="cb50-223"><a href="#cb50-223" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(eknns, <span class="fl">10</span>, <span class="op">:</span>)))</span>
+<span id="cb50-224"><a href="#cb50-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-225"><a href="#cb50-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-226"><a href="#cb50-226" aria-hidden="true" tabindex="-1"></a><span class="fu"># Búsqueda con índice</span></span>
+<span id="cb50-227"><a href="#cb50-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-230"><a href="#cb50-230" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-231"><a href="#cb50-231" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="fu">SearchGraph</span>(; db, dist)</span>
+<span id="cb50-232"><a href="#cb50-232" aria-hidden="true" tabindex="-1"></a>gctx <span class="op">=</span> <span class="fu">SearchGraphContext</span>(</span>
+<span id="cb50-233"><a href="#cb50-233" aria-hidden="true" tabindex="-1"></a>  <span class="co">#hyperparameters_callback=OptimizeParameters(MinRecall(0.99))</span></span>
+<span id="cb50-234"><a href="#cb50-234" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-235"><a href="#cb50-235" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">index!</span>(G, gctx)</span>
+<span id="cb50-236"><a href="#cb50-236" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-237"><a href="#cb50-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-240"><a href="#cb50-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-241"><a href="#cb50-241" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">optimize_index!</span>(G, gctx, <span class="fu">MinRecall</span>(<span class="fl">0.9</span>))</span>
+<span id="cb50-242"><a href="#cb50-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-243"><a href="#cb50-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-246"><a href="#cb50-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-247"><a href="#cb50-247" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> gknns <span class="op">=</span> <span class="fu">searchbatch</span>(G, gctx, queries, <span class="fl">10</span>)</span>
+<span id="cb50-248"><a href="#cb50-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-249"><a href="#cb50-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-252"><a href="#cb50-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-253"><a href="#cb50-253" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> DQ[qID, <span class="op">:</span>]</span>
+<span id="cb50-254"><a href="#cb50-254" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">Dict</span>(<span class="fu">pairs</span>(r)))</span>
+<span id="cb50-255"><a href="#cb50-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-256"><a href="#cb50-256" aria-hidden="true" tabindex="-1"></a>h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>)</span>
+<span id="cb50-257"><a href="#cb50-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-258"><a href="#cb50-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-261"><a href="#cb50-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-262"><a href="#cb50-262" aria-hidden="true" tabindex="-1"></a>children <span class="op">=</span> []</span>
+<span id="cb50-263"><a href="#cb50-263" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> <span class="fu">view</span>(gknns, <span class="op">:</span>, qID)</span>
+<span id="cb50-264"><a href="#cb50-264" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> D[p.id, [<span class="op">:</span>image_url, <span class="op">:</span>page_url, <span class="op">:</span>page_title]]</span>
+<span id="cb50-265"><a href="#cb50-265" aria-hidden="true" tabindex="-1"></a>  <span class="fu">push!</span>(children,</span>
+<span id="cb50-266"><a href="#cb50-266" aria-hidden="true" tabindex="-1"></a>    h.<span class="fu">div</span>(style<span class="op">=</span><span class="st">"display: inline-block; margin-left: 0.25cm;"</span>,</span>
+<span id="cb50-267"><a href="#cb50-267" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">img</span>(src<span class="op">=</span>r.image_url, alt<span class="op">=</span>r.page_title, width<span class="op">=</span><span class="fl">160</span>), h.<span class="fu">br</span>(),</span>
+<span id="cb50-268"><a href="#cb50-268" aria-hidden="true" tabindex="-1"></a>      h.<span class="fu">a</span>(r.page_title, href<span class="op">=</span>r.page_url)</span>
+<span id="cb50-269"><a href="#cb50-269" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-270"><a href="#cb50-270" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-271"><a href="#cb50-271" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-272"><a href="#cb50-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-273"><a href="#cb50-273" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> h.<span class="fu">div</span>(children)</span>
+<span id="cb50-274"><a href="#cb50-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-275"><a href="#cb50-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-278"><a href="#cb50-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-279"><a href="#cb50-279" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">plot</span>()</span>
+<span id="cb50-280"><a href="#cb50-280" aria-hidden="true" tabindex="-1"></a><span class="co">#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot</span></span>
+<span id="cb50-281"><a href="#cb50-281" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - indexed - multimodal "</span></span>
+<span id="cb50-282"><a href="#cb50-282" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(gknns, <span class="fl">10</span>, <span class="op">:</span>)))</span>
+<span id="cb50-283"><a href="#cb50-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-284"><a href="#cb50-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-287"><a href="#cb50-287" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-288"><a href="#cb50-288" aria-hidden="true" tabindex="-1"></a><span class="fu">macrorecall</span>(eknns, gknns)</span>
+<span id="cb50-289"><a href="#cb50-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-290"><a href="#cb50-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-293"><a href="#cb50-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb50-294"><a href="#cb50-294" aria-hidden="true" tabindex="-1"></a>B_ <span class="op">=</span> B <span class="op">=</span> G.algo[]</span>
+<span id="cb50-295"><a href="#cb50-295" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="kw">in</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
+<span id="cb50-296"><a href="#cb50-296" aria-hidden="true" tabindex="-1"></a>  G.algo[] <span class="op">=</span> B <span class="op">=</span> <span class="fu">BeamSearch</span>(B.bsize, B.Δ, <span class="fl">3</span> <span class="op">*</span> B.maxvisits)</span>
+<span id="cb50-297"><a href="#cb50-297" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@time</span> <span class="st">"searching </span><span class="sc">$</span>B<span class="st">"</span> gknns <span class="op">=</span> <span class="fu">searchbatch</span>(G, gctx, queries, <span class="fl">10</span>)</span>
+<span id="cb50-298"><a href="#cb50-298" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@info</span> <span class="fu">macrorecall</span>(eknns, gknns)</span>
+<span id="cb50-299"><a href="#cb50-299" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb50-300"><a href="#cb50-300" aria-hidden="true" tabindex="-1"></a>G.algo[] <span class="op">=</span> B_</span>
+<span id="cb50-301"><a href="#cb50-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Eric S. Tellez</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Esta obra está bajo una <a href="http://creativecommons.org/licenses/by-sa/4.0/">Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

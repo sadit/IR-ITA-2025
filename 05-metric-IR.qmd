@@ -1,0 +1,269 @@
+---
+engine: julia
+lang: es-MX
+title: Búsqueda en espacios métricos
+
+---
+
+Los ejercicios de esta unidad estan en colab <https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing>
+
+```{julia}
+using CSV, DataFrames
+using SimilaritySearch, StatsBase
+using PlotlyLight, JSON3, Cobweb
+using LinearAlgebra, JLD2
+PlotlyLight.settings.use_iframe = true  # necesario para quarto / jupyter / etc.
+```
+
+```{julia}
+path = "WIT-es_jina-clip-v2_sample"
+if !isdir(path)
+  run(`git clone https://huggingface.co/datasets/sadit/WIT-es_jina-clip-v2_sample/`)
+end
+```
+
+```{julia}
+
+metaimages = "$path/es-wit-images.tsv"
+vecimages = "$path/es-wit-images.h5"
+
+X = jldopen(vecimages) do h
+  h["emb"]
+end
+```
+
+```{julia}
+
+D = CSV.read(metaimages, DataFrame)
+names(D)
+```
+
+```{julia}
+
+Dict(pairs(D[1, :]))
+```
+
+## Búsqueda por fuerza bruta
+
+```{julia}
+
+n = 10^4
+db, queries = MatrixDatabase(X[:, 1:n]), MatrixDatabase(X[:, n+1:n+100])
+dist = SqL2_asf32()
+S = ExhaustiveSearch(; db, dist)
+ctx = GenericContext()
+```
+
+
+```{julia}
+
+knns = searchbatch(S, ctx, queries, 10)
+```
+
+
+```{julia}
+
+qID = 100
+r = D[10_000 + qID, :]
+Dict(pairs(r))
+```
+
+```{julia}
+
+h.img(src=r.image_url, alt=r.page_title, width=160)
+```
+
+```{julia}
+
+children = []
+for p in view(knns, :, qID)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+
+```{julia}
+p = plot()
+#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
+p.layout.title.text = "knn distance histogram"
+p.histogram(x=convert.(Float32, view(knns, 10, :)))
+```
+
+
+# Búsqueda con Texto - Embeddings de Jina Clip v2
+
+```{julia}
+metatext = "$path/es-wit-text.tsv"
+vectext = "$path/es-wit-text.h5"
+
+Q = jldopen(vectext) do h
+  h["emb"]
+end
+
+DQ = CSV.read(metatext, DataFrame)
+names(DQ)
+```
+
+```{julia}
+
+n = 10^4
+db, queries = MatrixDatabase(Q[:, 1:n]), MatrixDatabase(Q[:, n+1:n+100])
+
+S = ExhaustiveSearch(; db, dist)
+knns = searchbatch(S, ctx, queries, 10)
+```
+
+```{julia}
+
+qID = 100
+r = DQ[10_000 + qID, :]
+Dict(pairs(r))
+
+
+h.img(src=r.image_url, alt=r.page_title, width=160)
+```
+
+```{julia}
+
+children = []
+for p in view(knns, :, qID)
+  r = DQ[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+```{julia}
+
+p = plot()
+#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
+p.layout.title.text = "knn distance histogram - text "
+p.histogram(x=convert.(Float32, view(knns, 10, :)))
+```
+
+# Búsqueda Multimodal
+
+```{julia}
+
+db, queries = MatrixDatabase(X), MatrixDatabase(Q[:, 1:100])
+
+S = ExhaustiveSearch(; db, dist)
+@time eknns = searchbatch(S, ctx, queries, 10)
+```
+
+```{julia}
+
+qID = 7
+r = DQ[qID, :]
+display(Dict(pairs(r)))
+
+
+h.img(src=r.image_url, alt=r.page_title, width=160)
+```
+
+```{julia}
+
+children = []
+for p in view(eknns, :, qID)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+```{julia}
+
+p = plot()
+#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
+p.layout.title.text = "knn distance histogram - multimodal "
+p.histogram(x=convert.(Float32, view(eknns, 10, :)))
+```
+
+# Búsqueda con índice
+
+```{julia}
+
+G = SearchGraph(; db, dist)
+gctx = SearchGraphContext(
+  #hyperparameters_callback=OptimizeParameters(MinRecall(0.99))
+)
+@time index!(G, gctx)
+```
+
+```{julia}
+
+@time optimize_index!(G, gctx, MinRecall(0.9))
+```
+
+```{julia}
+
+@time gknns = searchbatch(G, gctx, queries, 10)
+```
+
+```{julia}
+
+r = DQ[qID, :]
+display(Dict(pairs(r)))
+
+h.img(src=r.image_url, alt=r.page_title, width=160)
+```
+
+```{julia}
+
+children = []
+for p in view(gknns, :, qID)
+  r = D[p.id, [:image_url, :page_url, :page_title]]
+  push!(children,
+    h.div(style="display: inline-block; margin-left: 0.25cm;",
+      h.img(src=r.image_url, alt=r.page_title, width=160), h.br(),
+      h.a(r.page_title, href=r.page_url)
+    )
+  )
+end
+
+res = h.div(children)
+```
+
+```{julia}
+
+p = plot()
+#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
+p.layout.title.text = "knn distance histogram - indexed - multimodal "
+p.histogram(x=convert.(Float32, view(gknns, 10, :)))
+```
+
+```{julia}
+
+macrorecall(eknns, gknns)
+```
+
+```{julia}
+
+B_ = B = G.algo[]
+for in in 1:5
+  G.algo[] = B = BeamSearch(B.bsize, B.Δ, 3 * B.maxvisits)
+  @time "searching $B" gknns = searchbatch(G, gctx, queries, 10)
+  @info macrorecall(eknns, gknns)
+end
+G.algo[] = B_
+```

@@ -1,0 +1,82 @@
+---
+engine: julia
+lang: es-MX
+title: Recuperación de Información
+
+---
+
+La Recuperación de Información (IR) es una disciplina multidisciplinaria que se crea a partir de la necesidad de simplificar el acceso y revisión de documentos en grandes colecciones. Estas colecciones pueden ser _homogéneas_ o _heterogéneas_, tanto en su contenido como en su formato. En un inicio, se consideraban colecciones textuales pero las necesidades de información han cambiado, y ahora es común encontrar sistemas de recuperación de información sobre otros datos como imágenes o videos, o inclusive multimodales, esto es que puedan usar diferentes tipos de objetos. Un objeto puede ser un documento de texto, una imagen, o cualquier otro tipo de datos que se desee tener acceso.
+
+Mantener un sistema de información homogéneo puede simplificar su mantenimiento enormemente, por lo que si es posible, se puede intentar mantener cierta homegeneidad. Para sistemas de fuentes abiertas como puede ser la web, esto será posible.
+
+En general, se puede ver un sistema de recuperación de información en tres grandes partes:
+
+1. Recolección de datos, normalización y modelado matemático.
+2. Indexamiento, interpretación de consultas y optimización.
+3. Agregación y filtrado de resultados, presentación de los mismos.
+
+
+La _normalización_ puede ir desde el simple preprocesamiento de los datos hasta manipulaciones y transformaciones dependientes del dominio y el lenguaje. Una vez aplicado el modelado adecuado a las colecciones, las representaciones matemáticas suelen ser vectores de alta dimensión para cada objeto.
+
+En cuanto al indexamiento se utilizarán dos tipos de algoritmos, búsqueda mediante _índices invertidos_ y búsqueda por _índices métricos_. Ambas tienen sus nichos de aplicación y usarlas adecuadamente requiere conocer los problemas y sus modelados.
+
+La presentación de los resultados puede ser tan simple como una lista de resultados más relevantes y una pequeña muestra del objeto, o más complejo que requiera alguna técnica de visualización. Todo esto dependerá del dominio de aplicación y la naturaleza del sistema de recuperación de información.
+
+En este curso se visitarán parcialmente todas estas partes. En general se usaran conjuntos de datos previamente recolectados, aunque se invita a explorar otras colecciones.
+
+### Sistemas basados en recuperación de información
+Ejemplos de sistemas de recuperación de información
+
+- Google, scholar google, google images, google news, youtube...
+- Bing!
+- Yahoo search
+- Yandex
+- DuckDuckGo
+
+También es común que el sistema de recuperación de información no sea el principal producto si no más bien un componente médular. Por ejemplo, el caso de los sistemas de streaming de videos, películas, música, redes sociales, market-places, etc.
+
+### Ejemplos de implementación de search engines open source
+- [Apache Lucene](https://lucene.apache.org/)
+- [Apache SOLR](https://solr.apache.org/)
+- [ElasticSearch](https://www.elastic.co/es/what-is/elasticsearch)
+- [hnswlib](https://github.com/nmslib/hnswlib)
+- [FAISS](https://github.com/facebookresearch/faiss)
+- [TextSearch.jl](https://github.com/sadit/TextSearch.jl)
+- [InvertedFiles.jl](https://github.com/sadit/InvertedFiles.jl)
+- [SimilaritySearch.jl](https://github.com/sadit/SimilaritySearch.jl)
+
+## Búsqueda de Texto Completo
+Tal vez la tarea más emblemática de la Recuperación de Información es la búsqueda de _texto completo_.
+El problema consiste en dado un corpus grande de documentos, preprocesarlo para crear una estructura de búsqueda que permita resolver consultas de manera eficiente. Una consulta es un texto corto que específica lo que se desea encontrar en la colección. En particular, es un ejemplo de lo que se desea. Esto lleva a que la estructura de búsqueda resuelve búsquedas por similitud.
+
+La similitud, es entonces un tema central, pero para medirla lo primero es tener una representación de los datos que capture las propiedades deseadas (que serán después evaluadas para medir la similitud). La manera más tradicional de hacerlo, es el uso de un modelo basado en bolsa de palabras (BOW). En dicho modelo, el texto es preprocesado, toquenizado y vectorizado.
+
+- El preprocesamiento incluye tratamientos tan simples como eliminar símbolos no deseados, eliminación de variantes léxicas, reducción a raíces o lemas, corrección de ortografía, eliminiación de palabras comunes (stop words). 
+- El toquenizado es el proceso donde el texto es partido, en frases u oraciones, y finalmente en palabras y símbolos que son unidades completas. En este punto también es posible realizar normalizaciones, así como también realizar limpieza basada en estadísticas de los términos.
+- El vectorizado utiliza el vocabulario de una colección $\{t_i\}$ para generar una matriz de la colección, i.e., un vector por documento.
+
+Al proceso de modelar una colección mediante un vocabulario y luego ser capaces de generar una representación manejable por una computadora se le llama _modelo de lenguaje_.
+
+### Problema de búsqueda
+Una vez que se tiene el modelo de lenguaje y que fue usado para vectorizar una colección $X$, la idea es ser capaces de resolver consultas $q \in Q$, i.e., encontrar un subconjunto de $X$ de tamaño $k$ que más se _parezca_ a $q$. Las consultas deben ser codificadas al mismo espacio que los documentos, i.e., espacio vectorial. Entonces el problema se transforma en encontrar los elementos más parecidos, que dada la representación, es conveniente usar el coseno entre vectores:
+
+$$ \cos(u, q) = \frac{ \sum_i {u_i \cdot q_i}}{\sqrt{\sum_i u_i^2} \cdot \sqrt{\sum_i q_i^2}} $$
+
+Así mismo, $d(u, q) = \arccos(\cos(u, q))$ sería el ángulo entre ambos vectores, que además es una métrica. El problema entonces se transforma en encontrar los vecinos más cercanos en la colección, esto es, si deseamos $k$ resultados de una consulta, estaríamos deseando encontrar aquel subconjunto $knn$ de la colección tal que $\sum_{v \in knn} d(v, q)$ sea mínimo comparado con todo subconjunto de tamaño $k$ de la colección de documentos.
+
+### Velocidad de consultas
+Para mejorar la solución de consultas, es posible crear una estructura de datos que simplifique el proceso de encontrar el subconjunto $knn$. En este problema, con una representación basada en bolsa de palabras, la estructura más adecuada es el _índice invertido_.
+
+## Medidas de calidad (scores)
+La medición de la calidad en un sistema de búsqueda es fundamental para obtener un sistema de RI adecuado. La idea básica es que un algoritmo recupere la información adecuada para solventar los requerimientos de las consultas hechas por usuarios. Dicho de otra forma, si se piden $k$ documentos relacionados a una consulta $q$, se medirá que porcentaje de esos $k$ son relevantes para el usuario.
+La evaluación de relevancia de un documento es hecha previamente por _usuarios expertos_ en el dominio del corpus y las consultas. A esta función de relevancia se le llama $\textsf{recall}$.
+
+$$ \textsf{recall}(\text{doc. recuperados}, \text{doc. esperados}) = \frac{\left| \text{doc. recuperados} \cap \text{doc esperados} \right|}{\left|\text{doc. esperados}\right|} $$
+
+Note que no se espera que cada conjunto de resultados sea de tamaño idéntico, aunque esta será la norma en nuestro curso. Para obtener una estadística fiable, la relevancia será promediada para obtener la calidad del modelo o algoritmo ante un conjunto de consultas. Llamaremos $\textsf{macrorecall}$ al promedio de los recalls varias consultas.
+
+$$ \textsf{macrorecall}(R, G) = \frac{1}{|G|} \sum_i \textsf{recall}(R_i, G_i)$$
+
+El conjunto $R$ es el conjunto de resultados recuperados para un conjunto de consultas, mientras que $G$ es un conjunto especial de resultados que suele llamarse _gold standard_, que sería esa el conjunto de resultados fiables obtenidos a través de la evaluación de expertos humanos.
+
+Es costoso y tardado construir un _gold standard_ para una tarea de recuperación de información, y más aún, para conjuntos de datos grandes. En este curso ignoramos esta parte crucial de todo esquema de recuperación de información y lo haremos de manera _perceptiva_.
