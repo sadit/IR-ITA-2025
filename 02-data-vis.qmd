@@ -2,48 +2,70 @@
 engine: julia
 lang: es-MX
 ---
+## Uso de tablas de datos
+Un dataframe es una tabla de datos y visualización con Plotly
+
 ```{julia}
-
-using CSV, DataFrames, Downloads, StatsBase
+using CSV, DataFrames, Downloads, StatsBase, MultivariateStats
 using PlotlyLight
-
+PlotlyLight.settings.use_iframe = true
+#preset.source.standalone!()
 ```
 
+Descargaremos una tabla de internet en formato CSV y luego se cargará
 ```{julia}
-URL_CSV = "https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"
+url = "https://raw.githubusercontent.com/plotly/datasets/master/iris.csv"
 
-Downloads.download(URL_CSV, "iris.csv")
+Downloads.download(url, "iris.csv")
 df = CSV.read("iris.csv", DataFrame)
 ```
 
+Para observar un resumen del contenido
 ```{julia}
 describe(df)
 ```
 
+Los dataframes permiten filtrar o seleccionar datos de manera muy simple:
 ```{julia}
 df_setosa = filter(r -> r.Name == "Iris-setosa", df)
-```
-
-```{julia}
-using PlotlyLight
-
-plot(x=1:100, y=cumsum(rand(100)))
+df_versicolor = df[df.Name .== "Iris-versicolor", :]
 ```
 
 
 ```{julia}
-#| label: fig-example
-#| fig-cap: "An example Plotly plot from Julia"
+p = plot(mode="markers")
+p = p.scatter(x=df_setosa.SepalLength, y=df_setosa.PetalLength, mode="markers")
+p = p.scatter(x=df_versicolor.SepalLength, y=df_versicolor.PetalLength, mode="markers")
+p.layout.title.text = "2 tipos de flores"
+p
+```
 
-p = PlotlyLight.Plot()
-p.layout.title = "My Plotly Light Plot"
-p.data = [
-    PlotlyLight.Config(
-        x = [1, 2, 3],
-        y = [4, 1, 2],
-        mode = "lines+markers",
-        name = "Series 1"
+El plot anterior tiene un problema, solo muestra `SepalLength` vs `PetalLength`; ignorando `SepalWidth` y `PealWidth`. Es posible hacer un plot en 3 dimensiones, pero en 4 ya no es posible. Entonces, lo que se suele hacer para visualizar datos de alta dimensión es utilizar un método para reducir la dimensión. Por ejemplo `PCA`.
+
+
+```{julia}
+#| label: fig-pca
+#| fig-cap: "PCA"
+
+p = plot()
+p.layout.title = "PCA sobre Iris"
+
+X = permutedims(Matrix{Float32}(df[:, [:SepalLength, :SepalWidth, :PetalLength, :PetalWidth]]))
+
+colors = Dict(
+    "Iris-setosa" => "blue", 
+    "Iris-versicolor" => "red", 
+    "Iris-virginica" => "orange"
     )
-]
+
+pca = fit(PCA, X; maxoutdim=2)
+X2 = predict(pca, X)
+display(size(X2))
+p = p.scatter(
+    x=X2[1, :],
+    y=X2[2, :],
+    mode="markers",
+    marker=Dict(:color => map(name->colors[name], df.Name))
+    )
 p
 ```

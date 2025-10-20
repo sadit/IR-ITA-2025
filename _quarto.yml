@@ -5,10 +5,7 @@ engine: julia
 
 format:
   html:
-    html-dependencies:
-    - name: plotly
-      src: https://cdn.plot.ly/plotly-latest.min.js
-    theme: simplex
+    theme: default
     code-tools: true
     echo: true
 
@@ -25,9 +22,9 @@ website:
   navbar:
     left:
       - href: index.qmd
-        text: Home
-      - href: 01-intro.qmd
-        text: Introducción al lenguaje Julia
+        text: Introducción
+      - href: 01-basico.qmd
+        text: Conceptos básicos de Julia
       - href: 02-data-vis.qmd
         text: Uso de dataframes y visualización
 
