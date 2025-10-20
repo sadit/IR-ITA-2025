@@ -5,6 +5,9 @@ engine: julia
 
 format:
   html:
+    html-dependencies:
+    - name: plotly
+      src: https://cdn.plot.ly/plotly-latest.min.js
     theme: simplex
     code-tools: true
     echo: true
@@ -17,7 +20,7 @@ project:
   output-dir: docs
   
 website:
-  title: "My Quarto Website"
+  title: "Curso Introductorio a Julia y Recuperación de Información"
   
   navbar:
     left:

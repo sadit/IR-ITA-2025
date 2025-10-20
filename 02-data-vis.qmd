@@ -1,7 +1,6 @@
 ---
 engine: julia
 lang: es-MX
-
 ---
 ```{julia}
 
