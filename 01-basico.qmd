@@ -72,8 +72,9 @@ Una vez instalado julia; debemos instalar el paquete `IJulia` que instalará tod
 
 ### Ejercicios
 Según sus posibilidades de equipo:
-  - Instale Julia 1.10, luego instale el paquete `IJulia` y ejecute Jupyter.
-  - Cree un notebook con Colab con el kernel de Julia.
+
+- Instale Julia 1.10, luego instale el paquete `IJulia` y ejecute Jupyter.
+- Cree un notebook con Colab con el kernel de Julia.
 
 
 ## Sintaxis y estructuras
