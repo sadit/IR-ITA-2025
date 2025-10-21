@@ -32,6 +32,7 @@ website:
   navbar:
     left:
       - index.qmd
+      - 01-basico.qmd
       - 02-data-vis.qmd
       - 03-IR.qmd
       - 04-text-IR.qmd
