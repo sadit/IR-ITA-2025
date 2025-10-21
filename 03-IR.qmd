@@ -15,7 +15,6 @@ En general, se puede ver un sistema de recuperación de información en tres gra
 2. Indexamiento, interpretación de consultas y optimización.
 3. Agregación y filtrado de resultados, presentación de los mismos.
 
-
 La _normalización_ puede ir desde el simple preprocesamiento de los datos hasta manipulaciones y transformaciones dependientes del dominio y el lenguaje. Una vez aplicado el modelado adecuado a las colecciones, las representaciones matemáticas suelen ser vectores de alta dimensión para cada objeto.
 
 En cuanto al indexamiento se utilizarán dos tipos de algoritmos, búsqueda mediante _índices invertidos_ y búsqueda por _índices métricos_. Ambas tienen sus nichos de aplicación y usarlas adecuadamente requiere conocer los problemas y sus modelados.
@@ -60,9 +59,11 @@ Al proceso de modelar una colección mediante un vocabulario y luego ser capaces
 ### Problema de búsqueda
 Una vez que se tiene el modelo de lenguaje y que fue usado para vectorizar una colección $X$, la idea es ser capaces de resolver consultas $q \in Q$, i.e., encontrar un subconjunto de $X$ de tamaño $k$ que más se _parezca_ a $q$. Las consultas deben ser codificadas al mismo espacio que los documentos, i.e., espacio vectorial. Entonces el problema se transforma en encontrar los elementos más parecidos, que dada la representación, es conveniente usar el coseno entre vectores:
 
-$$ \cos(u, q) = \frac{ \sum_i {u_i \cdot q_i}}{\sqrt{\sum_i u_i^2} \cdot \sqrt{\sum_i q_i^2}} $$
+$$ \cos(u, q) = \frac{\langle u_i, q_i \rangle}{\sqrt{\sum_i u_i^2} \cdot \sqrt{\sum_i q_i^2}} $$
 
 Así mismo, $d(u, q) = \arccos(\cos(u, q))$ sería el ángulo entre ambos vectores, que además es una métrica. El problema entonces se transforma en encontrar los vecinos más cercanos en la colección, esto es, si deseamos $k$ resultados de una consulta, estaríamos deseando encontrar aquel subconjunto $knn$ de la colección tal que $\sum_{v \in knn} d(v, q)$ sea mínimo comparado con todo subconjunto de tamaño $k$ de la colección de documentos.
+
+Es común normalizar previamente para tener vectores de norma 1 de tal forma que el denominador es innecesario. También suele ser innecesario calcular el $\arccos$ a menos que se requiera una métrica; si solo se requiere una distancia, y no una similitud como sería el coseno, se puede hacer $1 - cos(u, v)$ en su lugar.
 
 ### Velocidad de consultas
 Para mejorar la solución de consultas, es posible crear una estructura de datos que simplifique el proceso de encontrar el subconjunto $knn$. En este problema, con una representación basada en bolsa de palabras, la estructura más adecuada es el _índice invertido_.

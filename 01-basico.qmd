@@ -5,7 +5,7 @@ lang: es-MX
 ---
 
 ## El lenguaje de programación Julia {#sec-julia}
-El código se organiza en scripts, módulos y paquetes. Cada uno de estos define tipos y funciones que interactuan para componer las soluciones deseadas.
+El código se suele organizar en scripts, módulos y paquetes. Cada uno de estos define tipos y funciones que interactuan para componer las soluciones deseadas.
 
 El resto de esta unidad esta dedicada a precisar la sintaxis del lenguaje y anotaciones de importancia sobre su funcionamiento.
 
@@ -58,17 +58,23 @@ julia>
 
 ``` 
 
-### Creando un "Hola mundo"
+### Creando el famoso "Hola mundo"
 Uno de los programas más comunes es el siguiente
 ```{julia}
 println("¡Hola 🌎!")
 ```
 
-### Usando Colab
-Es posible usar Colab para reducir la complejidad de la instalación, ya que cuenta con un kernel de Julia. Como se mencionaba anteriormente, solo se soporta la versión `1.11` que es suboptima con las versiones de paquetes que usaremos más adelante. Adicionalmente, se tiene limitante de los recursos limitados que se nos proporcionen, en particular al momento de escribir estas notas, aunque los recursos que se otorgan suelen ser suficientes para pruebas, no lo son en otros ámbitos: solo se tienen 2 vcpus y tiempos de ejecución limitados.
+### Colab
+Es posible usar Colab para reducir la complejidad de la instalación, ya que cuenta con un kernel de Julia. Como se mencionaba anteriormente, solo se soporta la versión `1.11` que es subóptima con las versiones de paquetes que usaremos más adelante. Adicionalmente, se tiene limitante de los recursos limitados que se nos proporcionen, en particular al momento de escribir estas notas, aunque los recursos que se otorgan suelen ser suficientes para pruebas, no lo son en otros ámbitos: solo se tienen 2 vcpus y tiempos de ejecución limitados.
 
-### Usando Jupyter
+### Jupyter
 Una vez instalado julia; debemos instalar el paquete `IJulia` que instalará todo lo necesario para correr Jupyter (ver la sección de `Pkg` al final de esta unidad para más información sobre paquetes). Una vez corriendo, se debe seleccionar crear un notebook específicando el kernel de Julia para utilizarlo.
+
+### Ejercicios
+Según sus posibilidades de equipo:
+  - Instale Julia 1.10, luego instale el paquete `IJulia` y ejecute Jupyter.
+  - Cree un notebook con Colab con el kernel de Julia.
+
 
 ## Sintaxis y estructuras
 ### Funciones
@@ -206,8 +212,6 @@ Nota: Las ligas que salen estan rotas ya que no se adjunta la documentación en 
 
 :::
 
-
-
 Esto también indica que debemos documentar nuestro código, en particular se hace de la siguiente forma
 
 ```{{julia}}
@@ -221,7 +225,6 @@ function fun(...)
     ...
 end
 ```
-
 
 #### Definición de variables
 Las definiciones de variables tienen la sintaxis `variable = valor`; las variables comunmente comienzan con una letra o `_`, las letras pueden ser caracteres _unicode_, no deben contener espacios ni puntuaciones como parte del nombre; `valor` es el resultado de evaluar o ejecutar una expresión.
@@ -606,6 +609,15 @@ dot.(Ref(x), eachcol(A))
 ```
 
 Este ejemplo muestra la técnica _broadcasting_ que aplica una función a una colección; se indica añadiendo un punto al final del nombre de la función. Adicionalmente, hay una serie de reglas que se deben seguir para el manejo de las colecciones. La función `eachcol` crea un iterador sobre cada columna de la matriz `A` y `Ref(x)`, nos permite que el `broadcasting` reconozca al vector `x` como un único elemento en lugar de una colección de valores.
+
+### Ejercicios
+
+Dados dos vectores, cree las siguientes funciones:
+
+1. Calcule el coseno entre dos vectores $u, v$, de dimensión $d$:
+    - $cos(u, v) = \frac{\langle u, v \rangle}{\lVert u \rVert \lVert v \rVert}$; donde $\langle u, v \rangle = \sum^d_i u_i \cdot v_i$ y $\lVert \cdot \rVert$ es la norma de un vector.
+2. Calcule la distancia Euclidea entre dos vectores $u, v$:
+    - $euclidean(u, v) = \sqrt{\sum^d_i (u_i - v_i)^2}$.
 
 ## Paquetes y módulos
 El ecosistema de paquetes de Julia es una de sus mayores fortalezas, impulsado por usu gestor de paquetes _Pkg_, el cual viene integrado en el REPL y en la su instalación mínima; es muy robusto. Se encarga de la instalación y actualización de librerías, así como también garantiza la reproducibilidad de los proyectos. Cada ambiente de trabajo en Julia utiliza archivos como `Project.toml` y `Manifest.toml` para registrar la paquetería usada, así como las versiones necesarias de todas las dependencias. 

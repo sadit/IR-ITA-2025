@@ -8,29 +8,28 @@ title: Prefacio
 
 Este curso/taller esta dedicado a la Recuperación de Información (_Information Retrieval_) en Julia.[^julia] Nuestro enfoque será experimental, y nuestra metodología incluye medir la factibilidad y desempeño de cada algoritmo en términos reales.
 
-Julia es un lenguaje relativamente nuevo, en 2016 alcanzo su primera versión estable. Es un lenguaje diseñado para cálculo númerico de alto desempeño, aunque adaptado poco a poco para ser utilizado para propósito general. Por sus características es ampliamente usado en investigación científica y análisis de datos. 
+Julia es un lenguaje relativamente nuevo, en 2016 alcanzo su primera versión estable. Es un lenguaje diseñado para _cálculo numérico_; se fue adaptando para ser utilizado para propósito general. Por sus características es ampliamente usado en investigación científica y análisis de datos. 
 
 [^julia]: Para este curso se recomienda utilizar la versión 1.10 o superior, y puede obtenerse en <https://julialang.org/>.
 
-Julia fue diseñado para tener una velocidad comparable a lenguajes compilados como C o Fortran. Esto lo logra mediante la compilación _Just-In-Time (JIT)_ y una gestión de memoria eficiente, e.g., intentando evitar el _heap_ a favor del _stack_. Tiene un diseño similar a LISP, ya que es homoicónico y soporta macros que permiten reescribir código, y aprovechar el JIT de manera automática. Soporta la creación de binarios y la versión 1.12, estos binarios se han reducido de tamaño de manera significativa, lo que permite su uso más extendido. 
+Julia fue diseñado para tener una velocidad comparable a lenguajes compilados como C o Fortran, ya que cuenta con un compilador _Just-In-Time (JIT)_ y una gestión de memoria eficiente, e.g., intentando evitar el _heap_ a favor del _stack_. Por otro lado, tiene un diseño similar a LISP, i.e., es homoicónico y soporta macros que permiten reescribir código. Soporta la creación de ejecutables binarios en su versión 1.12 (última al momento de escribir este texto); antes ya se soportaban, sin embargo dichos binarios se han reducido de tamaño de manera significativa, lo que permite su uso más extendido. 
 
-Es posible trabajar con múltiples paradigmas, pero esta diseñado para sacar provecho del _Despacho Múltiple_. Significa que las funciones no solo se definen por su nombre, sino por el _tipo_ de argumentos, y para ser más precisos, de *todos* sus argumentos. La idea es escribir código genérico que es altamente optimizable por el compilador, aunque el costo viene asociado a los tiempos de compilación. 
+Es posible trabajar con múltiples _paradigmas_, pero esta diseñado para sacar provecho del _Despacho Múltiple_. Significa que las funciones no solo se definen por su nombre, sino por el _tipo_ de argumentos, y para ser más precisos, esto aplica para *todos* sus argumentos. La idea es escribir código genérico que es altamente optimizable por el compilador, aunque el costo viene asociado a los tiempos de compilación. 
 
-El lenguaje tiene estructuras de datos básicas como rangos, vistas, tuplas, arreglos, estructuras, diccionarios, conjuntos, cadenas de caracteres, así como expresiones de código como datos y controla la ejecución mediante condicionales, ciclos y funciones.
-Es de tipado fuerte y dinámico, permite a los programadores agregar anotaciones de tipo a las variables y funciones. Esto no solo mejora el rendimiento del código (dándole más información al compilador JIT), sino que también facilita la detección de errores.
+Julia tiene herramientas nativas y de alto nivel para _computación paralela_, ya sea en múltiples hilos, múltiples procesos o incluso en _clusters_ distribuidos, lo que es crucial para tareas de gran escala. También soporta la generación de código para SIMD, y programación de kernels para GPUs programando directamente en Julia.
 
-Tiene un ambiente REPL (Read Evaluate Print Loop) que simplifica el proceso de probar código e interactuar con el entorno de manera similar a Python o MATLAB. 
-Todas estas característica lo hacen útil para prototipar. 
+El _lenguaje_ tiene estructuras de datos básicas como rangos, vistas, tuplas, arreglos, estructuras, diccionarios, conjuntos, cadenas de caracteres, así como expresiones de código como datos y controla la ejecución mediante condicionales, ciclos y funciones.
+Es de _tipado fuerte_ y _dinámico_, permite a los programadores agregar anotaciones de tipo a las variables y funciones. Esto no solo mejora el rendimiento del código (dándole más información al compilador JIT), sino que también facilita la detección de errores. Existen numerosas herramientas para apoyar en el análisis estático del código para reducir errores en tiempo de corrida.
 
-Julia tiene herramientas nativas y de alto nivel para ejecutar código en paralelo, ya sea en múltiples hilos, múltiples procesos o incluso en _clusters_ distribuidos, lo que es crucial para tareas de gran escala.
+Entre los _tipos de datos_ es capaz de manejar enteros y números de punto flotante de diferentes precisiones, caracteres, cadenas de cáracteres, y simbolos. Los arreglos son realmente importantes en Julia, y soportan de manera nativa vectores, matrices y tensores, estaremos tocando apenas esta parte del lenguaje. 
 
-Utiliza un gestor de paquetes (`Pkg`) integrado que facilita la instalación, gestión de dependencias y la replicación de entornos de código, asegurando que un proyecto funcione de la misma manera en diferentes máquinas.
+Tiene un ambiente _Read Evaluate Print Loop_ (REPL) que simplifica el proceso de probar código e interactuar con el entorno de manera similar a Python o MATLAB. Todas estas característica lo hacen útil para prototipar. 
 
-Entre los tipos de datos es capaz de manejar enteros y números de punto flotante de diferentes precisiones, caracteres, cadenas de cáracteres, y simbolos. Los arreglos son realmente importantes en Julia, y soportan de manera nativa vectores, matrices y tensores, estaremos tocando apenas esta parte del lenguaje. 
+Su paquetería es amplia, aunque aun no se compara con las disponibles en Python. Utiliza un gestor de paquetes (`Pkg`) integrado que facilita la instalación, gestión de dependencias y la replicación de entornos de código, asegurando que un proyecto funcione de la misma manera en diferentes máquinas.
 
 Finalmente, es importante mencionar que Julia es un proyecto de código abierto, lo que significa que su desarrollo es transparente y está impulsado por una comunidad activa de desarrolladores y científicos. Funciona en la mayoría de plataformas y sistemas operativos, soporta diversos tipos de _Notebooks_ y _Editores_; en particular, [Visual Studio Code](https://code.visualstudio.com/) y [NeoVim](https://neovim.io/) usando [AstroNVim](https://astronvim.com/) tienen ambientes muy bien integrados.
 
-Este curso esta escrito en Quarto usando el `engine` para Julia 1.10, se espera que las actividades se repliquen tanto en Quarto <https://quarto.org>, Jupyter <https://jupyter.org/> o Colab. La mayoría de los ejemplos estarán empotrados en el sitio, y en principio, deberían poder replicarse copiando, pegando, y ejecutando en un notebook o REPL de Julia.
+Este curso esta escrito en Quarto usando el _engine_ para Julia 1.10, por facilidad, se espera que las actividades se repliquen tanto en Quarto <https://quarto.org>, Jupyter <https://jupyter.org/> o Colab; aunque también podrian usar scripts típicos si el alumno se siente cómodo en dichos ambientes. La mayoría de los ejemplos estarán empotrados en el sitio, y en principio, deberían poder replicarse copiando, pegando, y ejecutando en un notebook o REPL de Julia.
 
 Es importante clarificar que este curso introducirá el lenguaje de programación Julia pero habrá que ir más allá para dominarlo. Se recomienda al alumno interesado la revisión del manual y la documentación oficial para un estudio más profundo del lenguaje. 
 

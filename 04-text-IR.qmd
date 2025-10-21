@@ -57,7 +57,7 @@ Los algoritmos de BK pueden ser utilizados para calcular la unión y t-threshold
 - <https://github.com/sadit/Intersections.jl/blob/main/src/umerge.jl>
 - <https://github.com/sadit/Intersections.jl/blob/main/src/xmerge.jl>
 
-## Preparación del ámbiente
+## Preparación del ambiente
 ```{julia}
 using CSV, DataFrames, Downloads
 using SimilaritySearch, TextSearch, InvertedFiles
@@ -343,3 +343,8 @@ end
 
 res = h.div(children)
 ```
+
+### Ejercicios
+1. Cree un minibuscador sobre WIT que acepte consultas sobre los titulos y muestre 10 resultados similares; haga que se visualice la imagen y el `context_page_description`.
+
+2. Cree una tabla de contenidos relacionados usando los titulos.

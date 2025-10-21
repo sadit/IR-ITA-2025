@@ -78,3 +78,7 @@ p
 ```
 
 Ahora tenemos un mapa en 2D que contiene información de 4D; lo cual claramente podría implicar un _error_, ver el artículo de [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis) en wikipedia, pero nos permite generar conocimiento e intuición de las relaciones entre los datos.
+
+### Ejercicios
+
+Calcule las matriz de distancias entre todas las muestras (4D, 150 vectores). Grafique dicha matriz como si fuera una imagen; vea la página del manual de Plotly para [heatmap](https://plotly.com/javascript/reference/heatmap/).

@@ -28,7 +28,8 @@ author:
     affiliation: INFOTEC Centro de Investigación e Innovación en Tecnologías de la Información y Comunicación
 
 website:
-  title: "Curso Introductorio a Julia y Recuperación de Información"
+  title: "El lenguaje de programación Julia y su aplicación a Recuperación de Información
+Textual"
   navbar:
     left:
       - index.qmd

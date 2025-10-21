@@ -8,7 +8,7 @@
 
 <meta name="author" content="Eric S. Téllez">
 
-<title>Búsqueda en espacios métricos – Curso Introductorio a Julia y Recuperación de Información</title>
+<title>Búsqueda en espacios métricos – El lenguaje de programación Julia y su aplicación a Recuperación de Información Textual</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -150,7 +150,7 @@ window.Quarto = {
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Curso Introductorio a Julia y Recuperación de Información</span>
+    <span class="navbar-title">El lenguaje de programación Julia y su aplicación a Recuperación de Información Textual</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Buscar"></div>
@@ -250,7 +250,10 @@ window.Quarto = {
   <li><a href="#búsqueda-por-fuerza-bruta-en-imágenes" id="toc-búsqueda-por-fuerza-bruta-en-imágenes" class="nav-link" data-scroll-target="#búsqueda-por-fuerza-bruta-en-imágenes">Búsqueda por fuerza bruta en imágenes</a></li>
   <li><a href="#búsqueda-con-texto" id="toc-búsqueda-con-texto" class="nav-link" data-scroll-target="#búsqueda-con-texto">Búsqueda con Texto</a></li>
   <li><a href="#búsqueda-multimodal" id="toc-búsqueda-multimodal" class="nav-link" data-scroll-target="#búsqueda-multimodal">Búsqueda Multimodal</a></li>
-  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice" class="nav-link" data-scroll-target="#búsqueda-con-índice">Búsqueda con índice</a></li>
+  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice" class="nav-link" data-scroll-target="#búsqueda-con-índice">Búsqueda con índice</a>
+  <ul class="collapse">
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -282,7 +285,10 @@ window.Quarto = {
   <li><a href="#búsqueda-por-fuerza-bruta-en-imágenes" id="toc-búsqueda-por-fuerza-bruta-en-imágenes">Búsqueda por fuerza bruta en imágenes</a></li>
   <li><a href="#búsqueda-con-texto" id="toc-búsqueda-con-texto">Búsqueda con Texto</a></li>
   <li><a href="#búsqueda-multimodal" id="toc-búsqueda-multimodal">Búsqueda Multimodal</a></li>
-  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice">Búsqueda con índice</a></li>
+  <li><a href="#búsqueda-con-índice" id="toc-búsqueda-con-índice">Búsqueda con índice</a>
+  <ul>
+  <li><a href="#ejercicios" id="toc-ejercicios">Ejercicios</a></li>
+  </ul></li>
   </ul>
 </nav>
 <p>Los ejercicios de esta unidad estan en colab <a href="https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing" class="uri">https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing</a></p>
@@ -546,7 +552,7 @@ window.Quarto = {
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram"</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-misjulqbbl&quot;></div><script>Plotly.newPlot(&quot;plotlyx-misjulqbbl&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[265.50037,362.9355,251.52962,316.98166,396.0979,395.03336,425.55884,269.28714,328.38586,331.18866,261.68958,404.40536,437.3105,396.45245,533.3169,436.17334,337.87433,371.00922,349.27985,350.91504,485.2482,240.0353,334.03638,429.59247,491.2212,348.52814,389.62875,436.7011,380.88632,249.24792,337.24023,225.48091,386.10004,491.21042,455.87973,347.20258,429.7713,346.77734,468.4943,345.1293,309.89178,309.3969,421.45517,236.1104,431.21246,274.6833,218.68262,413.6911,334.851,356.6601,281.94147,388.10617,523.67175,414.01724,218.39648,430.052,474.51282,339.66333,501.6652,387.42358,389.7132,311.1147,343.44922,173.29645,325.37616,445.16135,302.61713,421.58105,331.1025,470.6722,249.91699,385.61688,192.20364,391.71817,422.3018,392.1233,303.56113,391.89948,315.486,609.595,359.24518,488.05008,324.40793,362.56042,290.07495,420.39706,251.74164,462.71378,317.41907,423.29547,390.38593,419.59412,268.02148,339.08484,471.15967,489.45013,494.13116,365.37854,238.71454,141.14615]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram&quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-fnihdtsqoi&quot;></div><script>Plotly.newPlot(&quot;plotlyx-fnihdtsqoi&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[265.50037,362.9355,251.52962,316.98166,396.0979,395.03336,425.55884,269.28714,328.38586,331.18866,261.68958,404.40536,437.3105,396.45245,533.3169,436.17334,337.87433,371.00922,349.27985,350.91504,485.2482,240.0353,334.03638,429.59247,491.2212,348.52814,389.62875,436.7011,380.88632,249.24792,337.24023,225.48091,386.10004,491.21042,455.87973,347.20258,429.7713,346.77734,468.4943,345.1293,309.89178,309.3969,421.45517,236.1104,431.21246,274.6833,218.68262,413.6911,334.851,356.6601,281.94147,388.10617,523.67175,414.01724,218.39648,430.052,474.51282,339.66333,501.6652,387.42358,389.7132,311.1147,343.44922,173.29645,325.37616,445.16135,302.61713,421.58105,331.1025,470.6722,249.91699,385.61688,192.20364,391.71817,422.3018,392.1233,303.56113,391.89948,315.486,609.595,359.24518,488.05008,324.40793,362.56042,290.07495,420.39706,251.74164,462.71378,317.41907,423.29547,390.38593,419.59412,268.02148,339.08484,471.15967,489.45013,494.13116,365.37854,238.71454,141.14615]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram&quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 </div>
 </section>
@@ -661,7 +667,7 @@ window.Quarto = {
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - text "</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(knns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-aicuuqkxec&quot;></div><script>Plotly.newPlot(&quot;plotlyx-aicuuqkxec&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[205.64456,219.08804,187.26715,196.34872,276.6077,238.62198,200.85129,207.07932,234.98386,195.74542,194.07788,174.56812,163.31091,170.67946,189.92044,256.117,202.01418,191.24078,182.44788,169.77385,181.15567,144.24422,209.71434,192.92236,199.76283,196.91028,142.45212,183.44159,186.54346,155.72229,163.95248,251.44856,196.84738,170.91196,167.2266,205.01128,184.30054,184.41461,198.26428,141.16835,175.37234,191.8652,187.3262,146.12343,163.95331,202.07695,236.92772,169.57632,198.00005,172.2992,174.46045,270.6467,242.48552,207.54955,208.57935,187.26764,190.81444,129.99448,166.33862,232.46156,191.70296,222.47531,151.69778,223.59563,168.56262,229.6274,191.68576,195.25299,141.31412,197.88284,218.36258,176.96072,209.42534,167.11623,198.67928,187.58743,175.34009,173.91185,155.69043,186.54156,177.52144,207.55151,178.3027,137.0307,270.14194,186.23776,167.5747,200.23672,213.44382,176.9073,178.255,249.64235,134.51529,158.15245,211.37097,133.7416,211.81209,161.04245,200.09343,187.54637]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - text &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-nqlhxcdqjo&quot;></div><script>Plotly.newPlot(&quot;plotlyx-nqlhxcdqjo&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[205.64456,219.08804,187.26715,196.34872,276.6077,238.62198,200.85129,207.07932,234.98386,195.74542,194.07788,174.56812,163.31091,170.67946,189.92044,256.117,202.01418,191.24078,182.44788,169.77385,181.15567,144.24422,209.71434,192.92236,199.76283,196.91028,142.45212,183.44159,186.54346,155.72229,163.95248,251.44856,196.84738,170.91196,167.2266,205.01128,184.30054,184.41461,198.26428,141.16835,175.37234,191.8652,187.3262,146.12343,163.95331,202.07695,236.92772,169.57632,198.00005,172.2992,174.46045,270.6467,242.48552,207.54955,208.57935,187.26764,190.81444,129.99448,166.33862,232.46156,191.70296,222.47531,151.69778,223.59563,168.56262,229.6274,191.68576,195.25299,141.31412,197.88284,218.36258,176.96072,209.42534,167.11623,198.67928,187.58743,175.34009,173.91185,155.69043,186.54156,177.52144,207.55151,178.3027,137.0307,270.14194,186.23776,167.5747,200.23672,213.44382,176.9073,178.255,249.64235,134.51529,158.15245,211.37097,133.7416,211.81209,161.04245,200.09343,187.54637]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - text &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 </div>
 <p>Comparemos con el de imágenes que anteriormente calculamos.</p>
@@ -675,7 +681,7 @@ window.Quarto = {
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fu">ExhaustiveSearch</span>(; db, dist)</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> eknns <span class="op">=</span> <span class="fu">searchbatch</span>(S, ctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.280256 seconds (102 allocations: 12.719 KiB)</code></pre>
+<pre><code>  0.333095 seconds (103 allocations: 12.734 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10×100 Matrix{IdWeight}:
@@ -750,7 +756,7 @@ window.Quarto = {
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - multimodal "</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(eknns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-hhzjjccsxn&quot;></div><script>Plotly.newPlot(&quot;plotlyx-hhzjjccsxn&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[616.11084,635.45605,637.0803,651.08777,639.45825,707.5231,732.46594,648.3557,636.6881,648.3023,635.6843,618.43494,634.28625,573.7157,639.1532,669.718,639.4857,657.72473,696.5674,623.1245,624.1621,627.9716,614.0053,649.3762,623.6111,640.8579,685.8071,653.579,648.8375,582.7557,616.86066,636.39655,662.9824,598.2416,644.2364,672.21625,599.5984,679.3215,730.9042,641.5776,657.4158,598.0437,657.8053,642.1494,599.0949,625.6293,688.855,671.17334,662.2425,661.7044,632.9502,662.7363,642.47095,674.1728,629.8949,716.9863,618.50116,623.6073,624.85974,616.08203,655.91223,643.8335,622.078,617.45715,643.5355,662.749,653.24097,638.0846,625.78625,676.4361,652.1956,610.1084,667.274,675.94617,638.8904,697.072,650.01294,676.63837,720.5722,624.4866,660.1457,566.99243,664.6105,641.2189,641.0554,590.5133,619.87036,731.94257,641.1808,700.0081,640.23926,696.1235,665.1376,599.683,623.32837,677.8589,683.1884,644.95465,680.99133,633.0964]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-zyuztgwywy&quot;></div><script>Plotly.newPlot(&quot;plotlyx-zyuztgwywy&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[616.11084,635.45605,637.0803,651.08777,639.45825,707.5231,732.46594,648.3557,636.6881,648.3023,635.6843,618.43494,634.28625,573.7157,639.1532,669.718,639.4857,657.72473,696.5674,623.1245,624.1621,627.9716,614.0053,649.3762,623.6111,640.8579,685.8071,653.579,648.8375,582.7557,616.86066,636.39655,662.9824,598.2416,644.2364,672.21625,599.5984,679.3215,730.9042,641.5776,657.4158,598.0437,657.8053,642.1494,599.0949,625.6293,688.855,671.17334,662.2425,661.7044,632.9502,662.7363,642.47095,674.1728,629.8949,716.9863,618.50116,623.6073,624.85974,616.08203,655.91223,643.8335,622.078,617.45715,643.5355,662.749,653.24097,638.0846,625.78625,676.4361,652.1956,610.1084,667.274,675.94617,638.8904,697.072,650.01294,676.63837,720.5722,624.4866,660.1457,566.99243,664.6105,641.2189,641.0554,590.5133,619.87036,731.94257,641.1808,700.0081,640.23926,696.1235,665.1376,599.683,623.32837,677.8589,683.1884,644.95465,680.99133,633.0964]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 </div>
 </section>
@@ -764,32 +770,30 @@ window.Quarto = {
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">index!</span>(G, gctx)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>LOG add_vertex! sp=1 ep=1 n=1 BeamSearch(bsize=4, Δ=1.0, maxvisits=1000000) 2025-10-20T19:44:38.828
+<pre><code>LOG add_vertex! sp=1 ep=1 n=1 BeamSearch(bsize=4, Δ=1.0, maxvisits=1000000) 2025-10-21T10:29:17.553
 LOG n.size quantiles:[0.0, 0.0, 0.0, 0.0, 0.0]
-LOG add_vertex! sp=32382 ep=32638 n=32381 BeamSearch(bsize=9, Δ=1.4039096, maxvisits=3068) 2025-10-20T19:44:39.830
-LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 13.0]
-LOG add_vertex! sp=81212 ep=81468 n=81211 BeamSearch(bsize=10, Δ=1.18, maxvisits=1236) 2025-10-20T19:44:40.833
+LOG add_vertex! sp=514 ep=770 n=513 BeamSearch(bsize=18, Δ=1.0857142, maxvisits=486) 2025-10-21T10:29:21.866
+LOG n.size quantiles:[1.0, 3.0, 4.0, 6.0, 9.0]
+LOG add_vertex! sp=85324 ep=85580 n=85323 BeamSearch(bsize=20, Δ=1.3066694, maxvisits=2404) 2025-10-21T10:29:22.944
 LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 12.0]
-LOG add_vertex! sp=129528 ep=129784 n=129527 BeamSearch(bsize=16, Δ=1.23, maxvisits=4598) 2025-10-20T19:44:41.840
+LOG add_vertex! sp=120276 ep=120532 n=120275 BeamSearch(bsize=20, Δ=1.3066694, maxvisits=2404) 2025-10-21T10:29:23.947
+LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 12.0]
+LOG add_vertex! sp=169363 ep=169619 n=169362 BeamSearch(bsize=15, Δ=1.157625, maxvisits=1768) 2025-10-21T10:29:24.949
+LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 12.0]
+LOG add_vertex! sp=219992 ep=220248 n=219991 BeamSearch(bsize=18, Δ=1.155, maxvisits=1850) 2025-10-21T10:29:25.951
 LOG n.size quantiles:[1.0, 4.0, 6.0, 7.0, 14.0]
-LOG add_vertex! sp=159854 ep=160110 n=159853 BeamSearch(bsize=16, Δ=1.23, maxvisits=4598) 2025-10-20T19:44:42.845
-LOG n.size quantiles:[2.0, 4.0, 6.0, 7.0, 11.0]
-LOG add_vertex! sp=188638 ep=188894 n=188637 BeamSearch(bsize=16, Δ=1.23, maxvisits=4598) 2025-10-20T19:44:43.848
-LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 13.0]
-LOG add_vertex! sp=221277 ep=221533 n=221276 BeamSearch(bsize=10, Δ=1.1865656, maxvisits=1718) 2025-10-20T19:44:44.852
-LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 11.0]
-LOG add_vertex! sp=258799 ep=259055 n=258798 BeamSearch(bsize=10, Δ=1.1865656, maxvisits=1718) 2025-10-20T19:44:45.857
-LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 14.0]
-LOG add_vertex! sp=289896 ep=290152 n=289895 BeamSearch(bsize=12, Δ=1.14, maxvisits=1790) 2025-10-20T19:44:46.863
-LOG n.size quantiles:[1.0, 4.0, 6.0, 7.0, 13.0]
-  8.766397 seconds (4.45 M allocations: 222.795 MiB)</code></pre>
+LOG add_vertex! sp=269336 ep=269592 n=269335 BeamSearch(bsize=18, Δ=1.155, maxvisits=1850) 2025-10-21T10:29:26.953
+LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 15.0]
+LOG add_vertex! sp=297349 ep=297605 n=297348 BeamSearch(bsize=16, Δ=1.31, maxvisits=4148) 2025-10-21T10:29:27.962
+LOG n.size quantiles:[1.0, 4.0, 5.0, 7.0, 12.0]
+ 12.481139 seconds (10.59 M allocations: 636.061 MiB, 2.55% gc time, 54.76% compilation time)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>SearchGraph{SqL2_asf32, MatrixDatabase{Matrix{Float16}}, SimilaritySearch.AdjacencyLists.AdjacencyList{UInt32}, Vector{UInt32}}
   dist: SqL2_asf32 SqL2_asf32()
   db: MatrixDatabase{Matrix{Float16}}
   adj: SimilaritySearch.AdjacencyLists.AdjacencyList{UInt32}
-  hints: Array{UInt32}((70,)) UInt32[0x00017140, 0x00024517, 0x00005663, 0x00017265, 0x00029902, 0x0000f1e3, 0x0000892c, 0x0001efdb, 0x00041f51, 0x0000f09a  …  0x0000064c, 0x00042d35, 0x0003e146, 0x000292ed, 0x00028a3e, 0x00022bb7, 0x000262f4, 0x0000be63, 0x0000445b, 0x000338cd]
+  hints: Array{UInt32}((70,)) UInt32[0x0001a8c5, 0x00020758, 0x00003168, 0x00020e6b, 0x0004030d, 0x0001c143, 0x0002eae8, 0x00025807, 0x0002a697, 0x0004449c  …  0x00000437, 0x0003825c, 0x00015a5f, 0x000111d8, 0x000149b5, 0x000165f5, 0x00003335, 0x000283b5, 0x00011488, 0x00007a8f]
   algo: Base.RefValue{BeamSearch}
   len: Base.RefValue{Int64}</code></pre>
 </div>
@@ -799,84 +803,69 @@ LOG n.size quantiles:[1.0, 4.0, 6.0, 7.0, 13.0]
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> <span class="fu">optimize_index!</span>(G, gctx, <span class="fu">MinRecall</span>(<span class="fl">0.9</span>); ksearch<span class="op">=</span><span class="fl">10</span>, queries<span class="op">=</span><span class="fu">rand</span>(queries, <span class="fl">32</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre><span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.10000000000000003, #objects: 318514, #queries: 32
+<pre><span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.12812500000000002, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [644.3356323242188, 661.320068359375, 715.5668334960938, 731.3150024414062, 730.361083984375, 673.3662109375, 713.0228881835938, 774.103271484375, 696.284423828125, 715.5668334960938, 687.8450927734375, 696.4031982421875, 714.094970703125, 774.103271484375, 661.9520263671875, 596.4913940429688, 727.2989501953125, 701.5137939453125, 721.257080078125, 709.677734375, 644.3356323242188, 661.320068359375, 715.4903564453125, 727.2989501953125, 774.103271484375, 713.0228881835938, 694.9534912109375, 705.5419311523438, 659.56494140625, 717.967529296875, 653.6616821289062, 652.125732421875]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.053125, #objects: 318514, #queries: 32
+cov = [742.7427978515625, 667.83203125, 602.3209228515625, 726.651123046875, 708.905517578125, 691.3491821289062, 661.320068359375, 640.004150390625, 608.4695434570312, 749.257080078125, 711.5469360351562, 650.33935546875, 668.07666015625, 643.0003662109375, 668.07666015625, 662.8495483398438, 681.824462890625, 690.171630859375, 684.8111572265625, 726.651123046875, 681.824462890625, 680.272705078125, 673.20703125, 686.0609130859375, 604.8754272460938, 729.790283203125, 749.257080078125, 717.674560546875, 661.320068359375, 681.824462890625, 602.3209228515625, 686.0609130859375]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.22187500000000002, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [794.27685546875, 700.68701171875, 736.1995849609375, 741.556640625, 759.0230712890625, 688.28662109375, 780.9667358398438, 774.103271484375, 774.6994018554688, 736.1995849609375, 687.8450927734375, 716.44482421875, 711.4411010742188, 774.103271484375, 668.39990234375, 622.4822387695312, 831.4176025390625, 799.3431396484375, 716.1834106445312, 759.5015258789062, 794.27685546875, 700.68701171875, 739.596435546875, 831.4176025390625, 774.103271484375, 780.9667358398438, 723.587158203125, 740.6311645507812, 654.6863403320312, 712.4624633789062, 666.8717041015625, 665.8799438476562]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.046875, #objects: 318514, #queries: 32
+cov = [684.783203125, 651.5800170898438, 599.6121826171875, 695.9497680664062, 697.3876953125, 691.3491821289062, 649.28759765625, 643.551025390625, 687.8296508789062, 738.35205078125, 675.1009521484375, 654.6863403320312, 649.0391235351562, 642.9573974609375, 649.0391235351562, 640.6434326171875, 623.443115234375, 677.5205078125, 677.09375, 695.9497680664062, 623.443115234375, 645.4116821289062, 650.3983764648438, 671.9378051757812, 600.420654296875, 714.8848876953125, 738.35205078125, 712.4761352539062, 649.28759765625, 623.443115234375, 599.6121826171875, 671.9378051757812]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.19687500000000002, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [745.02294921875, 700.68701171875, 736.1995849609375, 732.2035522460938, 730.9329223632812, 682.77197265625, 763.7719116210938, 774.103271484375, 696.284423828125, 736.1995849609375, 687.8450927734375, 707.3773803710938, 705.796142578125, 774.103271484375, 661.9520263671875, 616.484375, 762.4036254882812, 777.721435546875, 721.5880126953125, 752.5927734375, 745.02294921875, 700.68701171875, 714.6253662109375, 762.4036254882812, 774.103271484375, 763.7719116210938, 723.587158203125, 705.5419311523438, 660.9480590820312, 710.9345703125, 660.777099609375, 665.8799438476562]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.153125, #objects: 318514, #queries: 32
+cov = [686.3106689453125, 654.5127563476562, 599.6121826171875, 695.9497680664062, 701.876220703125, 686.9833374023438, 641.931640625, 631.8385009765625, 670.689208984375, 741.9556884765625, 687.3662109375, 648.7008666992188, 659.9610595703125, 642.9573974609375, 659.9610595703125, 662.8495483398438, 627.6822509765625, 685.4127197265625, 674.9387817382812, 695.9497680664062, 627.6822509765625, 650.496826171875, 650.3983764648438, 681.3414306640625, 600.420654296875, 727.3360595703125, 741.9556884765625, 712.4761352539062, 641.931640625, 627.6822509765625, 599.6121826171875, 681.3414306640625]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.284375, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [635.9010009765625, 651.6497192382812, 715.4219970703125, 702.9998168945312, 691.3450317382812, 670.4066162109375, 713.0228881835938, 769.2146606445312, 679.41162109375, 715.4219970703125, 684.5150146484375, 691.2651977539062, 678.9946899414062, 769.2146606445312, 660.9072265625, 581.279052734375, 706.4125366210938, 715.764404296875, 696.76904296875, 701.4288940429688, 635.9010009765625, 651.6497192382812, 707.7881469726562, 706.4125366210938, 769.2146606445312, 713.0228881835938, 678.8838500976562, 664.08544921875, 654.6863403320312, 679.5552978515625, 632.5574340820312, 642.9573974609375]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.056249999999999994, #objects: 318514, #queries: 32
+cov = [677.345703125, 642.8067016601562, 600.0947265625, 688.3359375, 708.905517578125, 691.3491821289062, 640.4542846679688, 632.4246826171875, 602.1101684570312, 746.512939453125, 655.8777465820312, 648.7008666992188, 645.404052734375, 642.9573974609375, 645.404052734375, 630.9037475585938, 627.6822509765625, 673.817626953125, 677.09375, 688.3359375, 627.6822509765625, 645.4116821289062, 650.3983764648438, 649.9633178710938, 600.420654296875, 703.8705444335938, 746.512939453125, 715.2803344726562, 640.4542846679688, 627.6822509765625, 600.0947265625, 649.9633178710938]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.10312500000000001, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [745.02294921875, 700.3517456054688, 735.6221923828125, 731.3150024414062, 730.9329223632812, 672.9588623046875, 763.7719116210938, 774.103271484375, 696.284423828125, 735.6221923828125, 687.8450927734375, 707.3773803710938, 705.796142578125, 774.103271484375, 661.9520263671875, 616.484375, 762.4036254882812, 777.721435546875, 716.1834106445312, 752.5927734375, 745.02294921875, 700.3517456054688, 714.6253662109375, 762.4036254882812, 774.103271484375, 763.7719116210938, 723.587158203125, 705.5419311523438, 654.6863403320312, 710.6547241210938, 660.777099609375, 662.3924560546875]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.040625, #objects: 318514, #queries: 32
+cov = [777.1376953125, 683.04833984375, 617.60986328125, 776.0941162109375, 754.1188354492188, 745.703369140625, 661.2703857421875, 656.3269653320312, 624.7601318359375, 793.818115234375, 725.8689575195312, 650.33935546875, 672.86767578125, 644.369140625, 672.86767578125, 663.439453125, 700.5733642578125, 692.0481567382812, 717.3480224609375, 776.0941162109375, 700.5733642578125, 672.9949951171875, 690.646484375, 723.02490234375, 634.1952514648438, 792.3567504882812, 793.818115234375, 761.2656860351562, 661.2703857421875, 700.5733642578125, 617.60986328125, 723.02490234375]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.115625, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [794.27685546875, 718.4113159179688, 736.7437133789062, 741.556640625, 759.0230712890625, 715.5050048828125, 783.6089477539062, 774.103271484375, 774.6994018554688, 736.7437133789062, 687.8450927734375, 716.44482421875, 714.094970703125, 774.103271484375, 668.39990234375, 622.4822387695312, 831.4176025390625, 799.3431396484375, 755.163818359375, 759.5015258789062, 794.27685546875, 718.4113159179688, 739.596435546875, 831.4176025390625, 774.103271484375, 783.6089477539062, 723.587158203125, 740.6311645507812, 660.9480590820312, 712.6663818359375, 666.8717041015625, 665.8799438476562]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.053125, #objects: 318514, #queries: 32
+cov = [744.5994873046875, 667.8514404296875, 609.3101196289062, 755.3368530273438, 719.0145263671875, 707.0672607421875, 656.149169921875, 642.4121704101562, 620.256103515625, 770.8988647460938, 715.7862548828125, 650.33935546875, 668.07666015625, 651.4044189453125, 668.07666015625, 663.439453125, 682.678466796875, 687.530517578125, 717.3480224609375, 755.3368530273438, 682.678466796875, 681.4674682617188, 686.1097412109375, 713.0469970703125, 604.8754272460938, 766.9263916015625, 770.8988647460938, 718.22705078125, 656.149169921875, 682.678466796875, 609.3101196289062, 713.0469970703125]
+<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.296875, #objects: 318514, #queries: 32
 <span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [794.27685546875, 700.68701171875, 736.1995849609375, 741.556640625, 759.0230712890625, 688.28662109375, 780.9667358398438, 774.103271484375, 774.6994018554688, 736.1995849609375, 687.8450927734375, 716.44482421875, 711.4411010742188, 774.103271484375, 668.39990234375, 622.4822387695312, 831.4176025390625, 799.3431396484375, 716.1834106445312, 759.5015258789062, 794.27685546875, 700.68701171875, 739.596435546875, 831.4176025390625, 774.103271484375, 780.9667358398438, 723.587158203125, 740.6311645507812, 654.6863403320312, 712.4624633789062, 666.8717041015625, 665.8799438476562]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.28124999999999994, #objects: 318514, #queries: 32
-<span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [628.974609375, 640.493408203125, 704.994140625, 695.85791015625, 688.8843994140625, 647.851318359375, 705.2745971679688, 765.0120849609375, 662.438232421875, 704.994140625, 659.408447265625, 683.76513671875, 654.5943603515625, 765.0120849609375, 627.6822509765625, 578.114501953125, 676.7801513671875, 694.1964111328125, 656.0347900390625, 686.0039672851562, 628.974609375, 640.493408203125, 599.9443359375, 676.7801513671875, 765.0120849609375, 705.2745971679688, 674.499755859375, 647.5924072265625, 650.33935546875, 661.0601806640625, 603.415771484375, 630.5596923828125]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.056249999999999994, #objects: 318514, #queries: 32
-<span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [745.02294921875, 700.3517456054688, 735.6221923828125, 731.3150024414062, 730.9329223632812, 672.9588623046875, 763.7719116210938, 774.103271484375, 696.284423828125, 735.6221923828125, 687.8450927734375, 707.3773803710938, 705.796142578125, 774.103271484375, 661.9520263671875, 616.484375, 762.4036254882812, 777.721435546875, 716.1834106445312, 752.5927734375, 745.02294921875, 700.3517456054688, 714.6253662109375, 762.4036254882812, 774.103271484375, 763.7719116210938, 723.587158203125, 705.5419311523438, 654.6863403320312, 710.6547241210938, 660.777099609375, 662.3924560546875]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.053125, #objects: 318514, #queries: 32
-<span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [794.27685546875, 700.68701171875, 736.1995849609375, 741.556640625, 759.0230712890625, 688.28662109375, 780.9667358398438, 774.103271484375, 774.6994018554688, 736.1995849609375, 687.8450927734375, 716.44482421875, 711.4411010742188, 774.103271484375, 668.39990234375, 622.4822387695312, 831.4176025390625, 799.3431396484375, 716.1834106445312, 759.5015258789062, 794.27685546875, 700.68701171875, 739.596435546875, 831.4176025390625, 774.103271484375, 780.9667358398438, 723.587158203125, 740.6311645507812, 654.6863403320312, 712.4624633789062, 666.8717041015625, 665.8799438476562]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.13437500000000002, #objects: 318514, #queries: 32
-<span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [640.0523681640625, 661.320068359375, 721.3461303710938, 717.568115234375, 690.488525390625, 658.09033203125, 713.0228881835938, 774.103271484375, 686.1849365234375, 721.3461303710938, 687.8450927734375, 691.2651977539062, 705.796142578125, 774.103271484375, 628.725830078125, 596.4913940429688, 684.7872314453125, 717.4613037109375, 660.189208984375, 704.1797485351562, 640.0523681640625, 661.320068359375, 714.6253662109375, 684.7872314453125, 774.103271484375, 713.0228881835938, 694.9534912109375, 690.4618530273438, 650.8583984375, 676.4140014648438, 604.3827514648438, 652.125732421875]
-<span class="ansi-yellow-fg ansi-bold">┌ </span><span class="ansi-yellow-fg ansi-bold">Warning: </span>OPT low recal&gt; recall: 0.1875, #objects: 318514, #queries: 32
-<span class="ansi-yellow-fg ansi-bold">└ </span><span class="ansi-bright-black-fg">@ SimilaritySearch ~/.julia/packages/SimilaritySearch/G1Cjs/src/opt.jl:67</span>
-cov = [640.0523681640625, 654.3450927734375, 714.150634765625, 702.9998168945312, 690.488525390625, 650.8567504882812, 713.0228881835938, 774.103271484375, 686.1849365234375, 714.150634765625, 631.1862182617188, 671.34619140625, 695.86376953125, 774.103271484375, 623.3262939453125, 596.4913940429688, 684.7872314453125, 696.2327270507812, 656.0347900390625, 704.1797485351562, 640.0523681640625, 654.3450927734375, 603.1654052734375, 684.7872314453125, 774.103271484375, 713.0228881835938, 690.9829711914062, 690.4618530273438, 650.8583984375, 672.3900756835938, 604.3827514648438, 631.4757080078125]
-  0.502116 seconds (108.02 k allocations: 11.340 MiB, 34.09% compilation time)
+cov = [652.7099609375, 645.8099365234375, 599.6121826171875, 689.392578125, 690.9466552734375, 686.9833374023438, 644.6885986328125, 640.004150390625, 599.9443359375, 735.6553955078125, 675.1009521484375, 650.33935546875, 649.0391235351562, 642.9573974609375, 649.0391235351562, 630.9037475585938, 623.443115234375, 678.0023193359375, 664.796142578125, 689.392578125, 623.443115234375, 641.5700073242188, 649.115966796875, 671.9378051757812, 598.5908203125, 702.9237060546875, 735.6553955078125, 712.4761352539062, 644.6885986328125, 623.443115234375, 599.6121826171875, 671.9378051757812]
+  1.423310 seconds (989.01 k allocations: 70.781 MiB, 64.53% compilation time)
 </pre>
 </div>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>16-element Vector{Pair}:
- BeamSearch(bsize=12, Δ=1.2788999, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3596.90625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.0001320885625, conf = BeamSearch(bsize=12, Δ=1.2788999, maxvisits=1000000))
- BeamSearch(bsize=12, Δ=1.2179999, maxvisits=1000000) =&gt; (visited = (min = 1708, mean = 3524.71875, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.0001296553125, conf = BeamSearch(bsize=12, Δ=1.2179999, maxvisits=1000000))
-  BeamSearch(bsize=12, Δ=1.244447, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3581.34375, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00012965309375, conf = BeamSearch(bsize=12, Δ=1.244447, maxvisits=1000000))
- BeamSearch(bsize=12, Δ=1.1851876, maxvisits=1000000) =&gt; (visited = (min = 1147, mean = 3290.875, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.0001220185625, conf = BeamSearch(bsize=12, Δ=1.1851876, maxvisits=1000000))
-  BeamSearch(bsize=12, Δ=1.342845, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3596.90625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00013244690625, conf = BeamSearch(bsize=12, Δ=1.342845, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.26, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3596.90625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.000130492875, conf = BeamSearch(bsize=12, Δ=1.26, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.19, maxvisits=1000000) =&gt; (visited = (min = 1478, mean = 3376.9375, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.0001248174375, conf = BeamSearch(bsize=12, Δ=1.19, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.22, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3564.0625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.000129437875, conf = BeamSearch(bsize=12, Δ=1.22, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.23, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3578.5625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00013084465625, conf = BeamSearch(bsize=12, Δ=1.23, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.25, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3587.53125, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.000131552125, conf = BeamSearch(bsize=12, Δ=1.25, maxvisits=1000000))
- BeamSearch(bsize=12, Δ=1.3066694, maxvisits=1000000) =&gt; (visited = (min = 1920, mean = 3596.90625, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00013227203125, conf = BeamSearch(bsize=12, Δ=1.3066694, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.21, maxvisits=1000000) =&gt; (visited = (min = 1706, mean = 3512.4375, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00012484071875, conf = BeamSearch(bsize=12, Δ=1.21, maxvisits=1000000))
-       BeamSearch(bsize=12, Δ=1.2, maxvisits=1000000) =&gt; (visited = (min = 1478, mean = 3421.78125, max = 3651), radius = (min = 573.716796875, mean = 644.9944229125977, max = 686.2117919921875), recall = 0.8312499999999998, searchtime = 0.00012506365625, conf = BeamSearch(bsize=12, Δ=1.2, maxvisits=1000000))
-      BeamSearch(bsize=12, Δ=1.16, maxvisits=1000000) =&gt; (visited = (min = 891, mean = 2900.03125, max = 3651), radius = (min = 573.716796875, mean = 645.2427005767822, max = 686.2117919921875), recall = 0.8218749999999999, searchtime = 0.0001084575, conf = BeamSearch(bsize=12, Δ=1.16, maxvisits=1000000))
- BeamSearch(bsize=11, Δ=1.3066694, maxvisits=1000000) =&gt; (visited = (min = 1962, mean = 3598.21875, max = 3651), radius = (min = 573.7156982421875, mean = 645.6720352172852, max = 687.6947021484375), recall = 0.8218749999999999, searchtime = 0.0001297665625, conf = BeamSearch(bsize=11, Δ=1.3066694, maxvisits=1000000))
- BeamSearch(bsize=11, Δ=1.2179999, maxvisits=1000000) =&gt; (visited = (min = 1690, mean = 3474.875, max = 3651), radius = (min = 573.7156982421875, mean = 645.6720352172852, max = 687.6947021484375), recall = 0.8218749999999999, searchtime = 0.00012602109375, conf = BeamSearch(bsize=11, Δ=1.2179999, maxvisits=1000000))</code></pre>
+    BeamSearch(bsize=13, Δ=1.2915, maxvisits=1000000) =&gt; (visited = (min = 5172, mean = 8267.15625, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.0002778686875, conf = BeamSearch(bsize=13, Δ=1.2915, maxvisits=1000000))
+ BeamSearch(bsize=13, Δ=1.3400955, maxvisits=1000000) =&gt; (visited = (min = 8367, mean = 8367.0, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00028114753125, conf = BeamSearch(bsize=13, Δ=1.3400955, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.23, maxvisits=1000000) =&gt; (visited = (min = 2906, mean = 7926.8125, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00025339615625, conf = BeamSearch(bsize=13, Δ=1.23, maxvisits=1000000))
+ BeamSearch(bsize=13, Δ=1.2155062, maxvisits=1000000) =&gt; (visited = (min = 1683, mean = 7534.4375, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00024382959375, conf = BeamSearch(bsize=13, Δ=1.2155062, maxvisits=1000000))
+ BeamSearch(bsize=13, Δ=1.2762815, maxvisits=1000000) =&gt; (visited = (min = 4975, mean = 8261.0, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.000273128875, conf = BeamSearch(bsize=13, Δ=1.2762815, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.22, maxvisits=1000000) =&gt; (visited = (min = 2872, mean = 7775.875, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.0002415074375, conf = BeamSearch(bsize=13, Δ=1.22, maxvisits=1000000))
+ BeamSearch(bsize=13, Δ=1.3560749, maxvisits=1000000) =&gt; (visited = (min = 8367, mean = 8367.0, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00024961734375, conf = BeamSearch(bsize=13, Δ=1.3560749, maxvisits=1000000))
+ BeamSearch(bsize=13, Δ=1.4071003, maxvisits=1000000) =&gt; (visited = (min = 8367, mean = 8367.0, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00024788625, conf = BeamSearch(bsize=13, Δ=1.4071003, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.32, maxvisits=1000000) =&gt; (visited = (min = 8367, mean = 8367.0, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00024970325, conf = BeamSearch(bsize=13, Δ=1.32, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.29, maxvisits=1000000) =&gt; (visited = (min = 5108, mean = 8265.15625, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.000247456625, conf = BeamSearch(bsize=13, Δ=1.29, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.28, maxvisits=1000000) =&gt; (visited = (min = 4993, mean = 8261.5625, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00022522846875, conf = BeamSearch(bsize=13, Δ=1.28, maxvisits=1000000))
+      BeamSearch(bsize=13, Δ=1.25, maxvisits=1000000) =&gt; (visited = (min = 3138, mean = 8135.09375, max = 8367), radius = (min = 582.7556762695312, mean = 637.9951019287109, max = 710.734375), recall = 0.896875, searchtime = 0.00022265984375, conf = BeamSearch(bsize=13, Δ=1.25, maxvisits=1000000))
+ BeamSearch(bsize=16, Δ=1.2762815, maxvisits=1000000) =&gt; (visited = (min = 5595, mean = 8263.4375, max = 8367), radius = (min = 582.7556762695312, mean = 637.7993030548096, max = 710.734375), recall = 0.89375, searchtime = 0.0002574196875, conf = BeamSearch(bsize=16, Δ=1.2762815, maxvisits=1000000))
+ BeamSearch(bsize=14, Δ=1.2155062, maxvisits=1000000) =&gt; (visited = (min = 1692, mean = 7383.6875, max = 8367), radius = (min = 582.7556762695312, mean = 637.6396465301514, max = 710.734375), recall = 0.890625, searchtime = 0.000239449625, conf = BeamSearch(bsize=14, Δ=1.2155062, maxvisits=1000000))
+ BeamSearch(bsize=14, Δ=1.2762815, maxvisits=1000000) =&gt; (visited = (min = 4927, mean = 8259.5, max = 8367), radius = (min = 582.7556762695312, mean = 637.6396465301514, max = 710.734375), recall = 0.890625, searchtime = 0.000270862875, conf = BeamSearch(bsize=14, Δ=1.2762815, maxvisits=1000000))
+      BeamSearch(bsize=14, Δ=1.22, maxvisits=1000000) =&gt; (visited = (min = 1858, mean = 7627.0625, max = 8367), radius = (min = 582.7556762695312, mean = 637.6396465301514, max = 710.734375), recall = 0.890625, searchtime = 0.00024138875, conf = BeamSearch(bsize=14, Δ=1.22, maxvisits=1000000))</code></pre>
 </div>
 </div>
 <p>Vamos a buscar en el índice</p>
 <div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@time</span> gknns <span class="op">=</span> <span class="fu">searchbatch</span>(G, gctx, queries, <span class="fl">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.030649 seconds (402 allocations: 19.078 KiB)</code></pre>
+<pre><code>  0.529569 seconds (426.38 k allocations: 27.303 MiB, 88.96% compilation time)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10×100 Matrix{IdWeight}:
  IdWeight(0x0001a81a, 605.293)  …  IdWeight(0x0001710f, 601.911)
  IdWeight(0x00034b40, 608.942)     IdWeight(0x0001f3f7, 603.531)
- IdWeight(0x00044d5f, 611.12)      IdWeight(0x00015bd3, 615.286)
- IdWeight(0x00035216, 611.12)      IdWeight(0x00003b56, 623.938)
- IdWeight(0x000491cd, 613.351)     IdWeight(0x0001194a, 625.19)
- IdWeight(0x00017876, 615.067)  …  IdWeight(0x00023b04, 627.171)
- IdWeight(0x000481ac, 615.698)     IdWeight(0x0003cfd4, 630.306)
- IdWeight(0x00011ac0, 619.328)     IdWeight(0x0000ef2d, 632.689)
- IdWeight(0x000497b9, 620.583)     IdWeight(0x0000fc1a, 633.244)
- IdWeight(0x00030c86, 620.585)     IdWeight(0x00014093, 633.248)</code></pre>
+ IdWeight(0x00032712, 610.634)     IdWeight(0x00015bd3, 615.286)
+ IdWeight(0x00044d5f, 611.12)      IdWeight(0x00003b56, 623.938)
+ IdWeight(0x00035216, 611.12)      IdWeight(0x0001194a, 625.19)
+ IdWeight(0x000491cd, 613.351)  …  IdWeight(0x00023b04, 627.171)
+ IdWeight(0x00017876, 615.067)     IdWeight(0x0003cfd4, 630.306)
+ IdWeight(0x000481ac, 615.698)     IdWeight(0x0000ef2d, 632.689)
+ IdWeight(0x00011ac0, 619.328)     IdWeight(0x0000fc1a, 633.244)
+ IdWeight(0x000497b9, 620.583)     IdWeight(0x00014093, 633.248)</code></pre>
 </div>
 </div>
 <p>Vamos observar algunas de las consultas</p>
@@ -935,14 +924,14 @@ cov = [640.0523681640625, 654.3450927734375, 714.150634765625, 702.9998168945312
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>p.layout.title.text <span class="op">=</span> <span class="st">"knn distance histogram - indexed - multimodal "</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>p.<span class="fu">histogram</span>(x<span class="op">=</span><span class="fu">convert</span>.(<span class="dt">Float32</span>, <span class="fu">view</span>(gknns, <span class="fl">10</span>, <span class="op">:</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-wmotprvggo&quot;></div><script>Plotly.newPlot(&quot;plotlyx-wmotprvggo&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[620.5853,636.65094,639.697,653.4647,639.45825,710.7344,732.46594,652.1738,638.2232,649.0984,638.13184,619.23364,634.28625,573.7168,639.33075,673.81836,642.03186,657.72473,696.5674,623.1245,624.1621,631.0896,614.89954,650.553,623.6111,640.8579,685.8071,654.24817,657.8203,582.7557,617.6571,636.39655,662.9824,598.53296,646.3882,672.21625,599.5984,680.0974,732.067,641.5776,657.4158,598.0437,660.8937,645.77765,602.052,626.60693,688.855,677.2561,667.54315,663.29004,632.9502,665.4952,643.52515,674.1728,631.8628,718.4684,621.94556,632.7737,624.85974,616.11096,660.6155,648.871,622.078,617.45715,648.5053,662.749,653.24097,640.278,632.32306,677.5576,652.1956,610.1084,670.82935,677.25635,647.0668,703.301,650.65796,680.43365,722.0599,624.4866,665.5292,566.99243,664.7555,641.2189,642.9354,593.8806,621.2994,734.2567,641.1808,705.015,640.23926,709.48267,665.1376,600.53174,623.32837,679.07776,688.5145,644.95465,684.04846,633.2477]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - indexed - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
+<iframe srcdoc="<html><head><meta charset=&quot;utf-8&quot;><meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;><meta name=&quot;description&quot; content=&quot;PlotlyLight.jl Plot&quot;><title>PlotlyLight.jl</title><style>html, body { padding: 0px; margin: 0px; }</style><script src=&quot;https://cdn.plot.ly/plotly-2.35.2.min.js&quot; charset=&quot;utf-8&quot;></script></head><body><div class=&quot;plotlylight-parent&quot;><div class=&quot;plotlylight-plot-div&quot; style=&quot;height:100vh; width:100vw&quot; id=&quot;plotlyx-nddltayfek&quot;></div><script>Plotly.newPlot(&quot;plotlyx-nddltayfek&quot;,[{&quot;type&quot;:&quot;histogram&quot;,&quot;x&quot;:[620.583,635.45605,639.4997,653.4647,639.45825,710.7344,732.46594,648.3557,638.338,649.4801,638.13184,618.43494,634.28625,573.7168,639.1532,673.81836,642.03186,660.01044,696.5674,623.1245,624.1621,627.9716,614.0053,649.3762,623.6111,640.8579,685.8071,654.24817,648.8375,582.7557,616.86066,636.39655,662.9824,598.53296,644.40735,672.21625,599.5984,679.4248,734.2053,641.5776,657.4158,598.0437,657.8053,645.77765,600.2874,625.6293,688.855,678.787,662.5328,661.7044,632.9502,663.66394,643.52515,674.9268,629.8949,716.9863,620.7897,632.7737,626.13196,616.08203,656.3766,643.8335,622.078,617.45715,644.14453,662.749,653.8605,638.0846,629.3789,677.45886,652.1956,610.1084,670.82935,675.94617,638.8904,703.301,650.01294,676.63837,720.5722,624.4866,660.1457,566.99243,664.6105,641.2189,642.49524,590.5133,619.87036,733.01044,641.1808,705.015,640.23926,696.53076,665.1376,599.683,623.32837,679.4602,688.20905,644.95465,684.04846,633.2477]}],{&quot;title&quot;:{&quot;text&quot;:&quot;knn distance histogram - indexed - multimodal &quot;}},{&quot;responsive&quot;:true,&quot;displaylogo&quot;:false})</script></div></body></html>" style="display:block; border:none; min-height:350px; min-width:350px; width:100%; height:100%"></iframe>
 </div>
 </div>
 <p>Ahora medimos el recall</p>
 <div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">macrorecall</span>(eknns, gknns)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.8689999999999999</code></pre>
+<pre><code>0.94</code></pre>
 </div>
 </div>
 <p>Vemos que no es tan bueno, pero es básicamente porque intercambiamos velocidad por calidad. A continuación veremos como mejorar un poco la calidad, manipulando algunos de los parametros de búsqueda.</p>
@@ -956,27 +945,30 @@ cov = [640.0523681640625, 654.3450927734375, 714.150634765625, 702.9998168945312
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>G.algo[] <span class="op">=</span> B_</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre>searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=21906): 0.093101 seconds (402 allocations: 19.078 KiB)
-<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9410000000000001
-searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=65718): 0.178200 seconds (402 allocations: 19.078 KiB)
-<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9530000000000001
-searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=197154): 0.189031 seconds (403 allocations: 19.094 KiB)
-<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9530000000000001
-searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=591462): 0.186574 seconds (402 allocations: 19.078 KiB)
-<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9530000000000001
-searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=1774386): 0.179276 seconds (402 allocations: 19.078 KiB)
-<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9530000000000001
+<pre>searching BeamSearch(bsize=13, Δ=1.2915, maxvisits=50202): 0.135379 seconds (403 allocations: 19.094 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9620000000000001
+searching BeamSearch(bsize=13, Δ=1.2915, maxvisits=150606): 0.172617 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9640000000000002
+searching BeamSearch(bsize=13, Δ=1.2915, maxvisits=451818): 0.176369 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9640000000000002
+searching BeamSearch(bsize=13, Δ=1.2915, maxvisits=1355454): 0.160070 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9640000000000002
+searching BeamSearch(bsize=13, Δ=1.2915, maxvisits=4066362): 0.165632 seconds (402 allocations: 19.078 KiB)
+<span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>0.9640000000000002
 </pre>
 </div>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>BeamSearch(bsize=12, Δ=1.2788999, maxvisits=7302)</code></pre>
+<pre><code>BeamSearch(bsize=13, Δ=1.2915, maxvisits=16734)</code></pre>
 </div>
 </div>
+<section id="ejercicios" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicios">Ejercicios</h3>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1798,7 +1790,8 @@ searching BeamSearch(bsize=12, Δ=1.2788999, maxvisits=1774386): 0.179276 second
 <span id="cb48-417"><a href="#cb48-417" aria-hidden="true" tabindex="-1"></a>G.algo[] <span class="op">=</span> B_</span>
 <span id="cb48-418"><a href="#cb48-418" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb48-419"><a href="#cb48-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-420"><a href="#cb48-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-420"><a href="#cb48-420" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ejercicios</span></span>
+<span id="cb48-421"><a href="#cb48-421" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
