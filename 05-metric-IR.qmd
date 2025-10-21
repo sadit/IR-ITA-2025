@@ -195,6 +195,8 @@ p.layout.title.text = "knn distance histogram"
 p.histogram(x=convert.(Float32, view(knns, 10, :)))
 ```
 
+### Ejercicios
+Extrae una lista de imagenes relativas a un tema de tu elección y genera una colección ligada por similitud entre ellas.
 
 ## Búsqueda con Texto
 
@@ -253,6 +255,9 @@ p.histogram(x=convert.(Float32, view(knns, 10, :)))
 ```
 
 Comparemos con el de imágenes que anteriormente calculamos.
+
+### Ejercicios
+Análiza las posibilidades de un buscador basado en embeddings neurales vs un búscador de texto completo disperso (unidad anterior). ¿De qué serviría usar ambos?
 
 ## Búsqueda Multimodal
 
@@ -370,5 +375,5 @@ G.algo[] = B_
 ```
 
 ### Ejercicios
-
+Generá un minibuscador de imágenes a través de texto; escoge algunas consultas para ver que recall es adecuado visualmente sin afectar la percepción. 
 
