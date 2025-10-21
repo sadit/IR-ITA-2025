@@ -31,10 +31,7 @@ website:
   title: "Curso Introductorio a Julia y Recuperación de Información"
   navbar:
     left:
-      - href: index.qmd
-        text: Introducción
-      - href: 01-basico.qmd
-        text: Conceptos básicos de Julia
+      - index.qmd
       - 02-data-vis.qmd
       - 03-IR.qmd
       - 04-text-IR.qmd

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Eric S. Téllez">
 
-<title>Acerca de – Curso Introductorio a Julia y Recuperación de Información</title>
+<title>Conclusiones – Curso Introductorio a Julia y Recuperación de Información</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -129,11 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Introducción</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./01-basico.html"> 
-<span class="menu-text">Conceptos básicos de Julia</span></a>
+<span class="menu-text">Prefacio</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./02-data-vis.html"> 
@@ -144,9 +140,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Recuperación de Información</span></a>
   </li>  
   <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">04-text-IR.qmd</span>
-    </span>
+    <a class="nav-link" href="./04-text-IR.html"> 
+<span class="menu-text">Búsqueda de Texto Completo</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./05-metric-IR.html"> 
@@ -154,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./06-about.html" aria-current="page"> 
-<span class="menu-text">Acerca de</span></a>
+<span class="menu-text">Conclusiones</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -167,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <div class="quarto-title-block"><div><h1 class="title">Acerca de</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
+      <div class="quarto-title-block"><div><h1 class="title">Conclusiones</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
                       </div>
   </div>
     
@@ -196,8 +191,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#acerca-de-este-curso" id="toc-acerca-de-este-curso" class="nav-link active" data-scroll-target="#acerca-de-este-curso">Acerca de este curso</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -205,7 +206,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#acerca-de-este-curso" id="toc-acerca-de-este-curso">Acerca de este curso</a></li>
+  </ul>
+</nav>
+<p>Concluyendo nuestro curso sobre la Recuperación de Información Multimodal, hemos visto cómo los paquetes <em>TextSearch.jl</em> y <em>SimilaritySearch.jl</em> se establecen como herramientas de Recuperación de Información escalables. Hemos aprendido a crear índices eficientes que permiten búsquedas rápidas, ya sea consultando grandes colecciones de <em>texto</em> mediante el uso de <em>embeddings</em> avanzados, o navegando vastas galerías de <em>imágenes</em> a través de modelos de visión. Lo más destacable es la capacidad de integrar estos dominios en un entorno <em>multimodal</em>, permitiendo a los usuarios buscar con una imagen para encontrar textos relevantes o viceversa. Al implementar el paquete, aprendimos a calibrar parámetros que intercambian <em>velocidad y calidad de los resultados</em> (recall), utilizando técnicas de auto-optimización que ajustan la estructura del grafo para garantizar que nuestras búsquedas no solo sean rápidas, sino que también devuelvan los vecinos más precisos en cada consulta.</p>
+<section id="acerca-de-este-curso" class="level2">
+<h2 class="anchored" data-anchor-id="acerca-de-este-curso">Acerca de este curso</h2>
 <ul>
 <li>Eric Sadit Téllez Avila <a href="mailto:eric.tellez@infotec.mx" class="email">eric.tellez@infotec.mx</a></li>
 <li>https://github.com/sadit/SimilaritySearch.jl</li>
@@ -217,6 +227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <!-- -->
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -673,15 +684,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> julia</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">lang:</span><span class="co"> es-MX</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Acerca de</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Conclusiones</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Eric Sadit Téllez Avila <span class="ot">&lt;eric.tellez@infotec.mx&gt;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/SimilaritySearch.jl</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/SimilaritySearchDemos</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/TextSearch.jl</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://ingeotec.github.io/</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Concluyendo nuestro curso sobre la Recuperación de Información Multimodal, hemos visto cómo los paquetes *TextSearch.jl* y *SimilaritySearch.jl* se establecen como herramientas de Recuperación de Información escalables. Hemos aprendido a crear índices eficientes que permiten búsquedas rápidas, ya sea consultando grandes colecciones de *texto* mediante el uso de *embeddings* avanzados, o navegando vastas galerías de *imágenes* a través de modelos de visión. Lo más destacable es la capacidad de integrar estos dominios en un entorno *multimodal*, permitiendo a los usuarios buscar con una imagen para encontrar textos relevantes o viceversa. Al implementar el paquete, aprendimos a calibrar parámetros que intercambian *velocidad y calidad de los resultados* (recall), utilizando técnicas de auto-optimización que ajustan la estructura del grafo para garantizar que nuestras búsquedas no solo sean rápidas, sino que también devuelvan los vecinos más precisos en cada consulta. </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Acerca de este curso</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Eric Sadit Téllez Avila <span class="ot">&lt;eric.tellez@infotec.mx&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/SimilaritySearch.jl</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/SimilaritySearchDemos</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://github.com/sadit/TextSearch.jl</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>https://ingeotec.github.io/</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

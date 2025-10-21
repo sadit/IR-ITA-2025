@@ -1,3 +1,9 @@
+---
+lang: es-MX
+title: Prefacio
+
+---
+
 # Prefacio {.unnumbered}
 
 Este curso/taller esta dedicado a la Recuperación de Información (_Information Retrieval_) en Julia.[^julia] Nuestro enfoque será experimental, y nuestra metodología incluye medir la factibilidad y desempeño de cada algoritmo en términos reales.

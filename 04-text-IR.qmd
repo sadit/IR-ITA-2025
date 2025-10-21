@@ -62,7 +62,7 @@ Los algoritmos de BK pueden ser utilizados para calcular la unión y t-threshold
 using CSV, DataFrames, Downloads
 using SimilaritySearch, TextSearch, InvertedFiles
 using StatsBase, JSON3, Cobweb
-using LinearAlgebra, JLD2
+using LinearAlgebra
 using PlotlyLight
 PlotlyLight.settings.use_iframe = true  # necesario para quarto / jupyter / etc.
 ```

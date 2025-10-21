@@ -1,9 +1,14 @@
 ---
 engine: julia
 lang: es-MX
-title: Acerca de
+title: Conclusiones
 
 ---
+
+Concluyendo nuestro curso sobre la Recuperación de Información Multimodal, hemos visto cómo los paquetes *TextSearch.jl* y *SimilaritySearch.jl* se establecen como herramientas de Recuperación de Información escalables. Hemos aprendido a crear índices eficientes que permiten búsquedas rápidas, ya sea consultando grandes colecciones de *texto* mediante el uso de *embeddings* avanzados, o navegando vastas galerías de *imágenes* a través de modelos de visión. Lo más destacable es la capacidad de integrar estos dominios en un entorno *multimodal*, permitiendo a los usuarios buscar con una imagen para encontrar textos relevantes o viceversa. Al implementar el paquete, aprendimos a calibrar parámetros que intercambian *velocidad y calidad de los resultados* (recall), utilizando técnicas de auto-optimización que ajustan la estructura del grafo para garantizar que nuestras búsquedas no solo sean rápidas, sino que también devuelvan los vecinos más precisos en cada consulta. 
+
+## Acerca de este curso
+
 
 - Eric Sadit Téllez Avila <eric.tellez@infotec.mx>
 - https://github.com/sadit/SimilaritySearch.jl

@@ -7,13 +7,120 @@ title: Búsqueda en espacios métricos
 
 Los ejercicios de esta unidad estan en colab <https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing>
 
+
+## Introducción
+Los algoritmos de búsqueda son centrales en múltiples áreas de las ciencias de la computación; en particular en la recuperación de información.
+Este problema consiste en identificar rápidamente en una colección objetos que son cercanos a un ejemplo dado, este problema 
+fue definido con respecto a documentos en la Unidad 2. En la presente unidad se generalizará el concepto.
+
+La cercanía o similitud es representada mediante una función de distancia que da una perspectiva _geométrica_ o _espacial_ al problema.
+Una de las operaciones más importantes en la búsqueda por similitud es la recuperación de $k$ vecinos cercanos que consiste en encontrar
+los $k$ elementos más cercanos de una base de datos a una consulta dada.
+
+El problema consiste en preprocesar una colección de datos, bajo alguna función de semejanza, para que la identificación de los objetos cercanos a una consulta pueda hacerse en tiempo que no dependa linealmente del tamaño de la colección. En otras palabras, que no sea necesario revisar todos los elementos de la base de datos para responder la consulta. La búsqueda de los $k$-vecinos cercanos tiene aplicaciones en diferentes áreas, como parte operativa de algoritmos de _agrupamiento_ [@SS2021] o como parte de la aceleración de dichos algoritmos [@YCC2020; @SKL2011]. 
+En procesamiento de lenguaje natural, la técnica es usada para diferentes objetivos, tal es el caso de recuperación de argumentos [@WPAA2017], descubrimiento de estructuras semánticas [@DS2020], búsqueda semántica [@SPA2019; @FH2017], entre otras. En problemas de clasificación, el método de $k$ vecinos cercanos ha sido usado como uno de los métodos más simples y populares, y a la vez, efectivo [@GCVR2018; @OTGMM2020].
+El cálculo de grafos de _todos_ los vecinos cercanos es uno de los componentes de las técnicas de reducción de dimensión no-lineales,
+como UMAP [@MHM2018], TriMap [@AW2019], o t-SNE [@VMH2018], además de las alternativas clásicas [@LV2017].
+El proceso de reducción de dimensión es usado para incrementar el desempeño de algoritmos de aprendizaje computacional, así como en el proceso de análisis de los datos. Las dimensiones 2 y 3 nos permiten visualizar información de manera efectiva, y por tanto, una proyección fiel en baja dimensión siempre será de utilidad en el proceso de análisis de la información.
+Una de las partes más costosas del proceso de reducción de dimensión no lineal es la búsqueda de $k$-vecinos cercanos, los algoritmos eficientes de búsqueda de vecinos son fundamentales para obtener en tiempos prácticos información de valor. Así mismo, asegurar la calidad de los vecinos es importante para confiar en las proyecciones que se obtienen.
+
+
+## Marco teórico
+Una de las formalizaciones más flexibles de búsqueda por similitud consiste en representar el problema en términos de espacios métricos.
+Un espacio métrico $(U,d)$ esta compuesto de un universo de objetos validos $U$
+y una función de distancia $d: U \times U \rightarrow \Re^+$.
+Para ser precisos, $d$ es una métrica por lo que para todo $u,v,w \in U$
+cumple las siguientes propiedades:
+
+- $d(u, v) \geq 0$ y $d(u,v)= 0 \iff u \equiv v$ (positividad y equivalencia)
+- $d(u, v) = d(v, u)$ (simetría), y finalmente,
+- $d(u, v) + d(v, w)  \leq d(u, w) \leq d(u, v) + d(v, w)$
+  (desigualdad triangular).
+
+El problema principal de la búsqueda en espacios métricos consiste en,
+dado el conjunto finito $S \subseteq U$, deseamos seleccionar elemento parecidos en $S$ a una consulta $q \in U$
+bajo una definición consistente de similitud.
+
+### $k$ vecinos cercanos
+Dado un universo de objetos validos $U$ y una función de distancia $d$, y sea $S$ un subconjunto finito de $U$ y dadas la consulta $q \in U$ y el número entero positivo $k$, el objetivo es encontrar $R$ de tamaño $k$ que minimiza $\sum_{u \in R} d(u, q)$, para $R \in 2^S$. Se suele denotar como $k\text{nn}(S, q)$.
+
+Existe una solución trivial para el problema, que consiste en evaluar $d(q, u)$ para todo $u \in S$.
+Sin embargo, en el caso de interés, i.e., el tamaño de la colección de datos, $n=|S|$, es muy grande y la evaluación exhaustiva de $S$ no escala.
+El problema se complica si adicionalmente la función $d$ es costosa de evaluar computacionalmente, como suele suceder en datos complejos.
+La solución a este problema es indexar o pre-procesar $S$, de tal forma que se evite evaluar la distancia contra la mayor cantidad de elementos de $S$.
+
+## Sobre la dimensión intrínseca
+El modelo de espacios métricos proporciona simplicidad del marco de trabajo, ya que el universo $U$ de objetos puede estar definido  por vectores en cualquier dimensión, secuencias de símbolos, documentos escritos en lenguaje natural, gráficas, distribuciones de probabilidad, o incluso conjuntos de elementos, que a su vez, podrían ser colecciones de los objetos antes mencionados. 
+Con la flexibilidad y potencia descrita viene implícita una debilidad, la inherente dependencia en la _dimensionalidad intrínseca_ de los datos, que podemos entenderla de manera informal como la información necesaria que necesita contener o representar un elemento del espacio métrico para ser distinguido entre todos los objetos validos. Chavez et al. [@CNBYM2001] detallan una definición formal de la dimensionalidad intrínseca y de como es una generalización de la dimensión de un espacio vectorial. En términos prácticos, la dimensión intrínseca impacta principalmente de dos maneras, en primera instancia suele estar ligada con una función de distancia costosa, y segunda y más importante, destruye la capacidad de discriminación de los índices métricos tal que serán degradados a una evaluación exhaustiva. Lo anterior se debe al efecto que tiene la dimensión sobre la distribución de valores de distancia entre elementos de una colección. De manera más detallada, el aumento de la dimensión trae con sigo el incremento de la distancia mínima entre pares de elementos, y a su vez, la concentración alrededor de la media de las distancias entre objetos. Lo anterior se traduce como la incapacidad de usar la desigualdad del triángulo como filtro.
+
+Desde el punto de vista del tamaño del conjunto de datos $S$, el problema es evidentemente lineal sin utilizar un índice, ya que basta con evaluar todos los elementos para obtener el resultado exacto. Recientemente se ha probado con diversos formalismos que si la dimensión intrínseca de los datos es _suficientemente_ alta, entonces con _cualquier_ índice posible, la complejidad de la búsqueda sigue siendo lineal en el caso exacto y aún en el caso aproximado. El problema puede reducirse a un  problema NP-completo [@AFN2004], como detalla Hetland [@Hetland2020], quién reduce el problema de búsqueda al problema de _minimum dominating set_, un problema NP-completo clásico. Por otro lado, en 2018 Rubinstein probó que el problema de encontrar el par bicromático mas cercano tiene dureza cuadrática, lo cual implica que la búsqueda del vecino mas cercano tiene a su vez dureza lineal, aún en el sentido aproximado [@RUB2018]. Estos resultados, y otros semejantes en la literatura obligan a buscar soluciones de índices sublineales en el sentido probabilístico.
+
+Para abundar en lo anterior, la búsqueda de proximidad exacta requiere, por ejemplo, encontrar el vecino más cercano _exacto_; mientras que la búsqueda de proximidad aproximada da garantías de proximidad; lo que regresa estará a lo más $\delta$ veces más lejos que el verdadero vecino mas cercano. Los resultados descritos en el párrafo anterior establecen que no es posible crear un índice para cualquiera de estos dos casos. La única posibilidad de tener algoritmos verdaderamente sublineales es en el sentido probabilístico; es decir, _la mayor parte de las veces darán el resultado correcto_; pero cuando se equivocan el error cometido no está acotado.
+
+
+## Búsqueda aproximada
+Con la finalidad de cuantificar la calidad en el sentido probabilístico, es necesario definir una medida de calidad; en la literatura se puede encontrar que el _recall_ es una medida bien aceptada, y esta definida como sigue:
+$$recall(S, q, k) = \frac{|k\text{nn}(S, q) \cap k\text{nn}^*(S, q)|}{k}, $$
+
+donde $k$nn calcula los $k$ vecinos de $q$ en $S$ de manera exacta y $k\text{nn}^*$ de manera aproximada, por lo que el valor de _recall_ estará en el rango de 0 a 1, siendo 0 el peor y 1 el mejor.
+
+Se busca que un índice para búsqueda aproximada tenga un costo computacional bajo, i.e., rápido y bajo uso en memoria; y a la vez tenga alta calidad en su aproximación, i.e., _recall_ cercano a 1. Claramente, los objetivos se contraponen y es necesario encontrar los métodos que mejor se ajusten a las necesidades del problema a solucionar.
+
+## Esquemas de búsqueda de $k$-vecinos cercanos en gráficas
+En [@GLS2008] se transforma el problema de búsqueda en espacios métricos al problema de navegación en una gráfica dónde los vértices representan al conjunto de datos y las aristas conexiones pesadas por un esquema especial de desorden con respecto a los vértices. Para resolver consultas se toma un vértice como inicio e iterativamente se reduce la distancia de los nodos visitados a la consulta. Este trabajo tiene un valor teórico importante, sin embargo, es poco útil en la práctica dados los costos computacionales envueltos en la construcción de la gráfica, sobre todo su memoria cuadrática.
+Chavez y Téllez [@CT2010] estudian una gráfica navegable inducida por la gráfica de todos los vecinos cercanos, tanto directos como reversos y describen como manejar las componentes dentro de la misma. Este algoritmo requiere la construcción de la gráfica de todos los $k$ vecinos cercanos, por lo que su construcción es muy costosa. Un algoritmo alternativo con un uso más reducido de memoria y construcciones más eficientes es el {\em Rank Cover Tree} (RCT) [@HN2014]. En lugar de la construcción genérica de una gráfica, se crea un árbol, con un nodo raíz que siempre será usado para iniciar la búsqueda. Los nodos descendientes se obtienen por rango, i.e., orden al padre, y es la única información que se usa para la navegación. El grado de cada nodo es un parámetro que limita los requerimientos de memoria y el costo de las búsquedas, en intercambio con la calidad de los resultados.
+
+En Malkov et al. [@MPLK2014] se introduce el índice _Navigable Small World_ (NSW), un esquema novedoso con un desempeño notable.
+Dichos autores sugieren que la velocidad de búsqueda y precisión de NSW se debe a que su algoritmo de construcción captura las propiedades de _Mundo Pequeño_ (_Small World_) de una base de datos métrica.
+Los requerimientos computacionales del NSW para su funcionamiento óptimo y el tiempo de construcción son altos, pero muy por debajo de esquemas anteriores.
+La construcción de NSW es incremental, se inserta un elemento a la vez, el algoritmo consiste en conectar el $j$-ésimo elemento con sus $k$ vecinos cercanos aproximados tomados en los $j-1$ elementos previamente indexados.
+Las conexiones son no-dirigidas, por lo que el grafo resultante también es no-dirigido.
+El orden de inserción debe ser aleatorizado para evitar varios casos con muy mal desempeño.
+Finalmente, el número de vecinos, $k$, es un parámetro crucial que debe ser optimizado para cada base de datos. En [@MYD2018] se introduce una variante aún más veloz que consisten en una estructura jerárquica sobre la gráfica NSW; éste nuevo algoritmo reduce los peores casos y es capaz de reducir la memoria necesaria por la gráfica usando una selección más apropiada de las aristas que conectan los vértices.
+Ruiz et al. [@RCGT2015] introducen nuevos algoritmos para la navegación del NSW, los cuales son capaces de obtener resultados de mayor calidad a igualdad de memoria. Mas recientemente, Tellez et al. [@TRCG2021] presentan estrategias para calcular el grado de los vértices, y así mismo, de filtrado de los vértices que dan como resultado búsquedas más eficientes y gráficas más pequeñas.
+Dada la definición del NSW, la gráfica guarda información útil sobre la estructura de la colección de datos siendo representada, que hasta el momento ha sido poco explotada.
+
+
+# Bibliografía
+
+- [@AFN2004] Alber, J., Fellows, M. R., & Niedermeier, R. (2004). Polynomial-time data reduction for dominating set. Journal of the ACM (JACM), 51(3), 363-384.
+- [@AW2019] Amid, E., & Warmuth, M. K. (2019). TriMap: Large-scale dimensionality reduction using triplets. arXiv preprint arXiv:1910.00204.
+- [@CNBYM2001] Chávez, E., Navarro, G., Baeza-Yates, R., & Marroquín, J. L. (2001). Searching in metric spaces. ACM computing surveys (CSUR), 33(3), 273-321.
+- [@CT2010] Chávez, E., & Tellez, E. S. (2010, September). Navigating k-nearest neighbor graphs to solve nearest neighbor searches. In Mexican Conference on Pattern Recognition (pp. 270-280). Springer, Berlin, Heidelberg.
+- [@DS2020] DS, D. (2020). A simple solution for the taxonomy enrichment task: Discovering hypernyms using nearest neighbor search.
+- [@FH2017] Faessler, E., & Hahn, U. (2017, July). Semedico: a comprehensive semantic search engine for the life sciences. In Proceedings of ACL 2017, System Demonstrations (pp. 91-96).
+- [@GCVR2018] Gallego, A. J., Calvo-Zaragoza, J., Valero-Mas, J. J., & Rico-Juan, J. R. (2018). Clustering-based k-nearest neighbor classification for large-scale data with neural codes representation. Pattern Recognition, 74, 531-543.
+- [@GLS2008] Goyal, N., Lifshits, Y., & Schütze, H. (2008, February). Disorder inequality: a combinatorial approach to nearest neighbor search. In Proceedings of the 2008 international conference on web search and data mining (pp. 25-32).
+- [@HN2014] Houle, M. E., & Nett, M. (2014). Rank-based similarity search: Reducing the dimensional dependence. IEEE transactions on pattern analysis and machine intelligence, 37(1), 136-150.
+- [@Hetland2020] Hetland, M. L. (2020, September). Optimal Metric Search Is Equivalent to the Minimum Dominating Set Problem. In International Conference on Similarity Search and Applications (pp. 111-125). Springer, Cham.
+- [@LV2017] Lee, J. A., & Verleysen, M. (2007). Nonlinear dimensionality reduction (Vol. 1). New York: Springer.
+- [@MHM2018] McInnes, L., Healy, J., & Melville, J. (2018). Umap: Uniform manifold approximation and projection for dimension reduction. arXiv preprint arXiv:1802.03426.
+- [@MPLK2014] Malkov, Y., Ponomarenko, A., Logvinov, A., & Krylov, V. (2014). Approximate nearest neighbor algorithm based on navigable small world graphs. Information Systems, 45, 61-68.
+- [@MYD2018] Malkov, Y. A., & Yashunin, D. A. (2018). Efficient and robust approximate nearest neighbor search using hierarchical navigable small world graphs. IEEE transactions on pattern analysis and machine intelligence, 42(4), 824-836.
+- [@OTGMM2020] Ortiz-Bejar, J., Téllez, E. S., Graff, M., Moctezuma, D., & Miranda-Jiménez, S. (2020). Improving k Nearest Neighbors and Naïve Bayes Classifiers Through Space Transformations and Model Selection. IEEE Access, 8, 221669-221688.
+- [@RCGT2015] Ruiz, G., Chávez, E., Graff, M., & Téllez, E. S. (2015, October). Finding near neighbors through local search. In International Conference on Similarity Search and Applications (pp. 103-109). Springer, Cham.
+- [@RUB2018] Rubinstein, A. (2018, June). Hardness of approximate nearest neighbor search. In Proceedings of the 50th annual ACM SIGACT symposium on theory of computing (pp. 1260-1268).
+- [@SKL2011] Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. the Journal of machine Learning research, 12, 2825-2830.
+- [@SPA2019] Soto, A. J., Przybyła, P., & Ananiadou, S. (2019). Thalia: semantic search engine for biomedical abstracts. Bioinformatics, 35(10), 1799-1801.
+- [@SS2021] Sharma, K. K., & Seal, A. (2021). Spectral embedded generalized mean based k-nearest neighbors clustering with S-distance. Expert Systems with Applications, 169, 114326.
+- [@TR2022] Tellez, E. S., & Ruiz, G. (2022). Similarity search on neighbor's graphs with automatic Pareto optimal performance and minimum expected quality setups based on hyperparameter optimization. arXiv preprint arXiv:2201.07917.
+- [@TRCG2021] Tellez, E. S., Ruiz, G., Chavez, E., & Graff, M. (2021). A scalable solution to the nearest neighbor search problem through local-search methods on neighbor graphs. Pattern Analysis and Applications, 24(2), 763-777.
+- [@VMH2018] Van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. Journal of machine learning research, 9(11).
+- [@WPAA2017] Wachsmuth, H., Potthast, M., Al Khatib, K., Ajjour, Y., Puschmann, J., Qu, J., ... & Stein, B. (2017, September). Building an argument search engine for the web. In Proceedings of the 4th Workshop on Argument Mining (pp. 49-59).
+- [@YCC2020] Yu, Q., Chen, K. H., & Chen, J. J. (2020, September). Using a set of triangle inequalities to accelerate k-means clustering. In International Conference on Similarity Search and Applications (pp. 297-311). Springer, Cham.
+
+## Ejemplo de uso con `SimilaritySearch`
 ```{julia}
 using CSV, DataFrames
 using SimilaritySearch, StatsBase
 using PlotlyLight, JSON3, Cobweb
-using LinearAlgebra, JLD2
+using LinearAlgebra, HDF5
 PlotlyLight.settings.use_iframe = true  # necesario para quarto / jupyter / etc.
 ```
+
+### Descargando los datos
+
+Para estos ejemplos, estaremos usando el segmento de Español de la base de datos Wikipedia Image-Text (WIT); previamente se calcularon los encajes de las imágenes y el texto usando el modelo Jina CLIP v2 <https://huggingface.co/jinaai/jina-clip-v2>.
 
 ```{julia}
 path = "WIT-es_jina-clip-v2_sample"
@@ -22,31 +129,27 @@ if !isdir(path)
 end
 ```
 
+La lectura de la base de datos vectorial se realizará con HDF5
 ```{julia}
-
 metaimages = "$path/es-wit-images.tsv"
 vecimages = "$path/es-wit-images.h5"
 
-X = jldopen(vecimages) do h
-  h["emb"]
-end
+X = Matrix{Float16}(h5read(vecimages, "emb"))
 ```
 
-```{julia}
+En particular, se convirtió a números de punto flotante de precisión media; solo los procesadores más nuevos le sacan provecho a estas representaciones en SIMD, pero en cualquier caso nos sirve para mantener la base de datos en un tamaño razonable.
 
+Ahora leemos los metadatos
+```{julia}
 D = CSV.read(metaimages, DataFrame)
-names(D)
-```
-
-```{julia}
-
+display(names(D))
 Dict(pairs(D[1, :]))
 ```
 
-## Búsqueda por fuerza bruta
+## Búsqueda por fuerza bruta en imágenes
 
+Usando subconjuntos pequeños de la base de datos leída (Embeddings de imágenes con Jina CLIP v2), vamos a realizar algunas búsquedas.
 ```{julia}
-
 n = 10^4
 db, queries = MatrixDatabase(X[:, 1:n]), MatrixDatabase(X[:, n+1:n+100])
 dist = SqL2_asf32()
@@ -54,25 +157,20 @@ S = ExhaustiveSearch(; db, dist)
 ctx = GenericContext()
 ```
 
-
+Ahora las búsquedas
 ```{julia}
-
 knns = searchbatch(S, ctx, queries, 10)
 ```
 
-
+Podemos observar a que corresponde una de las consultas realizadas
 ```{julia}
-
 qID = 100
 r = D[10_000 + qID, :]
-Dict(pairs(r))
-```
-
-```{julia}
-
+display(Dict(pairs(r)))
 h.img(src=r.image_url, alt=r.page_title, width=160)
 ```
 
+Ahora las respuestas
 ```{julia}
 
 children = []
@@ -89,7 +187,7 @@ end
 res = h.div(children)
 ```
 
-
+A continuación se muestran el histograma de distancias del 10-ésimo vecino cercano.
 ```{julia}
 p = plot()
 #p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
@@ -98,20 +196,21 @@ p.histogram(x=convert.(Float32, view(knns, 10, :)))
 ```
 
 
-# Búsqueda con Texto - Embeddings de Jina Clip v2
+## Búsqueda con Texto - Embeddings de Jina Clip v2
+
+Ahora vamos a realizar las búsquedas en la modalidad de texto, usando nuevamente los embeddings de Jina CLIP v2.
+
 
 ```{julia}
 metatext = "$path/es-wit-text.tsv"
 vectext = "$path/es-wit-text.h5"
 
-Q = jldopen(vectext) do h
-  h["emb"]
-end
-
+Q = Matrix{Float16}(h5read(vectext, "emb"))
 DQ = CSV.read(metatext, DataFrame)
 names(DQ)
 ```
 
+Indexaremos un pequeño segmento
 ```{julia}
 
 n = 10^4
@@ -121,18 +220,17 @@ S = ExhaustiveSearch(; db, dist)
 knns = searchbatch(S, ctx, queries, 10)
 ```
 
+Ahora veremos una de las consultas
 ```{julia}
-
 qID = 100
 r = DQ[10_000 + qID, :]
-Dict(pairs(r))
-
-
+display(Dict(pairs(r)))
 h.img(src=r.image_url, alt=r.page_title, width=160)
 ```
 
-```{julia}
 
+y los resultados asociados
+```{julia}
 children = []
 for p in view(knns, :, qID)
   r = DQ[p.id, [:image_url, :page_url, :page_title]]
@@ -147,34 +245,38 @@ end
 res = h.div(children)
 ```
 
+Observemos el histograma de distancias
 ```{julia}
-
 p = plot()
-#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
 p.layout.title.text = "knn distance histogram - text "
 p.histogram(x=convert.(Float32, view(knns, 10, :)))
 ```
 
-# Búsqueda Multimodal
+Comparemos con el de imágenes que anteriormente calculamos.
 
+## Búsqueda Multimodal
+
+
+Finalizaremos con búsqueda multimodal, con más datos
 ```{julia}
-
 db, queries = MatrixDatabase(X), MatrixDatabase(Q[:, 1:100])
 
 S = ExhaustiveSearch(; db, dist)
 @time eknns = searchbatch(S, ctx, queries, 10)
 ```
 
-```{julia}
+En este momento tenemos el conjunto de resultados `eknns`, el cual fue generado con una búsqueda exacta. Observa los tiempos.
 
+Ahora veamos una de las consultas
+```{julia}
 qID = 7
 r = DQ[qID, :]
 display(Dict(pairs(r)))
 
-
 h.img(src=r.image_url, alt=r.page_title, width=160)
 ```
 
+Y sus respectivas respuestas
 ```{julia}
 
 children = []
@@ -191,43 +293,41 @@ end
 res = h.div(children)
 ```
 
+Observemos el histograma de distancias y compare con los histogramas pasados.
 ```{julia}
-
 p = plot()
-#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
 p.layout.title.text = "knn distance histogram - multimodal "
 p.histogram(x=convert.(Float32, view(eknns, 10, :)))
 ```
 
-# Búsqueda con índice
-
+## Búsqueda con índice
+Ahora veremos como hacerlo más eficiente
 ```{julia}
-
 G = SearchGraph(; db, dist)
 gctx = SearchGraphContext(
-  #hyperparameters_callback=OptimizeParameters(MinRecall(0.99))
+  hyperparameters_callback=OptimizeParameters(MinRecall(0.99))
 )
 @time index!(G, gctx)
 ```
 
+Optimizamos para cierta calidad
 ```{julia}
-
 @time optimize_index!(G, gctx, MinRecall(0.9))
 ```
 
+Vamos a buscar en el índice
 ```{julia}
-
 @time gknns = searchbatch(G, gctx, queries, 10)
 ```
 
+Vamos observar algunas de las consultas
 ```{julia}
-
 r = DQ[qID, :]
 display(Dict(pairs(r)))
-
 h.img(src=r.image_url, alt=r.page_title, width=160)
 ```
 
+Y sus resultados
 ```{julia}
 
 children = []
@@ -244,21 +344,22 @@ end
 res = h.div(children)
 ```
 
+Sus histogramas
 ```{julia}
-
 p = plot()
-#p = plot(x = 1:20, y = cumsum(randn(20)), type="scatter", mode="lines+markers")  # Make plot
 p.layout.title.text = "knn distance histogram - indexed - multimodal "
 p.histogram(x=convert.(Float32, view(gknns, 10, :)))
 ```
 
+Ahora medimos el recall
 ```{julia}
-
 macrorecall(eknns, gknns)
 ```
 
-```{julia}
 
+Vemos que no es tan bueno, pero es básicamente porque intercambiamos velocidad por calidad. A continuación veremos como mejorar un poco la calidad, manipulando algunos de los parametros de búsqueda.
+
+```{julia}
 B_ = B = G.algo[]
 for in in 1:5
   G.algo[] = B = BeamSearch(B.bsize, B.Δ, 3 * B.maxvisits)
@@ -267,3 +368,6 @@ for in in 1:5
 end
 G.algo[] = B_
 ```
+
+
+
