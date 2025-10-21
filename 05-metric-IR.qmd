@@ -66,7 +66,7 @@ donde $k$nn calcula los $k$ vecinos de $q$ en $S$ de manera exacta y $k\text{nn}
 
 Se busca que un índice para búsqueda aproximada tenga un costo computacional bajo, i.e., rápido y bajo uso en memoria; y a la vez tenga alta calidad en su aproximación, i.e., _recall_ cercano a 1. Claramente, los objetivos se contraponen y es necesario encontrar los métodos que mejor se ajusten a las necesidades del problema a solucionar.
 
-## Esquemas de búsqueda de $k$-vecinos cercanos en gráficas
+### Esquemas de búsqueda de $k$-vecinos cercanos en gráficas
 En [@GLS2008] se transforma el problema de búsqueda en espacios métricos al problema de navegación en una gráfica dónde los vértices representan al conjunto de datos y las aristas conexiones pesadas por un esquema especial de desorden con respecto a los vértices. Para resolver consultas se toma un vértice como inicio e iterativamente se reduce la distancia de los nodos visitados a la consulta. Este trabajo tiene un valor teórico importante, sin embargo, es poco útil en la práctica dados los costos computacionales envueltos en la construcción de la gráfica, sobre todo su memoria cuadrática.
 Chavez y Téllez [@CT2010] estudian una gráfica navegable inducida por la gráfica de todos los vecinos cercanos, tanto directos como reversos y describen como manejar las componentes dentro de la misma. Este algoritmo requiere la construcción de la gráfica de todos los $k$ vecinos cercanos, por lo que su construcción es muy costosa. Un algoritmo alternativo con un uso más reducido de memoria y construcciones más eficientes es el {\em Rank Cover Tree} (RCT) [@HN2014]. En lugar de la construcción genérica de una gráfica, se crea un árbol, con un nodo raíz que siempre será usado para iniciar la búsqueda. Los nodos descendientes se obtienen por rango, i.e., orden al padre, y es la única información que se usa para la navegación. El grado de cada nodo es un parámetro que limita los requerimientos de memoria y el costo de las búsquedas, en intercambio con la calidad de los resultados.
 
@@ -81,7 +81,7 @@ Ruiz et al. [@RCGT2015] introducen nuevos algoritmos para la navegación del NSW
 Dada la definición del NSW, la gráfica guarda información útil sobre la estructura de la colección de datos siendo representada, que hasta el momento ha sido poco explotada.
 
 
-# Bibliografía
+## Bibliografía
 
 - [@AFN2004] Alber, J., Fellows, M. R., & Niedermeier, R. (2004). Polynomial-time data reduction for dominating set. Journal of the ACM (JACM), 51(3), 363-384.
 - [@AW2019] Amid, E., & Warmuth, M. K. (2019). TriMap: Large-scale dimensionality reduction using triplets. arXiv preprint arXiv:1910.00204.
@@ -196,7 +196,7 @@ p.histogram(x=convert.(Float32, view(knns, 10, :)))
 ```
 
 
-## Búsqueda con Texto - Embeddings de Jina Clip v2
+## Búsqueda con Texto
 
 Ahora vamos a realizar las búsquedas en la modalidad de texto, usando nuevamente los embeddings de Jina CLIP v2.
 
@@ -312,7 +312,7 @@ gctx = SearchGraphContext(
 
 Optimizamos para cierta calidad
 ```{julia}
-@time optimize_index!(G, gctx, MinRecall(0.9))
+@time optimize_index!(G, gctx, MinRecall(0.9); ksearch=10, queries=rand(queries, 32))
 ```
 
 Vamos a buscar en el índice
