@@ -82,3 +82,5 @@ Ahora tenemos un mapa en 2D que contiene información de 4D; lo cual claramente 
 ### Ejercicios
 
 Calcule las matriz de distancias entre todas las muestras (4D, 150 vectores). Grafique dicha matriz como si fuera una imagen; vea la página del manual de Plotly para [heatmap](https://plotly.com/javascript/reference/heatmap/).
+
+Intentalo antes de ver una posible solución: <https://colab.research.google.com/drive/1pxibakC-fYhCvFonV2n5UKB27CvZx_Vj?usp=sharing>

@@ -5,6 +5,8 @@ title: Búsqueda en espacios métricos
 
 ---
 
+El script para crear las representaciones vectoriales es el siguiente <https://colab.research.google.com/drive/1UNzBe4kAE0KA_xRcmhORFvCPoHZeO_UB?usp=sharing>
+
 Los ejercicios de esta unidad estan en colab <https://colab.research.google.com/drive/103qHTT_gyOiga8wjsUoWNCB5i__KiOEl?usp=sharing>
 
 
