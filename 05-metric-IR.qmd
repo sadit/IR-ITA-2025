@@ -378,3 +378,4 @@ G.algo[] = B_
 ### Ejercicios
 Generá un minibuscador de imágenes a través de texto; escoge algunas consultas para ver que recall es adecuado visualmente sin afectar la percepción. 
 
+Ejemplo de resultado <https://colab.research.google.com/drive/1E_XLhKBD371B7DXnJELUca5N2pEJPjA0?usp=sharing>. Para este ejemplo se debe tener cuidado de iniciar la instancia de Colab con GPUs; y se debe correr el servicio que esta empotrado en una de sus celdas.
