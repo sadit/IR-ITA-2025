@@ -363,7 +363,6 @@ Ahora medimos el recall
 macrorecall(eknns, gknns)
 ```
 
-
 Vemos que no es tan bueno, pero es básicamente porque intercambiamos velocidad por calidad. A continuación veremos como mejorar un poco la calidad, manipulando algunos de los parametros de búsqueda.
 
 ```{julia}
