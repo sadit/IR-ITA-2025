@@ -345,4 +345,7 @@ res = h.div(children)
 1. Cree un minibuscador sobre WIT que acepte consultas sobre los titulos y muestre 10 resultados similares; haga que se visualice la imagen y el `context_page_description`.
 2. Cree una tabla de contenidos relacionados usando los titulos.
 
-Ejemplo de solución: <https://colab.research.google.com/drive/11WXBWIQgTrEsoHMwJErhaqJrIVVKwCPF?usp=sharing>
+Ejemplo de solución: 
+<https://colab.research.google.com/drive/11WXBWIQgTrEsoHMwJErhaqJrIVVKwCPF?usp=sharing>
+<https://colab.research.google.com/drive/11WXBWIQgTrEsoHMwJErhaqJrIVVKwCPF?usp=sharing>
+
